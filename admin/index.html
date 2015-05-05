@@ -1,0 +1,358 @@
+<html lang="de">
+<meta charset="UTF-8">
+<!-- these 4 files always have to be included -->
+<link rel="stylesheet" type="text/css" href="../../lib/css/themes/jquery-ui/redmond/jquery-ui.min.css"/>
+
+<script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../lib/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+
+
+<!-- these two file always have to be included -->
+<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+<script type="text/javascript" src="../../js/translate.js"></script>
+<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+
+<style>
+    #headText {
+        font-size: 42px;
+        position: relative;
+        /* top: 15px; */
+        left: -60px;
+    }
+
+    #logo {
+        width: 200px;
+        margin-left: 20px;
+        position: relative;
+        left: -100px;
+    }
+
+    .ui-selectmenu-button span.ui-selectmenu-text {
+        padding-left: 5px;
+        padding-top: 0px;
+        padding-right: 0px;
+        padding-bottom: 0px;
+        /*font-size: 1.1em;*/
+    }
+
+    select {
+        width: 120px;
+    }
+
+    image {
+        text-align: center;
+    }
+
+    .number {
+        width: 30px;
+        text-align: right;
+    }
+
+    input {
+        width: 180px;
+        border-radius: 6px;
+        /*font-size: 1.1em;*/
+        padding-top: 3px;
+
+    }
+
+
+</style>
+
+<!-- you have to define 2 functions in the global scope: -->
+<script type="text/javascript">
+
+    // Dictionary (systemDictionary is global variable from adapter-settings.js)
+    systemDictionary = {};
+
+
+    // the function loadSettings has to exist ...
+    function load(settings, onchange) {
+       getIPs(function(data){
+
+           $.each(data, function(){
+               if(this.family == "ipv4"){
+                   $("#host_ip").append("<option>"+this.address+"</option>")
+               }
+
+           });
+
+           $('select').selectmenu({})
+       });
+
+
+//        console.log(adapter.getForeignObjects("*"));
+
+    }
+
+
+    // ... and the function save has to exist.
+    // you have to make sure the callback is called with the settings object as first param!
+    function save(callback) {
+        // example: select elements with class=value and build settings object
+        var obj = {
+
+        };
+
+        $('.devices').each(function(){
+            var cat = $(this).attr("id").substring(0,2);
+            if(obj[cat] == undefined){
+                obj[cat] = {};
+            }
+obj[cat][ $(this).attr("id").substring(0,3)] = $(this).val();
+        });
+        console.log(obj)
+        callback(obj);
+    }
+
+
+</script>
+
+<!-- you have to put your config page in a div with id adapter-container -->
+<div id="adapter-container" style="height: calc(100% - 95px);width: calc(100% - 7px); overflow: auto; text-align: center; font-family: arial, helvetica; font-size: 1.2em; padding-bottom: 50px" class="ui-widget-content">
+
+
+    <div style="position: relative; padding: 5px">
+        <image src="wolf_logo.png" id="logo"></image>
+        <span id="headText">Heiztechnik</span>
+    </div>
+    <table style="width: 600px; display: inline-block; text-align: left">
+        <tr>
+            <td colspan="4" style="text-align: center; font-size: 1.4em;" class="ui-widget-header">Verbindung</td>
+        </tr>
+        <tr>
+            <td style="width: 120px">Adapter IP:</td>
+            <td>
+                <select id="host_ip" style="width: 280px">
+                </select>
+            </td>
+            <td style="width: 100px;  text-align: right">Port:</td>
+            <td><input type="number" value="6000" style="width: 100px!important"/></td>
+        </tr>
+        <tr>
+            <td>ISM8i IP:</td>
+            <td><input type="text" value="192.168.100.68" style="width: 279px"/></td>
+            <td style="width: 100px;  text-align: right">Port:</td>
+            <td><input type="number" value="12004" style="width: 100px!important"/></td>
+        </tr>
+    </table>
+    <br>
+
+    <table style="width: 600px; display: inline-block">
+        <tr>
+            <th style="width: 160px "></th>
+            <th style="width: 50px"></th>
+            <th style="width: 150px"></th>
+            <th style="width: 100px"></th>
+            <th style="width: 230px"></th>
+        </tr>
+        <tr>
+            <td colspan="5" style="text-align: center; font-size: 1.4em;" class="ui-widget-header">Heizgeräte</td>
+        </tr>
+        <tr>
+            <td rowspan="4" style="text-align: center; height: 120px; vertical-align: middle">
+                <image src="image/heating.png" style="height: 100px"></image>
+            </td>
+            <td class="number">(1)</td>
+            <td>
+                <select class="devices" id="hg1_t">
+                    <option>auto</option>
+                    <option>CGB-2</option>
+                    <option>CGW-2</option>
+                    <option>CGS-2</option>
+                    <option>CSZ-2</option>
+                    <option>MGK-2</option>
+                    <option>TOB</option>
+                    <option>BWL-1-S</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input class="names" id="hg1_n" type="text"/></td>
+        </tr>
+        <tr>
+            <td class="number">(2)</td>
+            <td>
+                <select class="devices" id="hg2_t">
+                    <option>auto</option>
+                    <option>CGB-2</option>
+                    <option>CGW-2</option>
+                    <option>CGS-2</option>
+                    <option>CSZ-2</option>
+                    <option>MGK-2</option>
+                    <option>TOB</option>
+                    <option>BWL-1-S</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input class="names" id="hg2_n" type="text"/></td>
+        </tr>
+        <tr>
+            <td class="number">(3)</td>
+            <td>
+                <select class="devices" id="hg3_t">
+                    <option>auto</option>
+                    <option>CGB-2</option>
+                    <option>CGW-2</option>
+                    <option>CGS-2</option>
+                    <option>CSZ-2</option>
+                    <option>MGK-2</option>
+                    <option>TOB</option>
+                    <option>BWL-1-S</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input class="names" id="hg3_n" type="text"/></td>
+        </tr>
+        <tr>
+            <td class="number">(4)</td>
+            <td>
+                <select class="devices" id="hg4_t">
+                    <option>auto</option>
+                    <option>CGB-2</option>
+                    <option>CGW-2</option>
+                    <option>CGS-2</option>
+                    <option>CSZ-2</option>
+                    <option>MGK-2</option>
+                    <option>TOB</option>
+                    <option>BWL-1-S</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input class="names" id="hg4_n" type="text"/></td>
+        </tr>
+        <!------------------------------------------------------------------------------------------------>
+        <tr>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Bedienmodule</td>
+        </tr>
+        <tr>
+            <td rowspan="4" style="text-align: center; height: 120px; vertical-align: middle">
+                <image src="image/bm2.png" style="height: 100px"></image>
+            </td>
+            <td class="number">(1)</td>
+            <td>
+                <select class="devices" id="bm1_t">
+                    <option>auto</option>
+                    <option>BM-2</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input class="names" id="bm1_n" type="text"/></td>
+        </tr>
+        <tr>
+            <td class="number">(2)</td>
+            <td>
+                <select class="devices" id="bm2_t">
+                    <option>auto</option>
+                    <option>BM-2</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input class="names" id="bm2_n" type="text"/></td>
+        </tr>
+        <tr>
+            <td class="number">(3)</td>
+            <td>
+                <select class="devices" id="bm3_t">
+                    <option>auto</option>
+                    <option>BM-2</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input class="names" id="bm3_n" type="text"/></td>
+        </tr>
+        <tr>
+            <td class="number">(4)</td>
+            <td>
+                <select class="devices" id="bm4_t">
+                    <option>auto</option>
+                    <option>BM-2</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input class="names" id="bm4_n" type="text"/></td>
+        </tr>
+        <!------------------------------------------------------------------------------------------------>
+        <tr>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Mischermodule</td>
+        </tr>
+        <tr>
+            <td rowspan="3" style="text-align: center; height: 120px; vertical-align: middle">
+                <image src="image/uni.png" style="height: 100px"></image>
+            </td>
+            <td class="number">(1)</td>
+            <td>
+                <select class="devices" id="mm1_t">
+                    <option>auto</option>
+                    <option>MM</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input type="text"/></td>
+        </tr>
+        <tr>
+            <td class="number">(2)</td>
+            <td>
+                <select class="devices" id="mm2_t">
+                    <option>auto</option>
+                    <option>MM</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input  type="text"/></td>
+        </tr>
+        <tr>
+            <td class="number">(3)</td>
+            <td>
+                <select class="devices" id="mm3_t">
+                    <option>auto</option>
+                    <option>MM</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input type="text"/></td>
+        </tr>
+        <!------------------------------------------------------------------------------------------------>
+        <tr>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Kaskadenmodule</td>
+        </tr>
+        <tr>
+            <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
+                <image src="image/uni.png" style="height: 100px"></image>
+            </td>
+            <td class="number">(1)</td>
+            <td>
+                <select class="devices" id="km1_t">
+                    <option>auto</option>
+                    <option>KM</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input type="text"/></td>
+        </tr>
+        <!------------------------------------------------------------------------------------------------>
+        <tr>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Solarmodule</td>
+        </tr>
+        <tr>
+            <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
+                <image src="image/uni.png" style="height: 100px"></image>
+            </td>
+            <td class="number">(1)</td>
+            <td>
+                <select class="devices" id="sm1_t">
+                    <option>auto</option>
+                    <option>SM-1</option>
+                    <option>SM-2</option>
+                </select>
+            </td>
+            <td>Name:</td>
+            <td><input type="text"/></td>
+        </tr>
+    </table>
+
+
+</div>
+
+</html>

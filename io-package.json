@@ -1,0 +1,33 @@
+{
+  "common": {
+    "name": "wolf",
+    "version": "0.0.1",
+    "title": "wolf",
+    "desc": "Wolf Heating over ISM8i",
+    "authors": [
+      "smiling_Jack <smiling_Jack@iobroker.net>"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "loglevel": "info",
+    "icon": "wolf_logo.png",
+    "messagebox": true,
+    "keywords": [
+      "Heating",
+      "Solar",
+      "Wolf"
+    ],
+    "enabled": false,
+    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.wolf/master/admin/wolf_logo.png",
+    "readme": "https://github.com/ioBroker/ioBroker.wolf/blob/master/README.md",
+    "type": "hardware",
+    "config":{
+      "minWidth": 650,
+      "minHeight": 800,
+      "width ": 800
+    }
+  },
+  "native": {
+  }
+}
