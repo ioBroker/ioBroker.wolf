@@ -1,17 +1,21 @@
 "use strict";
 
-var utils = require(__dirname + '/lib/utils');
+//var utils = require(__dirname + '/lib/utils');
 //
-var adapter = utils.adapter('wolf');
+//var adapter = utils.adapter('wolf');
 var net = require('net');
 var buffer = require('buffer');
+
+var dec = new (require('./js/decoder.js'))();
+
 
 var HOST = '0.0.0.0';
 var PORT = 12004;
 var ack_data = {};
-adapter.on('ready', function () {
-    main();
-});
+
+//adapter.on('ready', function () {
+//    main();
+//});
 var datapoints = {
     1: {
         name: "Störung",
@@ -1152,47 +1156,71 @@ var datapoints = {
         type: "DPT_Value_Pres",
         rw: "r",
         einheit: "Pa"
-    },
+    }
 };
 
 function get_device(id){
-    if(id >= 0 || id <= 13 ){
+    if(id >= 1 && id <= 13 ){
         return "Heizgerät(1)"
-    }else if(id >= 14 || id <= 26 ){
+    }else if(id >= 14 && id <= 26 ){
         return "Heizgerät(2)"
-    }else if(id >= 27 || id <= 39 ){
+    }else if(id >= 27 && id <= 39 ){
         return "Heizgerät(3)"
-    }else if(id >= 40|| id <= 52 ){
+    }else if(id >= 40 && id <= 52 ){
         return "Heizgerät(4)"
-    }else if(id >= 53 || id <= 66 ){
+    }else if(id >= 53 && id <= 66 ){
         return "BM(1)"
-    }else if(id >= 67 || id <= 79 ){
+    }else if(id >= 67 && id <= 79 ){
         return "BM(2)"
-    }else if(id >= 80 || id <= 92 ){
+    }else if(id >= 80 && id <= 92 ){
         return "BM(3)"
-    }else if(id >= 93 || id <= 105 ){
+    }else if(id >= 93 && id <= 105 ){
         return "BM(4)"
-    }else if(id >= 106 || id <= 113 ){
+    }else if(id >= 106 && id <= 113 ){
         return "KM(1)"
-    }else if(id >= 114 || id <= 120 ){
+    }else if(id >= 114 && id <= 120 ){
         return "MM(1)"
-    }else if(id >= 121 || id <= 127 ){
+    }else if(id >= 121 && id <= 127 ){
         return "MM(2)"
-    }else if(id >= 128 || id <= 134 ){
+    }else if(id >= 128 && id <= 134 ){
         return "MM(3)"
-    }else if(id >= 135 || id <= 147 ){
+    }else if(id >= 135 && id <= 147 ){
         return "SM(1)"
-    }else if(id >= 148 || id <= 175 ){
+    }else if(id >= 148 && id <= 175 ){
         return "CWL"
-    }else if(id >= 176 || id <= 190){
+    }else if(id >= 176 && id <= 190){
         return "Heizgerät(1)"
+    }else{
+        return parseInt(id);
     }
 
 }
 
+function decode(type,data){
+    if( type == "DPT_Scaling" ){
+        return dec.decodeDPT5(data)
+    }else
+    if(type == "DPT_Value_Temp" || type == "DPT_Value_Tempd" || type == "DPT_Value_Pres" || type == "DPT_Power" || type == "DPT_Value_Volule_Flow" ){
+        return dec.decodeDPT9(data)
+    }else
+    if( type == "DPT_TimeOfDay" ){
+        return dec.decodeDPT10(data)
+    }else
+    if( type == "DPT_Date" ){
+        return dec.decodeDPT11(data)
+    }else
+    if( type == "DPT_FlowTate_m3/h" ){
+        return dec.decodeDPT13(data)
+    }else
+    if( type == "DPT_HVAVMode" ){
+        return dec.decodeDPT20(data)
+    }else{
+        return data.toString();
+    }
+}
 
 function main() {
-
+console.log("start")
     var buff = new Buffer(17);
     buff[0] = 0x06;
     buff[1] = 0x20;
@@ -1214,29 +1242,55 @@ function main() {
 
 
     net.createServer(function (sock) {
+        sock.on("connect",function(e){
+            console.log(e)
+        });
 
         sock.on('data', function (_data) {
             console.log("-------------------")
-            console.log(_data)
+
             buff[12] = _data[12];
             buff[13] = _data[13];
+            sock.write(buff)
+            var dp = _data.readUInt16BE(12)
+            console.log(_data)
+            console.log(dp)
 
-            var dp = buff.readUInt16BE(12)
+            if (ack_data[get_device(dp)] == undefined) {
 
-            try{
-                if(ack_data[get_device(dp)] == undefined){
-                    ack_data[get_device(dp)]={}
-                }
-                ack_data[get_device(dp)][datapoints[dp].name] = buff[20]
-            }catch (err){
-                console.log(err)
             }
+            if(datapoints[dp]){
+                console.log(get_device(dp))
+                console.log(datapoints[dp].name);
+
+                console.log("---")
+                console.log(_data[19].toString(10))
+
+                console.log("value: "+ decode(datapoints[dp].type, _data.slice(20)));
+
+                //if(datapoints[dp].type == "DPT_Value_Temp"){
+                //    var value = _data.readUInt16BE(20);
+                //
+                //    var sign = (value & 0x8000) >> 15;
+                //    var exp = (value & 0x7800) >> 11;
+                //    var mant = (value & 0x07ff);
+                //
+                //    if(sign !== 0) {
+                //        mant = -(~(mant - 1) & 0x07ff);
+                //    }
+                //    value = (1 << exp) * 0.01 * mant;
+                //    console.log(value)
+                //}
+            }
+            //ack_data[get_device(dp)][datapoints[dp].name] = buff[20];
 
 
             console.log("-------------------")
-            sock.write(buff)
-        });
+
+
+        })
+
+
     }).listen(PORT, HOST);
-
-
 }
+main();
