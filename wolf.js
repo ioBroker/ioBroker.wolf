@@ -1,8 +1,8 @@
-"use strict";
+ï»¿"use strict";
 
-//var utils = require(__dirname + '/lib/utils');
+var utils = require(__dirname + '/lib/utils');
 //
-//var adapter = utils.adapter('wolf');
+var adapter = utils.adapter('wolf');
 var net = require('net');
 var buffer = require('buffer');
 
@@ -18,7 +18,7 @@ var ack_data = {};
 //});
 var datapoints = {
     1: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -39,31 +39,31 @@ var datapoints = {
         name: "Kesseltemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     5: {
         name: "Sammlertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     6: {
-        name: "Rücklauftemperatur",
+        name: "RÃ¼cklauftemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     7: {
         name: "Warmwassertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     8: {
-        name: "Außentemperatur",
+        name: "AuÃŸentemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     9: {
         name: "Status Brenner / Flamme",
@@ -96,7 +96,7 @@ var datapoints = {
         einheit: "Pa"
     },
     14: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -117,31 +117,31 @@ var datapoints = {
         name: "Kesseltemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     18: {
         name: "Sammlertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     19: {
-        name: "Rücklauftemperatur",
+        name: "RÃ¼cklauftemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     20: {
         name: "Warmwassertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     21: {
-        name: "Außentemperatur",
+        name: "AuÃŸentemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     22: {
         name: "Status Brenner / Flamme",
@@ -174,7 +174,7 @@ var datapoints = {
         einheit: "Pa"
     },
     27: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -195,31 +195,31 @@ var datapoints = {
         name: "Kesseltemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     31: {
         name: "Sammlertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     32: {
-        name: "Rücklauftemperatur",
+        name: "RÃ¼cklauftemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     33: {
         name: "Warmwassertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     34: {
-        name: "Außentemperatur",
+        name: "AuÃŸentemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     35: {
         name: "Status Brenner / Flamme",
@@ -252,7 +252,7 @@ var datapoints = {
         einheit: "Pa"
     },
     40: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -273,31 +273,31 @@ var datapoints = {
         name: "Kesseltemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     44: {
         name: "Sammlertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     45: {
-        name: "Rücklauftemperatur",
+        name: "RÃ¼cklauftemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     46: {
         name: "Warmwassertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     47: {
-        name: "Außentemperatur",
+        name: "AuÃŸentemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     48: {
         name: "Status Brenner / Flamme",
@@ -330,28 +330,28 @@ var datapoints = {
         einheit: "Pa"
     },
     53: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
     },
     54: {
-        name: "Außentemperatur",
+        name: "AuÃŸentemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     55: {
         name: "Raumtemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     56: {
         name: "Warmwassersolltemperatur",
         type: "DPT_Value_Temp",
         rw: "rw",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     57: {
         name: "Programmwahl Heizkreis",
@@ -414,7 +414,7 @@ var datapoints = {
         einheit: "K"
     },
     67: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -423,13 +423,13 @@ var datapoints = {
         name: "Raumtemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     69: {
         name: "Warmwassersolltemperatur",
         type: "DPT_Value_Temp",
         rw: "rw",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     70: {
         name: "Programmwahl Mischer",
@@ -492,7 +492,7 @@ var datapoints = {
         einheit: "K"
     },
     80: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -501,13 +501,13 @@ var datapoints = {
         name: "Raumtemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     82: {
         name: "Warmwassersolltemperatur",
         type: "DPT_Value_Temp",
         rw: "rw",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     83: {
         name: "Programmwahl Mischer",
@@ -570,7 +570,7 @@ var datapoints = {
         einheit: "K"
     },
     93: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -579,13 +579,13 @@ var datapoints = {
         name: "Raumtemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     95: {
         name: "Warmwassersolltemperatur",
         type: "DPT_Value_Temp",
         rw: "rw",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     96: {
         name: "Programmwahl Mischer",
@@ -648,7 +648,7 @@ var datapoints = {
         einheit: "K"
     },
     106: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -657,7 +657,7 @@ var datapoints = {
         name: "Sammlertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     108: {
         name: "Gesamtmodulationsgrad",
@@ -669,7 +669,7 @@ var datapoints = {
         name: "Vorlauftemperatur Mischerkreis",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     110: {
         name: "Status Mischerkreispumpe",
@@ -687,16 +687,16 @@ var datapoints = {
         name: "Eingang E1",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     113: {
         name: "Eingang E2",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     114: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -705,13 +705,13 @@ var datapoints = {
         name: "Warmwassertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     116: {
         name: "Vorlauftemperatur Mischerkreis",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     117: {
         name: "Status Mischerkreispumpe",
@@ -729,16 +729,16 @@ var datapoints = {
         name: "Eingang E1",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     120: {
         name: "Eingang E2",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     121: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -747,13 +747,13 @@ var datapoints = {
         name: "Warmwassertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     123: {
         name: "Vorlauftemperatur Mischerkreis",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     124: {
         name: "Status Mischerkreispumpe",
@@ -771,16 +771,16 @@ var datapoints = {
         name: "Eingang E1",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     127: {
         name: "Eingang E2",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     128: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -789,13 +789,13 @@ var datapoints = {
         name: "Warmwassertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     130: {
         name: "Vorlauftemperatur Mischerkreis",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     131: {
         name: "Status Mischerkreispumpe",
@@ -813,16 +813,16 @@ var datapoints = {
         name: "Eingang E1",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     134: {
         name: "Eingang E2",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     135: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -831,19 +831,19 @@ var datapoints = {
         name: "Warmwassertemperatur Solar 1",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     137: {
         name: "Temperatur Kollektor 1",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     138: {
         name: "Eingang E1",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     139: {
         name: "Eingang E2 (Durchfluss)",
@@ -855,7 +855,7 @@ var datapoints = {
         name: "Eingang E3",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     141: {
         name: "Status Solarkreispumpe SKP1",
@@ -900,7 +900,7 @@ var datapoints = {
         einheit: "kW"
     },
     148: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -930,31 +930,31 @@ var datapoints = {
         einheit: ""
     },
     153: {
-        name: "Zeitweise Intensivlüftung AN/AUS",
+        name: "Zeitweise IntensivlÃ¼ftung AN/AUS",
         type: "DPT_Switch",
         rw: "rw",
         einheit: ""
     },
     154: {
-        name: "Zeitweise Intensivlüftung Startdatum",
+        name: "Zeitweise IntensivlÃ¼ftung Startdatum",
         type: "DPT_Date",
         rw: "rw",
         einheit: ""
     },
     155: {
-        name: "Zeitweise Intensivlüftung Enddatum",
+        name: "Zeitweise IntensivlÃ¼ftung Enddatum",
         type: "DPT_Date",
         rw: "rw",
         einheit: ""
     },
     156: {
-        name: "Zeitweise Intensivlüftung Startzeit",
+        name: "Zeitweise IntensivlÃ¼ftung Startzeit",
         type: "DPT_TimeOfDay",
         rw: "rw",
         einheit: ""
     },
     157: {
-        name: "Zeitweise Intensivlüftung Endzeit",
+        name: "Zeitweise IntensivlÃ¼ftung Endzeit",
         type: "DPT_TimeOfDay",
         rw: "rw",
         einheit: ""
@@ -990,7 +990,7 @@ var datapoints = {
         einheit: ""
     },
     163: {
-        name: "Lüftungsstufe",
+        name: "LÃ¼ftungsstufe",
         type: "DPT_Scaling",
         rw: "r",
         einheit: "%"
@@ -999,25 +999,25 @@ var datapoints = {
         name: "Ablufttemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     165: {
         name: "Frischlufttemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     166: {
         name: "Luftdurchsatz Zuluft",
         type: "DPT_FlowRate_m3/h",
         rw: "r",
-        einheit: "m³/h"
+        einheit: "mÂ³/h"
     },
     167: {
         name: "Luftdurchsatz Abluft",
         type: "DPT_FlowRate_m3/h",
         rw: "r",
-        einheit: "m³/h"
+        einheit: "mÂ³/h"
     },
     168: {
         name: "Bypass Initialisierung",
@@ -1026,13 +1026,13 @@ var datapoints = {
         einheit: ""
     },
     169: {
-        name: "Bypass öffnet/offen",
+        name: "Bypass Ã¶ffnet/offen",
         type: "DPT_Bool",
         rw: "r",
         einheit: ""
     },
     170: {
-        name: "Bypass schließt/geschlossen",
+        name: "Bypass schlieÃŸt/geschlossen",
         type: "DPT_Bool",
         rw: "r",
         einheit: ""
@@ -1056,7 +1056,7 @@ var datapoints = {
         einheit: ""
     },
     174: {
-        name: "Frost Status: Vorwärmer",
+        name: "Frost Status: VorwÃ¤rmer",
         type: "DPT_Bool",
         rw: "r",
         einheit: ""
@@ -1065,10 +1065,10 @@ var datapoints = {
         name: "Frost Status: Fehler/Unausgeglichen",
         type: "DPT_Bool",
         rw: "r",
-        einheit: "Heizgerät(1)"
+        einheit: "HeizgerÃ¤t(1)"
     },
     176: {
-        name: "Störung",
+        name: "StÃ¶rung",
         type: "DPT_Switch",
         rw: "r",
         einheit: ""
@@ -1086,7 +1086,7 @@ var datapoints = {
         einheit: "kW"
     },
     179: {
-        name: "Kühlleistung",
+        name: "KÃ¼hlleistung",
         type: "DPT_Power",
         rw: "r",
         einheit: "kW"
@@ -1095,31 +1095,31 @@ var datapoints = {
         name: "Kesseltemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     181: {
         name: "Sammlertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     182: {
-        name: "Rücklauftemperatur",
+        name: "RÃ¼cklauftemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     183: {
         name: "Warmwassertemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     184: {
-        name: "Außentemperatur",
+        name: "AuÃŸentemperatur",
         type: "DPT_Value_Temp",
         rw: "r",
-        einheit: "°C"
+        einheit: "Â°C"
     },
     185: {
         name: "Status Heizkreispumpe",
@@ -1159,68 +1159,128 @@ var datapoints = {
     }
 };
 
-function get_device(id){
-    if(id >= 1 && id <= 13 ){
-        return "Heizgerät(1)"
-    }else if(id >= 14 && id <= 26 ){
-        return "Heizgerät(2)"
-    }else if(id >= 27 && id <= 39 ){
-        return "Heizgerät(3)"
-    }else if(id >= 40 && id <= 52 ){
-        return "Heizgerät(4)"
-    }else if(id >= 53 && id <= 66 ){
+function get_device(id) {
+    if (id >= 1 && id <= 13) {
+        return "HeizgerÃ¤t(1)"
+    } else if (id >= 14 && id <= 26) {
+        return "HeizgerÃ¤t(2)"
+    } else if (id >= 27 && id <= 39) {
+        return "HeizgerÃ¤t(3)"
+    } else if (id >= 40 && id <= 52) {
+        return "HeizgerÃ¤t(4)"
+    } else if (id >= 53 && id <= 66) {
         return "BM(1)"
-    }else if(id >= 67 && id <= 79 ){
+    } else if (id >= 67 && id <= 79) {
         return "BM(2)"
-    }else if(id >= 80 && id <= 92 ){
+    } else if (id >= 80 && id <= 92) {
         return "BM(3)"
-    }else if(id >= 93 && id <= 105 ){
+    } else if (id >= 93 && id <= 105) {
         return "BM(4)"
-    }else if(id >= 106 && id <= 113 ){
+    } else if (id >= 106 && id <= 113) {
         return "KM(1)"
-    }else if(id >= 114 && id <= 120 ){
+    } else if (id >= 114 && id <= 120) {
         return "MM(1)"
-    }else if(id >= 121 && id <= 127 ){
+    } else if (id >= 121 && id <= 127) {
         return "MM(2)"
-    }else if(id >= 128 && id <= 134 ){
+    } else if (id >= 128 && id <= 134) {
         return "MM(3)"
-    }else if(id >= 135 && id <= 147 ){
+    } else if (id >= 135 && id <= 147) {
         return "SM(1)"
-    }else if(id >= 148 && id <= 175 ){
+    } else if (id >= 148 && id <= 175) {
         return "CWL"
-    }else if(id >= 176 && id <= 190){
-        return "Heizgerät(1)"
-    }else{
+    } else if (id >= 176 && id <= 190) {
+        return "HeizgerÃ¤t(1)"
+    } else {
         return parseInt(id);
     }
 
 }
 
-function decode(type,data){
-    if( type == "DPT_Scaling" ){
+function get_device_rage(id) {
+    if (id == "hg1") {
+        return {'lsb': 1, 'msb': 13}
+    } else if (id == "hg2") {
+        return {'lsb': 14, 'msb': 26}
+    } else if (id == "hg3") {
+        return {'lsb': 27, 'msb': 39}
+    } else if (id == "hg4") {
+        return {'lsb': 40, 'msb': 52}
+    } else if (id == "bm1") {
+        return {'lsb': 53, 'msb': 66}
+    } else if (id == "bm2") {
+        return {'lsb': 67, 'msb': 79}
+    } else if (id == "bm3") {
+        return {'lsb': 80, 'msb': 92}
+    } else if (id == "bm4") {
+        return {'lsb': 93, 'msb': 105}
+    } else if (id == "km1") {
+        return {'lsb': 106, 'msb': 113}
+    } else if (id == "mm1") {
+        return {'lsb': 14, 'msb': 120}
+    } else if (id == "mm2") {
+        return {'lsb': 121, 'msb': 127}
+    } else if (id == "mm3") {
+        return {'lsb': 128, 'msb': 134}
+    } else if (id == "sm1") {
+        return {'lsb': 135, 'msb': 147}
+    } else {
+        return false
+    }
+
+}
+
+function decode(type, data) {
+
+    if (type == "DPT_Switch") {
+        var val = data.readInt8()
+        if (val == 0) {
+            return "Off"
+        } else {
+            return "On"
+        }
+    } else if (type == "DPT_Bool") {
+        var val = data.readInt8()
+        if (val == 0) {
+            return "false"
+        } else {
+            return "true"
+        }
+    } else if (type == "DPT_Enable") {
+        var val = data.readInt8()
+        if (val == 0) {
+            return "Disable"
+        } else {
+            return "Enable"
+        }
+    } else if (type == "DPT_OpenClose") {
+        var val = data.readInt8()
+        if (val == 0) {
+            return "Open"
+        } else {
+            return "On"
+        }
+    } else if (type == "DPT_Scaling") {
         return dec.decodeDPT5(data)
-    }else
-    if(type == "DPT_Value_Temp" || type == "DPT_Value_Tempd" || type == "DPT_Value_Pres" || type == "DPT_Power" || type == "DPT_Value_Volule_Flow" ){
+    } else if (type == "DPT_Value_Temp" || type == "DPT_Value_Tempd" || type == "DPT_Value_Pres" || type == "DPT_Power" || type == "DPT_Value_Volume_Flow") {
         return dec.decodeDPT9(data)
-    }else
-    if( type == "DPT_TimeOfDay" ){
+    } else if (type == "DPT_TimeOfDay") {
         return dec.decodeDPT10(data)
-    }else
-    if( type == "DPT_Date" ){
+    } else if (type == "DPT_Date") {
         return dec.decodeDPT11(data)
-    }else
-    if( type == "DPT_FlowTate_m3/h" ){
+    } else if (type == "DPT_FlowRate_m3/h") {
         return dec.decodeDPT13(data)
-    }else
-    if( type == "DPT_HVAVMode" ){
+    } else if (type == "DPT_HVAVMode") {
         return dec.decodeDPT20(data)
-    }else{
+    } else {
         return data.toString();
     }
 }
 
 function main() {
-console.log("start")
+
+    var devices = adapter.config.devices;
+    var names = adapter.config.names;
+
     var buff = new Buffer(17);
     buff[0] = 0x06;
     buff[1] = 0x20;
@@ -1239,10 +1299,69 @@ console.log("start")
     buff[14] = 0x00;
     buff[15] = 0x00;
     buff[16] = 0x00;
+//console.log(devices)
+    for (var group in devices) {
+        var parent = false
+        for (var dev in devices[group]) {
+
+            if (devices[group][dev] == "auto") {
+                if (parent == false) {
+                    parent = true;
+                    var name = "";
+                    console.log(dev)
+
+                    if(dev.match(/hg/)){
+                        name = 'HeizgerÃ¤te'
+                    }else{
+                        name = "keine ahnung"
+                    }
+                    adapter.setObject(group, {
+                        type: 'device',
+                        common: {
+                            name: name,
+                            type: "device",
+                        },
+                        native: {}
+                    });
+                }
+                adapter.setObject(group + "." + dev, {
+                    type: 'channel',
+                    common: {
+                        name: names[dev+ "_n"],
+                        type: "channel",
+                    },
+                    native: {}
+                });
+
+                var range = get_device_rage(dev)
+
+                for (range.lsb; range.lsb < range.msb; range.lsb++) {
+
+                    var data = datapoints[range.lsb];
+                    adapter.setObject(group + "." + dev + "." + range.lsb, {
+                        type: 'state',
+                        common: {
+                            name: data.name,
+                            role: data.type.replace("DPT_",""),
+                            type: "state",
+                            unit: data.einheit,
+                            enabled: false
+                        },
+                        native: {
+                            rw: data.rw,
+                        }
+                    });
+                }
+
+
+            }
+
+        }
+    }
 
 
     net.createServer(function (sock) {
-        sock.on("connect",function(e){
+        sock.on("connect", function (e) {
             console.log(e)
         });
 
@@ -1259,14 +1378,14 @@ console.log("start")
             if (ack_data[get_device(dp)] == undefined) {
 
             }
-            if(datapoints[dp]){
+            if (datapoints[dp]) {
                 console.log(get_device(dp))
                 console.log(datapoints[dp].name);
 
                 console.log("---")
-                console.log(_data[19].toString(10))
+                console.log(datapoints[dp].type)
 
-                console.log("value: "+ decode(datapoints[dp].type, _data.slice(20)));
+                console.log("value: " + decode(datapoints[dp].type, _data.slice(20)));
 
                 //if(datapoints[dp].type == "DPT_Value_Temp"){
                 //    var value = _data.readUInt16BE(20);
@@ -1293,4 +1412,7 @@ console.log("start")
 
     }).listen(PORT, HOST);
 }
-main();
+
+adapter.on('ready', function () {
+    main();
+});

@@ -93,15 +93,21 @@
     function save(callback) {
         // example: select elements with class=value and build settings object
         var obj = {
-
+            devices: {},
+            names:{}
         };
 
-        $('.devices').each(function(){
-            var cat = $(this).attr("id").substring(0,2);
-            if(obj[cat] == undefined){
-                obj[cat] = {};
+        $('.devices').each(function () {
+            var cat = $(this).attr("id").substring(0, 2);
+            if (obj.devices[cat] == undefined) {
+                obj.devices[cat] = {};
             }
-obj[cat][ $(this).attr("id").substring(0,3)] = $(this).val();
+            obj.devices[cat][$(this).attr("id").substring(0, 3)] = $(this).val();
+        });
+        $('.names').each(function () {
+            var key = $(this).attr("id");
+
+            obj.names[key]= $(this).text();
         });
         console.log(obj)
         callback(obj);
@@ -112,7 +118,6 @@ obj[cat][ $(this).attr("id").substring(0,3)] = $(this).val();
 
 <!-- you have to put your config page in a div with id adapter-container -->
 <div id="adapter-container" style="height: calc(100% - 95px);width: calc(100% - 7px); overflow: auto; text-align: center; font-family: arial, helvetica; font-size: 1.2em; padding-bottom: 50px" class="ui-widget-content">
-
 
     <div style="position: relative; padding: 5px">
         <image src="wolf_logo.png" id="logo"></image>
@@ -149,7 +154,7 @@ obj[cat][ $(this).attr("id").substring(0,3)] = $(this).val();
             <th style="width: 230px"></th>
         </tr>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em;" class="ui-widget-header">Heizgeräte</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em;" class="ui-widget-header">Heizgerï¿½te</td>
         </tr>
         <tr>
             <td rowspan="4" style="text-align: center; height: 120px; vertical-align: middle">
