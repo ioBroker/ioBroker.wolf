@@ -9,8 +9,6 @@ var buffer = require('buffer');
 var dec = new (require('./js/decoder.js'))();
 
 
-var HOST = '0.0.0.0';
-var PORT = 12004;
 var ack_data = {};
 
 //adapter.on('ready', function () {
@@ -1193,7 +1191,20 @@ function get_device(id) {
     } else {
         return parseInt(id);
     }
+}
 
+function get_group(id){
+    if(id.match(/Heizgerät/)){
+        return "hg"
+    }else if(id.match(/BM/)){
+        return "bm"
+    }else if(id.match(/KM/)){
+        return "km"
+    }else if(id.match(/MM/)){
+        return "mm"
+    }else if(id.match(/SM/)){
+        return "sm"
+    }
 }
 
 function get_device_rage(id) {
@@ -1262,7 +1273,7 @@ function decode(type, data) {
     } else if (type == "DPT_Scaling") {
         return dec.decodeDPT5(data)
     } else if (type == "DPT_Value_Temp" || type == "DPT_Value_Tempd" || type == "DPT_Value_Pres" || type == "DPT_Power" || type == "DPT_Value_Volume_Flow") {
-        return dec.decodeDPT9(data)
+        return Math.round(dec.decodeDPT9(data)*100)/100
     } else if (type == "DPT_TimeOfDay") {
         return dec.decodeDPT10(data)
     } else if (type == "DPT_Date") {
@@ -1299,12 +1310,28 @@ function main() {
     buff[14] = 0x00;
     buff[15] = 0x00;
     buff[16] = 0x00;
+
+    var buff_getall = new Buffer(12);
+    buff_getall[0] = 0x06;
+    buff_getall[1] = 0x20;
+    buff_getall[2] = 0xF0;
+    buff_getall[3] = 0x80;
+    buff_getall[4] = 0x00;
+    buff_getall[5] = 0x16;
+    buff_getall[6] = 0x04;
+    buff_getall[7] = 0x00;
+    buff_getall[8] = 0x00;
+    buff_getall[9] = 0x00;
+    buff_getall[10] = 0xF0;
+    buff_getall[11] = 0xD0;
 //console.log(devices)
     for (var group in devices) {
         var parent = false
         for (var dev in devices[group]) {
 
             if (devices[group][dev] == "auto") {
+                var range = get_device_rage(dev);
+                var device = get_device(range.lsb);
                 if (parent == false) {
                     parent = true;
                     var name = "";
@@ -1324,7 +1351,7 @@ function main() {
                         native: {}
                     });
                 }
-                adapter.setObject(group + "." + dev, {
+                adapter.setObject(group + "." + device, {
                     type: 'channel',
                     common: {
                         name: names[dev+ "_n"],
@@ -1333,12 +1360,12 @@ function main() {
                     native: {}
                 });
 
-                var range = get_device_rage(dev)
+
 
                 for (range.lsb; range.lsb < range.msb; range.lsb++) {
 
                     var data = datapoints[range.lsb];
-                    adapter.setObject(group + "." + dev + "." + range.lsb, {
+                    adapter.setObject(group + "." + device + "." + range.lsb, {
                         type: 'state',
                         common: {
                             name: data.name,
@@ -1352,10 +1379,7 @@ function main() {
                         }
                     });
                 }
-
-
             }
-
         }
     }
 
@@ -1384,8 +1408,12 @@ function main() {
 
                 console.log("---")
                 console.log(datapoints[dp].type)
+var val = decode(datapoints[dp].type, _data.slice(20))
+                console.log("value: " + val);
 
-                console.log("value: " + decode(datapoints[dp].type, _data.slice(20)));
+                var device = get_device(dp)
+                console.log(get_group(device)+"."+device+"."+dp)
+                adapter.setState(get_group(device)+"."+device+"."+dp, val, true)
 
                 //if(datapoints[dp].type == "DPT_Value_Temp"){
                 //    var value = _data.readUInt16BE(20);
@@ -1410,7 +1438,17 @@ function main() {
         })
 
 
-    }).listen(PORT, HOST);
+    }).listen(adapter.config.host_port, adapter.config.host_ip);
+
+
+    //net.createConnection(6000, '192.168.100.68', function() {
+    //
+    //    console.log('CONNECTED TO: ' + HOST + ':' + PORT);
+    //    // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
+    //    client.write('I am Chuck Norris!');
+    //
+    //});
+
 }
 
 adapter.on('ready', function () {

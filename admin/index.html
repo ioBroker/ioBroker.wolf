@@ -94,7 +94,11 @@
         // example: select elements with class=value and build settings object
         var obj = {
             devices: {},
-            names:{}
+            names:{},
+            ism8_ip: $("#ism8_ip").val(),
+            ism8_port: $("#ism8_port").val(),
+            host_ip: $("#host_ip").val(),
+            host_port: $("#host_port").val()
         };
 
         $('.devices').each(function () {
@@ -109,6 +113,7 @@
 
             obj.names[key]= $(this).text();
         });
+
         console.log(obj)
         callback(obj);
     }
@@ -134,13 +139,13 @@
                 </select>
             </td>
             <td style="width: 100px;  text-align: right">Port:</td>
-            <td><input type="number" value="6000" style="width: 100px!important"/></td>
+            <td><input id="host_port" type="number" value="6000" style="width: 100px!important"/></td>
         </tr>
         <tr>
             <td>ISM8i IP:</td>
-            <td><input type="text" value="192.168.100.68" style="width: 279px"/></td>
+            <td><input id="ism8_ip" type="text" value="192.168.100.68" style="width: 279px"/></td>
             <td style="width: 100px;  text-align: right">Port:</td>
-            <td><input type="number" value="12004" style="width: 100px!important"/></td>
+            <td><input id="ism8_port" type="number" value="12004" style="width: 100px!important"/></td>
         </tr>
     </table>
     <br>
