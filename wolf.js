@@ -1,19 +1,21 @@
-﻿"use strict";
+﻿//﻿"use strict";
+
+// todo unterscheidung hg1 datenbereich 1-13 oder 176-191
+// todo schreiben
 
 var utils = require(__dirname + '/lib/utils');
-//
+
 var adapter = utils.adapter('wolf');
 var net = require('net');
-var buffer = require('buffer');
 
 var dec = new (require('./js/decoder.js'))();
 
 
-var ack_data = {};
+var ack_data = {
+    old_devices: {},
+    new_devices: [],
+};
 
-//adapter.on('ready', function () {
-//    main();
-//});
 var datapoints = {
     1: {
         name: "Störung",
@@ -1159,51 +1161,37 @@ var datapoints = {
 
 function get_device(id) {
     if (id >= 1 && id <= 13) {
-        return "Heizgerät(1)"
+        return "hg1"
     } else if (id >= 14 && id <= 26) {
-        return "Heizgerät(2)"
+        return "hg2"
     } else if (id >= 27 && id <= 39) {
-        return "Heizgerät(3)"
+        return "hg3"
     } else if (id >= 40 && id <= 52) {
-        return "Heizgerät(4)"
+        return "hg4"
     } else if (id >= 53 && id <= 66) {
-        return "BM(1)"
+        return "bm1"
     } else if (id >= 67 && id <= 79) {
-        return "BM(2)"
+        return "bm2"
     } else if (id >= 80 && id <= 92) {
-        return "BM(3)"
+        return "bm3"
     } else if (id >= 93 && id <= 105) {
-        return "BM(4)"
+        return "bm4"
     } else if (id >= 106 && id <= 113) {
-        return "KM(1)"
+        return "km1"
     } else if (id >= 114 && id <= 120) {
-        return "MM(1)"
+        return "mm1"
     } else if (id >= 121 && id <= 127) {
-        return "MM(2)"
+        return "mm2"
     } else if (id >= 128 && id <= 134) {
-        return "MM(3)"
+        return "mm3"
     } else if (id >= 135 && id <= 147) {
-        return "SM(1)"
+        return "sm1"
     } else if (id >= 148 && id <= 175) {
         return "CWL"
     } else if (id >= 176 && id <= 190) {
-        return "Heizgerät(1)"
+        return "hg1"
     } else {
         return parseInt(id);
-    }
-}
-
-function get_group(id){
-    if(id.match(/Heizgerät/)){
-        return "hg"
-    }else if(id.match(/BM/)){
-        return "bm"
-    }else if(id.match(/KM/)){
-        return "km"
-    }else if(id.match(/MM/)){
-        return "mm"
-    }else if(id.match(/SM/)){
-        return "sm"
     }
 }
 
@@ -1227,7 +1215,7 @@ function get_device_rage(id) {
     } else if (id == "km1") {
         return {'lsb': 106, 'msb': 113}
     } else if (id == "mm1") {
-        return {'lsb': 14, 'msb': 120}
+        return {'lsb': 114, 'msb': 120}
     } else if (id == "mm2") {
         return {'lsb': 121, 'msb': 127}
     } else if (id == "mm3") {
@@ -1273,7 +1261,7 @@ function decode(type, data) {
     } else if (type == "DPT_Scaling") {
         return dec.decodeDPT5(data)
     } else if (type == "DPT_Value_Temp" || type == "DPT_Value_Tempd" || type == "DPT_Value_Pres" || type == "DPT_Power" || type == "DPT_Value_Volume_Flow") {
-        return Math.round(dec.decodeDPT9(data)*100)/100
+        return Math.round(dec.decodeDPT9(data) * 100) / 100
     } else if (type == "DPT_TimeOfDay") {
         return dec.decodeDPT10(data)
     } else if (type == "DPT_Date") {
@@ -1283,173 +1271,172 @@ function decode(type, data) {
     } else if (type == "DPT_HVAVMode") {
         return dec.decodeDPT20(data)
     } else {
-        return data.toString();
+        return "undefind datapoint"
     }
 }
 
 function main() {
 
-    var devices = adapter.config.devices;
-    var names = adapter.config.names;
+    adapter.getForeignObjects(adapter.namespace + ".*", function (err, list) {
 
-    var buff = new Buffer(17);
-    buff[0] = 0x06;
-    buff[1] = 0x20;
-    buff[2] = 0xF0;
-    buff[3] = 0x80;
-    buff[4] = 0x00;
-    buff[5] = 0x15;
-    buff[6] = 0x04;
-    buff[7] = 0x00;
-    buff[8] = 0x00;
-    buff[9] = 0x00;
-    buff[10] = 0xF0;
-    buff[11] = 0x86;
-    buff[12] = 0x00;
-    buff[13] = 0x6E;
-    buff[14] = 0x00;
-    buff[15] = 0x00;
-    buff[16] = 0x00;
+//console.log(list)
+        for (var idd in list) {
 
-    var buff_getall = new Buffer(12);
-    buff_getall[0] = 0x06;
-    buff_getall[1] = 0x20;
-    buff_getall[2] = 0xF0;
-    buff_getall[3] = 0x80;
-    buff_getall[4] = 0x00;
-    buff_getall[5] = 0x16;
-    buff_getall[6] = 0x04;
-    buff_getall[7] = 0x00;
-    buff_getall[8] = 0x00;
-    buff_getall[9] = 0x00;
-    buff_getall[10] = 0xF0;
-    buff_getall[11] = 0xD0;
-//console.log(devices)
-    for (var group in devices) {
-        var parent = false
-        for (var dev in devices[group]) {
+            ack_data[idd.split(".").pop()] = {id: idd}
+            ack_data.old_devices[idd.split(".")[2]] = idd.split(".")[2];
+        }
 
-            if (devices[group][dev] == "auto") {
-                var range = get_device_rage(dev);
-                var device = get_device(range.lsb);
-                if (parent == false) {
-                    parent = true;
-                    var name = "";
-                    console.log(dev)
 
-                    if(dev.match(/hg/)){
-                        name = 'Heizgeräte'
-                    }else{
-                        name = "keine ahnung"
+
+        var devices = adapter.config.devices;
+        var names = adapter.config.names;
+
+        var buff_req = new Buffer(17);
+        buff_req[0] = 0x06;
+        buff_req[1] = 0x20;
+        buff_req[2] = 0xF0;
+        buff_req[3] = 0x80;
+        buff_req[4] = 0x00;
+        buff_req[5] = 0x15;
+        buff_req[6] = 0x04;
+        buff_req[7] = 0x00;
+        buff_req[8] = 0x00;
+        buff_req[9] = 0x00;
+        buff_req[10] = 0xF0;
+        buff_req[11] = 0x86;
+        buff_req[12] = 0x00;
+        buff_req[13] = 0x6E;
+        buff_req[14] = 0x00;
+        buff_req[15] = 0x00;
+        buff_req[16] = 0x00;
+
+        var buff_getall = new Buffer(12);
+        buff_getall[0] = 0x06;
+        buff_getall[1] = 0x20;
+        buff_getall[2] = 0xF0;
+        buff_getall[3] = 0x80;
+        buff_getall[4] = 0x00;
+        buff_getall[5] = 0x16;
+        buff_getall[6] = 0x04;
+        buff_getall[7] = 0x00;
+        buff_getall[8] = 0x00;
+        buff_getall[9] = 0x00;
+        buff_getall[10] = 0xF0;
+        buff_getall[11] = 0xD0;
+
+
+        for (var group in devices) {
+            var parent = false;
+            for (var dev in devices[group]) {
+
+
+
+                if (devices[group][dev] == "auto") {
+                    ack_data.new_devices.push(dev);
+                    var range = get_device_rage(dev);
+
+                    if (parent == false) {  //todo muss das parent sein ?
+                        parent = true;
+                        var group_name = "";
+
+                        if (dev.match(/hg/)) {
+                            group_name = 'Heizgeräte'
+                        } else if (dev.match(/bm/)) {
+                            group_name = 'Bediengeräte'
+                        } else if (dev.match(/mm/)) {
+                            group_name = 'Mischermodule'
+                        } else if (dev.match(/km/)) {
+                            group_name = 'Kaskadenmodul'
+                        } else if (dev.match(/sm/)) {
+                            group_name = 'Solarmodul'
+                        }
+
                     }
-                    adapter.setObject(group, {
-                        type: 'device',
+
+                    adapter.setObject(dev, {
+                        type: 'channel',
                         common: {
-                            name: name,
-                            type: "device",
+                            name: names[dev + "_n"] || group_name + " " + dev.slice(-1),
+                            type: "channel",
                         },
                         native: {}
                     });
-                }
-                adapter.setObject(group + "." + device, {
-                    type: 'channel',
-                    common: {
-                        name: names[dev+ "_n"],
-                        type: "channel",
-                    },
-                    native: {}
-                });
 
 
+                    for (range.lsb; range.lsb <= range.msb; range.lsb++) {
 
-                for (range.lsb; range.lsb < range.msb; range.lsb++) {
+                        if (!ack_data[range.lsb]) {
 
-                    var data = datapoints[range.lsb];
-                    adapter.setObject(group + "." + device + "." + range.lsb, {
-                        type: 'state',
-                        common: {
-                            name: data.name,
-                            role: data.type.replace("DPT_",""),
-                            type: "state",
-                            unit: data.einheit,
-                            enabled: false
-                        },
-                        native: {
-                            rw: data.rw,
+                            var data = datapoints[range.lsb];
+
+                            console.log("add:" + dev + "." + range.lsb  )
+                            adapter.setObject(dev + "." + range.lsb, {
+                                type: 'state',
+                                common: {
+                                    name: data.name,
+                                    role: data.type.replace("DPT_", ""),
+                                    type: "state",
+                                    unit: data.einheit,
+                                    enabled: false
+                                },
+                                native: {
+                                    rw: data.rw,
+                                }
+                            });
                         }
-                    });
+                    }
                 }
             }
         }
-    }
 
+        //console.log(ack_data)
+        for (var dev in ack_data.old_devices){
+            if(ack_data.new_devices.indexOf(dev) == -1){
+                console.log("delete " + dev)
+                adapter.deleteChannel(dev, function(){
 
-    net.createServer(function (sock) {
-        sock.on("connect", function (e) {
-            console.log(e)
-        });
-
-        sock.on('data', function (_data) {
-            console.log("-------------------")
-
-            buff[12] = _data[12];
-            buff[13] = _data[13];
-            sock.write(buff)
-            var dp = _data.readUInt16BE(12)
-            console.log(_data)
-            console.log(dp)
-
-            if (ack_data[get_device(dp)] == undefined) {
-
+                })
             }
-            if (datapoints[dp]) {
-                console.log(get_device(dp))
-                console.log(datapoints[dp].name);
-
-                console.log("---")
-                console.log(datapoints[dp].type)
-var val = decode(datapoints[dp].type, _data.slice(20))
-                console.log("value: " + val);
-
-                var device = get_device(dp)
-                console.log(get_group(device)+"."+device+"."+dp)
-                adapter.setState(get_group(device)+"."+device+"."+dp, val, true)
-
-                //if(datapoints[dp].type == "DPT_Value_Temp"){
-                //    var value = _data.readUInt16BE(20);
-                //
-                //    var sign = (value & 0x8000) >> 15;
-                //    var exp = (value & 0x7800) >> 11;
-                //    var mant = (value & 0x07ff);
-                //
-                //    if(sign !== 0) {
-                //        mant = -(~(mant - 1) & 0x07ff);
-                //    }
-                //    value = (1 << exp) * 0.01 * mant;
-                //    console.log(value)
-                //}
-            }
-            //ack_data[get_device(dp)][datapoints[dp].name] = buff[20];
+        }
 
 
-            console.log("-------------------")
+        net.createServer(function (sock) {
+
+            sock.write(buff_getall);
+
+            sock.on("connect", function (e) {
+                console.log(e)
+            });
+
+            sock.on('data', function (_data) {
+
+                buff_req[12] = _data[12];
+                buff_req[13] = _data[13];
+                sock.write(buff_req)
+
+                var dp = _data.readUInt16BE(12);
+                var device = get_device(dp);
 
 
-        })
+                if (ack_data[device] == undefined) {
 
+                }
 
-    }).listen(adapter.config.host_port, adapter.config.host_ip);
-
-
-    //net.createConnection(6000, '192.168.100.68', function() {
-    //
-    //    console.log('CONNECTED TO: ' + HOST + ':' + PORT);
-    //    // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
-    //    client.write('I am Chuck Norris!');
-    //
-    //});
-
+                if (datapoints[dp]) {
+                    var val = decode(datapoints[dp].type, _data.slice(20))
+                    adapter.setState(device + "." + dp, val, true);
+                    //console.log("Device: " + device);
+                    //console.log("Datapoint: " + dp);
+                    //console.log("Datapoint_name: " + datapoints[dp].name);
+                    //console.log("Datapoint_type: " + datapoints[dp].type);
+                    //console.log("value: " + val);
+                    //console.log("oid: " + device + "." + dp);
+                }
+            })
+        }).listen(adapter.config.ism8_port, adapter.config.host_ip);
+    });
 }
+
 
 adapter.on('ready', function () {
     main();

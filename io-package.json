@@ -22,12 +22,40 @@
     "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.wolf/master/admin/wolf_logo.png",
     "readme": "https://github.com/ioBroker/ioBroker.wolf/blob/master/README.md",
     "type": "hardware",
-    "config":{
+    "config": {
       "minWidth": 650,
       "minHeight": 800,
       "width ": 800
     }
   },
   "native": {
+    "ism8_ip": "192.168.100.68",
+    "ism8_port": "12004",
+    "host_ip": "0.0.0.0",
+    "devices": {
+      "hg": {
+        "hg1": "auto",
+        "hg2": "auto",
+        "hg3": "auto",
+        "hg4": "auto"
+      },
+      "bm": {
+        "bm1": "auto",
+        "bm2": "auto",
+        "bm3": "auto",
+        "bm4": "auto"
+      },
+      "mm": {
+        "mm1": "auto",
+        "mm2": "auto",
+        "mm3": "auto"
+      },
+      "km": {
+        "km1": "auto"
+      },
+      "sm": {
+        "sm1": "auto"
+      }
+    }
   }
 }

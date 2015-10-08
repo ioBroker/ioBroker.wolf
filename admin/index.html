@@ -70,6 +70,7 @@
 
     // the function loadSettings has to exist ...
     function load(settings, onchange) {
+        console.log(settings)
        getIPs(function(data){
 
            $.each(data, function(){
@@ -77,6 +78,17 @@
                    $("#host_ip").append("<option>"+this.address+"</option>")
                }
 
+           });
+
+           $('.devices').each(function () {
+               var cat = $(this).attr("id").substring(0, 2);
+               $(this).val(settings.devices[cat][$(this).attr("id").substring(0, 3)]) ;
+           });
+
+           $('.names').each(function () {
+               var key = $(this).attr("id");
+
+               $(this).val(settings.names[key]) ;
            });
 
            $('select').selectmenu({})
@@ -111,7 +123,7 @@
         $('.names').each(function () {
             var key = $(this).attr("id");
 
-            obj.names[key]= $(this).text();
+            obj.names[key]= $(this).val();
         });
 
         console.log(obj)
@@ -138,8 +150,8 @@
                 <select id="host_ip" style="width: 280px">
                 </select>
             </td>
-            <td style="width: 100px;  text-align: right">Port:</td>
-            <td><input id="host_port" type="number" value="6000" style="width: 100px!important"/></td>
+            <!--<td style="width: 100px;  text-align: right">Port:</td>-->
+            <!--<td><input id="host_port" type="number" value="6000" style="width: 100px!important"/></td>-->
         </tr>
         <tr>
             <td>ISM8i IP:</td>
@@ -167,15 +179,10 @@
             </td>
             <td class="number">(1)</td>
             <td>
-                <select class="devices" id="hg1_t">
+                <select class="devices" id="hg1_t" value="settings.devi">
                     <option>auto</option>
-                    <option>CGB-2</option>
-                    <option>CGW-2</option>
-                    <option>CGS-2</option>
-                    <option>CSZ-2</option>
-                    <option>MGK-2</option>
-                    <option>TOB</option>
-                    <option>BWL-1-S</option>
+                    <option>off</option>
+
                 </select>
             </td>
             <td>Name:</td>
@@ -186,13 +193,7 @@
             <td>
                 <select class="devices" id="hg2_t">
                     <option>auto</option>
-                    <option>CGB-2</option>
-                    <option>CGW-2</option>
-                    <option>CGS-2</option>
-                    <option>CSZ-2</option>
-                    <option>MGK-2</option>
-                    <option>TOB</option>
-                    <option>BWL-1-S</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
@@ -203,13 +204,7 @@
             <td>
                 <select class="devices" id="hg3_t">
                     <option>auto</option>
-                    <option>CGB-2</option>
-                    <option>CGW-2</option>
-                    <option>CGS-2</option>
-                    <option>CSZ-2</option>
-                    <option>MGK-2</option>
-                    <option>TOB</option>
-                    <option>BWL-1-S</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
@@ -220,13 +215,7 @@
             <td>
                 <select class="devices" id="hg4_t">
                     <option>auto</option>
-                    <option>CGB-2</option>
-                    <option>CGW-2</option>
-                    <option>CGS-2</option>
-                    <option>CSZ-2</option>
-                    <option>MGK-2</option>
-                    <option>TOB</option>
-                    <option>BWL-1-S</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
@@ -244,7 +233,7 @@
             <td>
                 <select class="devices" id="bm1_t">
                     <option>auto</option>
-                    <option>BM-2</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
@@ -255,7 +244,7 @@
             <td>
                 <select class="devices" id="bm2_t">
                     <option>auto</option>
-                    <option>BM-2</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
@@ -266,7 +255,7 @@
             <td>
                 <select class="devices" id="bm3_t">
                     <option>auto</option>
-                    <option>BM-2</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
@@ -277,7 +266,7 @@
             <td>
                 <select class="devices" id="bm4_t">
                     <option>auto</option>
-                    <option>BM-2</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
@@ -295,33 +284,33 @@
             <td>
                 <select class="devices" id="mm1_t">
                     <option>auto</option>
-                    <option>MM</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
-            <td><input type="text"/></td>
+            <td><input class="names" id="mm1_n" type="text"/></td>
         </tr>
         <tr>
             <td class="number">(2)</td>
             <td>
                 <select class="devices" id="mm2_t">
                     <option>auto</option>
-                    <option>MM</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
-            <td><input  type="text"/></td>
+            <td><input  class="names" id="mm2_n"  type="text"/></td>
         </tr>
         <tr>
             <td class="number">(3)</td>
             <td>
                 <select class="devices" id="mm3_t">
                     <option>auto</option>
-                    <option>MM</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
-            <td><input type="text"/></td>
+            <td><input class="names" id="mm3_n" type="text"/></td>
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
@@ -335,11 +324,11 @@
             <td>
                 <select class="devices" id="km1_t">
                     <option>auto</option>
-                    <option>KM</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
-            <td><input type="text"/></td>
+            <td><input  class="names" id="km1_n" type="text"/></td>
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
@@ -353,12 +342,11 @@
             <td>
                 <select class="devices" id="sm1_t">
                     <option>auto</option>
-                    <option>SM-1</option>
-                    <option>SM-2</option>
+                    <option>off</option>
                 </select>
             </td>
             <td>Name:</td>
-            <td><input type="text"/></td>
+            <td><input  class="names" id="sm1_n" type="text"/></td>
         </tr>
     </table>
 
