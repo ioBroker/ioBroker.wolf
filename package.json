@@ -17,9 +17,11 @@
   "keywords": [
     "ioBroker",
     "Heating",
+    "Solar",
     "Wolf",
     "Smart Home",
     "home automation"
+
   ],
   "repository": {
     "type": "git",
