@@ -34,27 +34,28 @@
     "host_ip": "0.0.0.0",
     "devices": {
       "hg": {
-        "hg1": "auto",
-        "hg2": "auto",
-        "hg3": "auto",
-        "hg4": "auto"
+        "hg1": "on",
+        "hg2": "on",
+        "hg3": "on",
+        "hg4": "on",
+        "hg0": "off"
       },
       "bm": {
-        "bm1": "auto",
-        "bm2": "auto",
-        "bm3": "auto",
-        "bm4": "auto"
+        "bm1": "on",
+        "bm2": "on",
+        "bm3": "on",
+        "bm4": "on"
       },
       "mm": {
-        "mm1": "auto",
-        "mm2": "auto",
-        "mm3": "auto"
+        "mm1": "on",
+        "mm2": "on",
+        "mm3": "on"
       },
       "km": {
-        "km1": "auto"
+        "km1": "on"
       },
       "sm": {
-        "sm1": "auto"
+        "sm1": "on"
       }
     }
   }

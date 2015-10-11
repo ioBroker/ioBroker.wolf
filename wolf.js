@@ -1156,6 +1156,12 @@ var datapoints = {
         type: 'DPT_Value_Pres',
         rw: 'r',
         einheit: 'Pa'
+    },
+    191: {
+        name: 'Leistungsaufnahme',
+        type: 'DPT_Power',
+        rw: 'r',
+        einheit: 'kW'
     }
 };
 
@@ -1188,8 +1194,8 @@ function get_device(id) {
         return 'sm1'
     } else if (id >= 148 && id <= 175) {
         return 'CWL'
-    } else if (id >= 176 && id <= 190) {
-        return 'hg1'
+    } else if (id >= 176 && id <= 191) {
+        return 'hg0'
     } else {
         return parseInt(id);
     }
@@ -1222,6 +1228,8 @@ function get_device_rage(id) {
         return {'lsb': 128, 'msb': 134}
     } else if (id == 'sm1') {
         return {'lsb': 135, 'msb': 147}
+    } else if (id == 'hg0') {
+        return {'lsb': 176, 'msb': 191}
     } else {
         return false
     }
@@ -1331,7 +1339,7 @@ console.log(adapter.namespace)
 
 
 
-                if (devices[group][dev] == 'auto') {
+                if (devices[group][dev] == 'on') {
                     ack_data.new_devices.push(dev);
                     var range = get_device_rage(dev);
 
@@ -1366,7 +1374,7 @@ console.log(adapter.namespace)
                     for (range.lsb; range.lsb <= range.msb; range.lsb++) {
 
                         if (!ack_data[range.lsb]) {
-
+console.log(range.lsb)
                             var data = datapoints[range.lsb];
                             ack_data[range.lsb] = {id: adapter.namespace+"."+ dev + '.' + range.lsb}
                             //console.log('add:' + dev + '.' + range.lsb  );
@@ -1425,10 +1433,11 @@ console.log(adapter.namespace)
 
                 }
 
-                if (datapoints[dp]) {
+                if (datapoints[dp] && ack_data[dp] ) {
                     var val = decode(datapoints[dp].type, _data.slice(20))
                     adapter.setState(device + '.' + dp, val, true);
                     ack_data[dp]["value"] = val;
+                    console.log('-----------------------------------------');
                     console.log('Device: ' + device);
                     console.log('Datapoint: ' + dp);
                     console.log('Datapoint_name: ' + datapoints[dp].name);
