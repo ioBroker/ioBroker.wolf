@@ -20,6 +20,9 @@ der Adapter kann über das ISM8i maximal 4  von den nachfolgenden Heizgeräten a
 
 
 ## Changelog
+### 0.0.3 [2015.10.14]
+* (smiling_Jack) add CWL
+* (smiling_Jack) remove ISM8 ip
 
 ### 0.0.2 [2015.10.12]
 * (smiling_Jack) add BWL-1-S

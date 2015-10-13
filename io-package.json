@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wolf",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "title": "wolf",
     "desc": "Wolf Heating over ISM8i",
     "authors": [
@@ -29,34 +29,52 @@
     }
   },
   "native": {
-    "ism8_ip": "192.168.100.68",
     "ism8_port": "12004",
     "host_ip": "0.0.0.0",
     "devices": {
       "hg": {
-        "hg1": "on",
-        "hg2": "on",
-        "hg3": "on",
-        "hg4": "on",
-        "hg0": "off"
+        "hg2": "off",
+        "hg3": "off",
+        "hg4": "off",
+        "hg0": "off",
+        "hg1": "on"
       },
       "bm": {
         "bm1": "on",
-        "bm2": "on",
-        "bm3": "on",
-        "bm4": "on"
+        "bm2": "off",
+        "bm3": "off",
+        "bm4": "off"
       },
       "mm": {
-        "mm1": "on",
-        "mm2": "on",
-        "mm3": "on"
+        "mm1": "off",
+        "mm2": "off",
+        "mm3": "off"
       },
       "km": {
-        "km1": "on"
+        "km1": "off"
       },
       "sm": {
-        "sm1": "on"
+        "sm1": "off"
+      },
+      "cw": {
+        "cwl": "off"
       }
+    },
+    "names": {
+      "hg1_n": "",
+      "hg2_n": "",
+      "hg3_n": "",
+      "hg4_n": "",
+      "bm1_n": "",
+      "bm2_n": "",
+      "bm3_n": "",
+      "bm4_n": "",
+      "mm1_n": "",
+      "mm2_n": "",
+      "mm3_n": "",
+      "km1_n": "",
+      "sm1_n": "",
+      "cwl_n": ""
     }
   }
 }

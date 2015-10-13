@@ -93,7 +93,6 @@
 
     // the function loadSettings has to exist ...
     function load(settings, onchange) {
-        console.log(settings)
         getIPs(function (data) {
 
             $.each(data, function () {
@@ -103,36 +102,13 @@
 
             });
 
-            $('.checkbox').each(function () {
-                var cat = $(this).attr("id").substring(0, 2);
-                console.log(settings.devices[cat][$(this).attr("id").substring(0, 3)] )
-                if (settings.devices[cat][$(this).attr("id").substring(0, 3)] == "on") {
-                    $(this).trigger("click")
-                    console.log("c")
-                } else {
-                    $(this).siblings('label').html('off');
-                    console.log("unc")
-                }
+            $("#ism8_ip").val(settings.ism8_ip);
+            $("#ism8_port").val(settings.ism8_port);
+            $("#host_ip").val(settings.host_ip);
 
-            });
-
-            if (settings.devices.hg.hg1 == "on") {
-                $(".device_hg1").val("CG*-2/MGK-2")
-            } else if (settings.devices.hg.hg0 == "on") {
-                $(".device_hg1").val("BWL-1-S")
-            } else {
-                $(".device_hg1").val("off")
-            }
-
-            $('.names').each(function () {
-                var key = $(this).attr("id");
-
-                $(this).val(settings.names[key]);
-            });
 
             $('select').selectmenu({})
         });
-
 
         $('.checkbox').button().click(function () {
             if ($(this).is(':checked')) {
@@ -140,6 +116,30 @@
             } else {
                 $(this).siblings('label').html('off');
             }
+        });
+
+
+        $('.checkbox').each(function () {
+            var cat = $(this).attr("id").substring(0, 2);
+            if (settings.devices[cat][$(this).attr("id").substring(0, 3)] == "on") {
+                $(this).trigger("click")
+            } else {
+                $(this).siblings('label').html('off');
+            }
+        });
+
+        if (settings.devices.hg.hg1 == "on") {
+            $(".device_hg1").val("CG*-2/MGK-2")
+        } else if (settings.devices.hg.hg0 == "on") {
+            $(".device_hg1").val("BWL-1-S")
+        } else {
+            $(".device_hg1").val("off")
+        }
+
+        $('.names').each(function () {
+            var key = $(this).attr("id");
+
+            $(this).val(settings.names[key]);
         });
 
 
@@ -155,11 +155,10 @@
         var obj = {
             devices: {},
             names: {},
-            ism8_ip: $("#ism8_ip").val(),
             ism8_port: $("#ism8_port").val(),
             host_ip: $("#host_ip").val(),
-            host_port: $("#host_port").val()
         };
+
 
         $('.checkbox').each(function () {
             var cat = $(this).attr("id").substring(0, 2);
@@ -169,7 +168,7 @@
             }
 
             if ($(this).is(':checked'))
-                obj.devices[cat][$(this).attr("id").substring(0, 3)] = "on"
+                obj.devices[cat][$(this).attr("id").substring(0, 3)] = "on";
             else
                 obj.devices[cat][$(this).attr("id").substring(0, 3)] = "off"
         });
@@ -191,7 +190,6 @@
             obj.names[key] = $(this).val();
         });
 
-        console.log(obj)
         callback(obj);
     }
 
@@ -217,12 +215,6 @@
                 <select id="host_ip" style="width: 280px">
                 </select>
             </td>
-            <!--<td style="width: 100px;  text-align: right">Port:</td>-->
-            <!--<td><input id="host_port" type="number" value="6000" style="width: 100px!important"/></td>-->
-        </tr>
-        <tr>
-            <td>ISM8i IP:</td>
-            <td><input id="ism8_ip" type="text" value="192.168.100.68" style="width: 279px"/></td>
             <td style="width: 100px;  text-align: right">Port:</td>
             <td><input id="ism8_port" type="number" value="12004" style="width: 100px!important"/></td>
         </tr>
@@ -380,9 +372,23 @@
             <td>Name:</td>
             <td><input class="names" id="sm1_n" type="text"/></td>
         </tr>
+        <!------------------------------------------------------------------------------------------------>
+        <tr>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">
+                Comfort-Wohnungs-Lüftung
+            </td>
+        </tr>
+        <tr>
+            <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
+                <image src="image/cwl.png" style="height: 100px"></image>
+            </td>
+            <td class="number">(1)</td>
+            <td>
+                <input type="checkbox" class="checkbox" id="cwl_t"/><label for="cwl_t">on</label>
+            </td>
+            <td>Name:</td>
+            <td><input class="names" id="cwl_n" type="text"/></td>
+        </tr>
     </table>
-
-
 </div>
-
 </html>

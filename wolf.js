@@ -1,6 +1,5 @@
 ﻿//﻿'use strict';
 
-// todo unterscheidung hg1 datenbereich 1-13 oder 176-191
 // todo schreiben
 
 var utils = require(__dirname + '/lib/utils');
@@ -1193,7 +1192,7 @@ function get_device(id) {
     } else if (id >= 135 && id <= 147) {
         return 'sm1'
     } else if (id >= 148 && id <= 175) {
-        return 'CWL'
+        return 'cwl'
     } else if (id >= 176 && id <= 191) {
         return 'hg0'
     } else {
@@ -1228,6 +1227,8 @@ function get_device_rage(id) {
         return {'lsb': 128, 'msb': 134}
     } else if (id == 'sm1') {
         return {'lsb': 135, 'msb': 147}
+    } else if (id == 'cwl') {
+        return {'lsb': 148, 'msb': 175}
     } else if (id == 'hg0') {
         return {'lsb': 176, 'msb': 191}
     } else {
@@ -1348,15 +1349,17 @@ console.log(adapter.namespace)
                         var group_name = '';
 
                         if (dev.match(/hg/)) {
-                            group_name = 'Heizgeräte'
+                            group_name = 'Heizgeräte ' + dev.slice(-1)
                         } else if (dev.match(/bm/)) {
-                            group_name = 'Bediengeräte'
+                            group_name = 'Bediengeräte ' + dev.slice(-1)
                         } else if (dev.match(/mm/)) {
-                            group_name = 'Mischermodule'
+                            group_name = 'Mischermodule ' + dev.slice(-1)
                         } else if (dev.match(/km/)) {
                             group_name = 'Kaskadenmodul'
                         } else if (dev.match(/sm/)) {
                             group_name = 'Solarmodul'
+                        }else if (dev.match(/cwl/)) {
+                            group_name = 'Comfort-Wohnungs-Lüftung'
                         }
 
                     }
@@ -1364,7 +1367,7 @@ console.log(adapter.namespace)
                     adapter.setObject(dev, {
                         type: 'channel',
                         common: {
-                            name: names[dev + '_n'] || group_name + ' ' + dev.slice(-1),
+                            name: names[dev + '_n'] || group_name,
                             type: 'channel',
                         },
                         native: {}
@@ -1374,7 +1377,6 @@ console.log(adapter.namespace)
                     for (range.lsb; range.lsb <= range.msb; range.lsb++) {
 
                         if (!ack_data[range.lsb]) {
-console.log(range.lsb)
                             var data = datapoints[range.lsb];
                             ack_data[range.lsb] = {id: adapter.namespace+"."+ dev + '.' + range.lsb}
                             //console.log('add:' + dev + '.' + range.lsb  );
@@ -1423,7 +1425,7 @@ console.log(range.lsb)
 
                 buff_req[12] = _data[12];
                 buff_req[13] = _data[13];
-                sock.write(buff_req)
+                sock.write(buff_req);
 
                 var dp = _data.readUInt16BE(12);
                 var device = get_device(dp);
@@ -1434,16 +1436,16 @@ console.log(range.lsb)
                 }
 
                 if (datapoints[dp] && ack_data[dp] ) {
-                    var val = decode(datapoints[dp].type, _data.slice(20))
+                    var val = decode(datapoints[dp].type, _data.slice(20));
                     adapter.setState(device + '.' + dp, val, true);
                     ack_data[dp]["value"] = val;
-                    console.log('-----------------------------------------');
-                    console.log('Device: ' + device);
-                    console.log('Datapoint: ' + dp);
-                    console.log('Datapoint_name: ' + datapoints[dp].name);
-                    console.log('Datapoint_type: ' + datapoints[dp].type);
-                    console.log('value: ' + val);
-                    console.log('oid: ' + device + '.' + dp);
+                    //console.log('-----------------------------------------');
+                    //console.log('Device: ' + device);
+                    //console.log('Datapoint: ' + dp);
+                    //console.log('Datapoint_name: ' + datapoints[dp].name);
+                    //console.log('Datapoint_type: ' + datapoints[dp].type);
+                    //console.log('value: ' + val);
+                    //console.log('oid: ' + device + '.' + dp);
                 }
             })
         }).listen(adapter.config.ism8_port, adapter.config.host_ip);
