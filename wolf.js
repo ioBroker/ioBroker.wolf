@@ -1296,7 +1296,7 @@ function main() {
         }
 
 
-console.log(adapter.namespace)
+        console.log(adapter.namespace)
         var devices = adapter.config.devices;
         var names = adapter.config.names;
 
@@ -1339,7 +1339,6 @@ console.log(adapter.namespace)
             for (var dev in devices[group]) {
 
 
-
                 if (devices[group][dev] == 'on') {
                     ack_data.new_devices.push(dev);
                     var range = get_device_rage(dev);
@@ -1358,7 +1357,7 @@ console.log(adapter.namespace)
                             group_name = 'Kaskadenmodul'
                         } else if (dev.match(/sm/)) {
                             group_name = 'Solarmodul'
-                        }else if (dev.match(/cwl/)) {
+                        } else if (dev.match(/cwl/)) {
                             group_name = 'Comfort-Wohnungs-Lüftung'
                         }
 
@@ -1378,7 +1377,7 @@ console.log(adapter.namespace)
 
                         if (!ack_data[range.lsb]) {
                             var data = datapoints[range.lsb];
-                            ack_data[range.lsb] = {id: adapter.namespace+"."+ dev + '.' + range.lsb}
+                            ack_data[range.lsb] = {id: adapter.namespace + "." + dev + '.' + range.lsb}
                             //console.log('add:' + dev + '.' + range.lsb  );
                             adapter.setObject(dev + '.' + range.lsb, {
                                 type: 'state',
@@ -1400,14 +1399,14 @@ console.log(adapter.namespace)
         }
 
 
-        for (var dev in ack_data.old_devices){
-            if(ack_data.new_devices.indexOf(dev) == -1){
+        for (var dev in ack_data.old_devices) {
+            if (ack_data.new_devices.indexOf(dev) == -1) {
                 //console.log('delete ' + dev)
-                adapter.deleteChannel(dev, function(){
+                adapter.deleteChannel(dev, function () {
                 });
                 var range = get_device_rage();
                 for (range.lsb; range.lsb <= range.msb; range.lsb++) {
-                   delete ack_data[range.lsb]
+                    delete ack_data[range.lsb]
                 }
             }
         }
@@ -1415,6 +1414,7 @@ console.log(adapter.namespace)
 
         net.createServer(function (sock) {
 
+            var val = "";
             sock.write(buff_getall);
 
             //sock.on('connect', function (e) {
@@ -1435,10 +1435,25 @@ console.log(adapter.namespace)
 
                 }
 
-                if (datapoints[dp] && ack_data[dp] ) {
-                    var val = decode(datapoints[dp].type, _data.slice(20));
-                    adapter.setState(device + '.' + dp, val, true);
-                    ack_data[dp]["value"] = val;
+                if (datapoints[dp] && ack_data[dp]) {
+
+                    try {
+                        val = decode(datapoints[dp].type, _data.slice(20));
+                    }
+                    catch (err) {
+                        val = "";
+                        adapter.log.error("Can't parse DP : " + dp + " - data: " + _data.toString("hex") + " - length: " + _data.length)
+                    }
+
+                    try {
+                        adapter.setState(device + '.' + dp, val, true);
+                        ack_data[dp]["value"] = val;
+                    }
+                    catch (err) {
+                        adapter.log.error("Can't set DP " + dp);
+                        adapter.log.error(err)
+                    }
+
                     //console.log('-----------------------------------------');
                     //console.log('Device: ' + device);
                     //console.log('Datapoint: ' + dp);
@@ -1454,10 +1469,10 @@ console.log(adapter.namespace)
         adapter.on('stateChange', function (id, state) {
             if (state && !state.ack && id) {
                 var dp = id.split('.').pop();
-                if(datapoints[dp].rw == "r"){
+                if (datapoints[dp].rw == "r") {
                     adapter.setState(id, ack_data[dp].value, true);
-                    adapter.log.error("oid: "+id + " is only readable")
-                }else{
+                    adapter.log.error("oid: " + id + " is only readable")
+                } else {
                     adapter.setState(id, ack_data[dp].value, true); // todo hier an ism8 senden
                 }
 
