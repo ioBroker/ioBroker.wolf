@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wolf",
-    "version": "0.0.2",
+    "version": "0.0.4",
     "title": "wolf",
     "desc": "Wolf Heating over ISM8i",
     "authors": [

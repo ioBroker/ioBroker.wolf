@@ -1,6 +1,6 @@
 {
   "name": "iobroker.wolf",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Wolf Heating over ISM8i",
   "author": {
     "name": "smiling_Jack",

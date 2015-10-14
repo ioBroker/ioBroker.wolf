@@ -1237,31 +1237,31 @@ function get_device_rage(id) {
 
 }
 
-function decode(type, data) {
+function decode(type, data, dp) {
 
     if (type == 'DPT_Switch') {
-        var val = data.readInt8()
+        var val = data.readInt8();
         if (val == 0) {
             return 'Off'
         } else {
             return 'On'
         }
     } else if (type == 'DPT_Bool') {
-        var val = data.readInt8()
+        var val = data.readInt8();
         if (val == 0) {
             return 'false'
         } else {
             return 'true'
         }
     } else if (type == 'DPT_Enable') {
-        var val = data.readInt8()
+        var val = data.readInt8();
         if (val == 0) {
             return 'Disable'
         } else {
             return 'Enable'
         }
     } else if (type == 'DPT_OpenClose') {
-        var val = data.readInt8()
+        var val = data.readInt8();
         if (val == 0) {
             return 'Open'
         } else {
@@ -1277,10 +1277,65 @@ function decode(type, data) {
         return dec.decodeDPT11(data)
     } else if (type == 'DPT_FlowRate_m3/h') {
         return dec.decodeDPT13(data)
-    } else if (type == 'DPT_HVAVMode') {
-        return dec.decodeDPT20(data)
+    } else if (type == 'DPT_HVACMode') {
+        var _data = parseInt(data);
+
+        if (datapoints[dp].name == "Programmwahl Heizkreis" || datapoints[dp].name == "Mischer") {
+            if (_data == 2) {
+                return "Standby"
+            } else if (_data == 0) {
+                return "Automatikbetrieb"
+            } else if (_data == 2) {
+                return "Heizbetrieb"
+            } else if (_data == 3) {
+                return "Sparbetrieb"
+            } else {
+                throw "";
+            }
+        }else {
+            throw "";
+        }
+    } else if (type == 'DPT_HVACContrMode') {
+        var _data = parseInt(data);
+
+        if(dp < 177){
+            if (_data == 0) {
+                return "Auto"
+            } else if (_data == 1) {
+                return "Heat"
+            } else if (_data == 6) {
+                return "Off"
+            } else if (_data == 7) {
+                return "Test"
+            } else if (_data == 11) {
+                return "Ice"
+            } else if (_data == 15) {
+                return "calibrations Mode"
+            } else {
+                throw "";
+            }
+
+        }else{
+            if (_data == 0) {
+                return "Auto"
+            } else if (_data == 1) {
+                return "Heat"
+            } else if (_data == 3) {
+                return "Cool"
+            } else if (_data == 6) {
+                return "Off"
+            } else if (_data == 7) {
+                return "Test"
+            } else if (_data == 11) {
+                return "Ice"
+            } else {
+                throw "";
+            }
+        }
+
+
     } else {
-        return 'undefind datapoint'
+        throw "";
     }
 }
 
@@ -1360,7 +1415,6 @@ function main() {
                         } else if (dev.match(/cwl/)) {
                             group_name = 'Comfort-Wohnungs-Lüftung'
                         }
-
                     }
 
                     adapter.setObject(dev, {
@@ -1438,7 +1492,7 @@ function main() {
                 if (datapoints[dp] && ack_data[dp]) {
 
                     try {
-                        val = decode(datapoints[dp].type, _data.slice(20));
+                        val = decode(datapoints[dp].type, _data.slice(20), dp);
                     }
                     catch (err) {
                         val = "";
