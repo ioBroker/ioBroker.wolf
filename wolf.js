@@ -2,1166 +2,18 @@
 
 // todo schreiben
 
-var utils = require(__dirname + '/lib/utils');
 
-var adapter = utils.adapter('wolf');
 var net = require('net');
+//var utils = require(__dirname + '/lib/utils');
+//var adapter = utils.adapter('wolf');
+
 
 var dec = new (require('./js/decoder.js'))();
-
+var datapoints = require('./js/datapoints.json');
 
 var ack_data = {
     old_devices: {},
-    new_devices: [],
-};
-
-var datapoints = {
-    1: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    2: {
-        name: 'Betriebsart',
-        type: 'DPT_HVACContrMode',
-        rw: 'r',
-        einheit: ''
-    },
-    3: {
-        name: 'Modulationsgrad  Brennerleistung',
-        type: 'DPT_Scaling',
-        rw: 'r',
-        einheit: '%'
-    },
-    4: {
-        name: 'Kesseltemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    5: {
-        name: 'Sammlertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    6: {
-        name: 'Rücklauftemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    7: {
-        name: 'Warmwassertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    8: {
-        name: 'Außentemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    9: {
-        name: 'Status Brenner / Flamme',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    10: {
-        name: 'Status Heizkreispumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    11: {
-        name: 'Status Speicherladepumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    12: {
-        name: 'Status 3-Wege-Umschaltventil',
-        type: 'DPT_OpenClose',
-        rw: 'r',
-        einheit: ''
-    },
-    13: {
-        name: 'Anlagendruck',
-        type: 'DPT_Value_Pres',
-        rw: 'r',
-        einheit: 'Pa'
-    },
-    14: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    15: {
-        name: 'Betriebsart',
-        type: 'DPT_HVACContrMode',
-        rw: 'r',
-        einheit: ''
-    },
-    16: {
-        name: 'Modulationsgrad / Brennerleistung',
-        type: 'DPT_Scaling',
-        rw: 'r',
-        einheit: '%'
-    },
-    17: {
-        name: 'Kesseltemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    18: {
-        name: 'Sammlertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    19: {
-        name: 'Rücklauftemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    20: {
-        name: 'Warmwassertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    21: {
-        name: 'Außentemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    22: {
-        name: 'Status Brenner / Flamme',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    23: {
-        name: 'Status Heizkreispumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    24: {
-        name: 'Status Speicherladepumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    25: {
-        name: 'Status 3-Wege-Umschaltventil',
-        type: 'DPT_OpenClose',
-        rw: 'r',
-        einheit: ''
-    },
-    26: {
-        name: 'Anlagendruck',
-        type: 'DPT_Value_Pres',
-        rw: 'r',
-        einheit: 'Pa'
-    },
-    27: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    28: {
-        name: 'Betriebsart',
-        type: 'DPT_HVACContrMode',
-        rw: 'r',
-        einheit: ''
-    },
-    29: {
-        name: 'Modulationsgrad / Brennerleistung',
-        type: 'DPT_Scaling',
-        rw: 'r',
-        einheit: '%'
-    },
-    30: {
-        name: 'Kesseltemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    31: {
-        name: 'Sammlertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    32: {
-        name: 'Rücklauftemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    33: {
-        name: 'Warmwassertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    34: {
-        name: 'Außentemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    35: {
-        name: 'Status Brenner / Flamme',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    36: {
-        name: 'Status Heizkreispumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    37: {
-        name: 'Status Speicherladepumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    38: {
-        name: 'Status 3-Wege-Umschaltventil',
-        type: 'DPT_OpenClose',
-        rw: 'r',
-        einheit: ''
-    },
-    39: {
-        name: 'Anlagendruck',
-        type: 'DPT_Value_Pres',
-        rw: 'r',
-        einheit: 'Pa'
-    },
-    40: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    41: {
-        name: 'Betriebsart',
-        type: 'DPT_HVACContrMode',
-        rw: 'r',
-        einheit: ''
-    },
-    42: {
-        name: 'Modulationsgrad / Brennerleistung',
-        type: 'DPT_Scaling',
-        rw: 'r',
-        einheit: '%'
-    },
-    43: {
-        name: 'Kesseltemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    44: {
-        name: 'Sammlertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    45: {
-        name: 'Rücklauftemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    46: {
-        name: 'Warmwassertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    47: {
-        name: 'Außentemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    48: {
-        name: 'Status Brenner / Flamme',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    49: {
-        name: 'Status Heizkreispumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    50: {
-        name: 'Status Speicherladepumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    51: {
-        name: 'Status 3-Wege-Umschaltventil',
-        type: 'DPT_OpenClose',
-        rw: 'r',
-        einheit: ''
-    },
-    52: {
-        name: 'Anlagendruck',
-        type: 'DPT_Value_Pres',
-        rw: 'r',
-        einheit: 'Pa'
-    },
-    53: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    54: {
-        name: 'Außentemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    55: {
-        name: 'Raumtemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    56: {
-        name: 'Warmwassersolltemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'rw',
-        einheit: '°C'
-    },
-    57: {
-        name: 'Programmwahl Heizkreis',
-        type: 'DPT_HVACMode',
-        rw: 'rw',
-        einheit: ''
-    },
-    58: {
-        name: 'Programmwahl Warmwasser',
-        type: 'DPT_DHWMode',
-        rw: 'rw',
-        einheit: ''
-    },
-    59: {
-        name: 'Heizkreis Zeitprogramm 1',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    60: {
-        name: 'Heizkreis Zeitprogramm 2',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    61: {
-        name: 'Heizkreis Zeitprogramm 3',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    62: {
-        name: 'Warmwasser Zeitprogramm 1',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    63: {
-        name: 'Warmwasser Zeitprogramm 2',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    64: {
-        name: 'Warmwasser Zeitprogramm 3',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    65: {
-        name: 'Sollwertkorrektur',
-        type: 'DPT_Tempd',
-        rw: 'rw',
-        einheit: 'K'
-    },
-    66: {
-        name: 'Sparfaktor',
-        type: 'DPT_Tempd',
-        rw: 'rw',
-        einheit: 'K'
-    },
-    67: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    68: {
-        name: 'Raumtemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    69: {
-        name: 'Warmwassersolltemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'rw',
-        einheit: '°C'
-    },
-    70: {
-        name: 'Programmwahl Mischer',
-        type: 'DPT_HVACMode',
-        rw: 'rw',
-        einheit: ''
-    },
-    71: {
-        name: 'Programmwahl Warmwasser',
-        type: 'DPT_DHWMode',
-        rw: 'rw',
-        einheit: ''
-    },
-    72: {
-        name: 'Mischer Zeitprogramm 1',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    73: {
-        name: 'Mischer Zeitprogramm 2',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    74: {
-        name: 'Mischer Zeitprogramm 3',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    75: {
-        name: 'Warmwasser Zeitprogramm 1',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    76: {
-        name: 'Warmwasser Zeitprogramm 2',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    77: {
-        name: 'Warmwasser Zeitprogramm 3',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    78: {
-        name: 'Sollwertkorrektur',
-        type: 'DPT_Tempd',
-        rw: 'rw',
-        einheit: 'K'
-    },
-    79: {
-        name: 'Sparfaktor',
-        type: 'DPT_Tempd',
-        rw: 'rw',
-        einheit: 'K'
-    },
-    80: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    81: {
-        name: 'Raumtemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    82: {
-        name: 'Warmwassersolltemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'rw',
-        einheit: '°C'
-    },
-    83: {
-        name: 'Programmwahl Mischer',
-        type: 'DPT_HVACMode',
-        rw: 'rw',
-        einheit: ''
-    },
-    84: {
-        name: 'Programmwahl Warmwasser',
-        type: 'DPT_DHWMode',
-        rw: 'rw',
-        einheit: ''
-    },
-    85: {
-        name: 'Mischer Zeitprogramm 1',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    86: {
-        name: 'Mischer Zeitprogramm 2',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    87: {
-        name: 'Mischer Zeitprogramm 3',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    88: {
-        name: 'Warmwasser Zeitprogramm 1',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    89: {
-        name: 'Warmwasser Zeitprogramm 2',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    90: {
-        name: 'Warmwasser Zeitprogramm 3',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    91: {
-        name: 'Sollwertkorrektur',
-        type: 'DPT_Tempd',
-        rw: 'rw',
-        einheit: 'K'
-    },
-    92: {
-        name: 'Sparfaktor',
-        type: 'DPT_Tempd',
-        rw: 'rw',
-        einheit: 'K'
-    },
-    93: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    94: {
-        name: 'Raumtemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    95: {
-        name: 'Warmwassersolltemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'rw',
-        einheit: '°C'
-    },
-    96: {
-        name: 'Programmwahl Mischer',
-        type: 'DPT_HVACMode',
-        rw: 'rw',
-        einheit: ''
-    },
-    97: {
-        name: 'Programmwahl Warmwasser',
-        type: 'DPT_DHWMode',
-        rw: 'rw',
-        einheit: ''
-    },
-    98: {
-        name: 'Mischer Zeitprogramm 1',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    99: {
-        name: 'Mischer Zeitprogramm 2',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    100: {
-        name: 'Mischer Zeitprogramm 3',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    101: {
-        name: 'Warmwasser Zeitprogramm 1',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    102: {
-        name: 'Warmwasser Zeitprogramm 2',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    103: {
-        name: 'Warmwasser Zeitprogramm 3',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    104: {
-        name: 'Sollwertkorrektur',
-        type: 'DPT_Tempd',
-        rw: 'rw',
-        einheit: 'K'
-    },
-    105: {
-        name: 'Sparfaktor',
-        type: 'DPT_Tempd',
-        rw: 'rw',
-        einheit: 'K'
-    },
-    106: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    107: {
-        name: 'Sammlertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    108: {
-        name: 'Gesamtmodulationsgrad',
-        type: 'DPT_Scaling',
-        rw: 'r',
-        einheit: '%'
-    },
-    109: {
-        name: 'Vorlauftemperatur Mischerkreis',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    110: {
-        name: 'Status Mischerkreispumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    111: {
-        name: 'Status Ausgang A1',
-        type: 'DPT_Enable',
-        rw: 'r',
-        einheit: ''
-    },
-    112: {
-        name: 'Eingang E1',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    113: {
-        name: 'Eingang E2',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    114: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    115: {
-        name: 'Warmwassertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    116: {
-        name: 'Vorlauftemperatur Mischerkreis',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    117: {
-        name: 'Status Mischerkreispumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    118: {
-        name: 'Status Ausgang A1',
-        type: 'DPT_Enable',
-        rw: 'r',
-        einheit: ''
-    },
-    119: {
-        name: 'Eingang E1',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    120: {
-        name: 'Eingang E2',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    121: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    122: {
-        name: 'Warmwassertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    123: {
-        name: 'Vorlauftemperatur Mischerkreis',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    124: {
-        name: 'Status Mischerkreispumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    125: {
-        name: 'Status Ausgang A1',
-        type: 'DPT_Enable',
-        rw: 'r',
-        einheit: ''
-    },
-    126: {
-        name: 'Eingang E1',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    127: {
-        name: 'Eingang E2',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    128: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    129: {
-        name: 'Warmwassertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    130: {
-        name: 'Vorlauftemperatur Mischerkreis',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    131: {
-        name: 'Status Mischerkreispumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    132: {
-        name: 'Status Ausgang A1',
-        type: 'DPT_Enable',
-        rw: 'r',
-        einheit: ''
-    },
-    133: {
-        name: 'Eingang E1',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    134: {
-        name: 'Eingang E2',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    135: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    136: {
-        name: 'Warmwassertemperatur Solar 1',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    137: {
-        name: 'Temperatur Kollektor 1',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    138: {
-        name: 'Eingang E1',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    139: {
-        name: 'Eingang E2 (Durchfluss)',
-        type: 'DPT_Value_Volume_Flow',
-        rw: 'r',
-        einheit: 'l/h'
-    },
-    140: {
-        name: 'Eingang E3',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    141: {
-        name: 'Status Solarkreispumpe SKP1',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    142: {
-        name: 'Status Ausgang A1',
-        type: 'DPT_Enable',
-        rw: 'r',
-        einheit: ''
-    },
-    143: {
-        name: 'Status Ausgang A2',
-        type: 'DPT_Enable',
-        rw: 'r',
-        einheit: ''
-    },
-    144: {
-        name: 'Status Ausgang A3',
-        type: 'DPT_Enable',
-        rw: 'r',
-        einheit: ''
-    },
-    145: {
-        name: 'Status Ausgang A4',
-        type: 'DPT_Enable',
-        rw: 'r',
-        einheit: ''
-    },
-    146: {
-        name: 'Durchfluss',
-        type: 'DPT_Value_Volume_Flow',
-        rw: 'r',
-        einheit: 'l/h'
-    },
-    147: {
-        name: 'aktuelle Leistung',
-        type: 'DPT_Power',
-        rw: 'r',
-        einheit: 'kW'
-    },
-    148: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    149: {
-        name: 'Programm',
-        type: 'DPT_DHWMode',
-        rw: 'rw',
-        einheit: ''
-    },
-    150: {
-        name: 'Zeitprogramm 1',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    151: {
-        name: 'Zeitprogramm 2',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    152: {
-        name: 'Zeitprogramm 3',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    153: {
-        name: 'Zeitweise Intensivlüftung AN/AUS',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    154: {
-        name: 'Zeitweise Intensivlüftung Startdatum',
-        type: 'DPT_Date',
-        rw: 'rw',
-        einheit: ''
-    },
-    155: {
-        name: 'Zeitweise Intensivlüftung Enddatum',
-        type: 'DPT_Date',
-        rw: 'rw',
-        einheit: ''
-    },
-    156: {
-        name: 'Zeitweise Intensivlüftung Startzeit',
-        type: 'DPT_TimeOfDay',
-        rw: 'rw',
-        einheit: ''
-    },
-    157: {
-        name: 'Zeitweise Intensivlüftung Endzeit',
-        type: 'DPT_TimeOfDay',
-        rw: 'rw',
-        einheit: ''
-    },
-    158: {
-        name: 'Zeitweiser Feuchteschutz AN/AUS',
-        type: 'DPT_Switch',
-        rw: 'rw',
-        einheit: ''
-    },
-    159: {
-        name: 'Zeitweiser Feuchteschutz Startdatum',
-        type: 'DPT_Date',
-        rw: 'rw',
-        einheit: ''
-    },
-    160: {
-        name: 'Zeitweiser Feuchteschutz Enddatum',
-        type: 'DPT_Date',
-        rw: 'rw',
-        einheit: ''
-    },
-    161: {
-        name: 'Zeitweiser Feuchteschutz Startzeit',
-        type: 'DPT_TimeOfDay',
-        rw: 'rw',
-        einheit: ''
-    },
-    162: {
-        name: 'Zeitweiser Feuchteschutz Endzeit',
-        type: 'DPT_TimeOfDay',
-        rw: 'rw',
-        einheit: ''
-    },
-    163: {
-        name: 'Lüftungsstufe',
-        type: 'DPT_Scaling',
-        rw: 'r',
-        einheit: '%'
-    },
-    164: {
-        name: 'Ablufttemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    165: {
-        name: 'Frischlufttemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    166: {
-        name: 'Luftdurchsatz Zuluft',
-        type: 'DPT_FlowRate_m3/h',
-        rw: 'r',
-        einheit: 'm³/h'
-    },
-    167: {
-        name: 'Luftdurchsatz Abluft',
-        type: 'DPT_FlowRate_m3/h',
-        rw: 'r',
-        einheit: 'm³/h'
-    },
-    168: {
-        name: 'Bypass Initialisierung',
-        type: 'DPT_Bool',
-        rw: 'r',
-        einheit: ''
-    },
-    169: {
-        name: 'Bypass öffnet/offen',
-        type: 'DPT_Bool',
-        rw: 'r',
-        einheit: ''
-    },
-    170: {
-        name: 'Bypass schließt/geschlossen',
-        type: 'DPT_Bool',
-        rw: 'r',
-        einheit: ''
-    },
-    171: {
-        name: 'Bypass Fehler',
-        type: 'DPT_Bool',
-        rw: 'r',
-        einheit: ''
-    },
-    172: {
-        name: 'Frost Status: Initialisierung/Warte',
-        type: 'DPT_Bool',
-        rw: 'r',
-        einheit: ''
-    },
-    173: {
-        name: 'Frost Status: Kein Frost',
-        type: 'DPT_Bool',
-        rw: 'r',
-        einheit: ''
-    },
-    174: {
-        name: 'Frost Status: Vorwärmer',
-        type: 'DPT_Bool',
-        rw: 'r',
-        einheit: ''
-    },
-    175: {
-        name: 'Frost Status: Fehler/Unausgeglichen',
-        type: 'DPT_Bool',
-        rw: 'r',
-        einheit: 'Heizgerät(1)'
-    },
-    176: {
-        name: 'Störung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    177: {
-        name: 'Betriebsart',
-        type: 'DPT_HVACContrMode',
-        rw: 'r',
-        einheit: ''
-    },
-    178: {
-        name: 'Heizleistung',
-        type: 'DPT_Power',
-        rw: 'r',
-        einheit: 'kW'
-    },
-    179: {
-        name: 'Kühlleistung',
-        type: 'DPT_Power',
-        rw: 'r',
-        einheit: 'kW'
-    },
-    180: {
-        name: 'Kesseltemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    181: {
-        name: 'Sammlertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    182: {
-        name: 'Rücklauftemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    183: {
-        name: 'Warmwassertemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    184: {
-        name: 'Außentemperatur',
-        type: 'DPT_Value_Temp',
-        rw: 'r',
-        einheit: '°C'
-    },
-    185: {
-        name: 'Status Heizkreispumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    186: {
-        name: 'Status Zubringer-/Heizkreispumpe',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    187: {
-        name: 'Status 3-Wege-Umschaltventil HZ/WW',
-        type: 'DPT_OpenClose',
-        rw: 'r',
-        einheit: ''
-    },
-    188: {
-        name: 'Status 3-Wege-Umschaltventil HZ/K',
-        type: 'DPT_OpenClose',
-        rw: 'r',
-        einheit: ''
-    },
-    189: {
-        name: 'Status E-Heizung',
-        type: 'DPT_Switch',
-        rw: 'r',
-        einheit: ''
-    },
-    190: {
-        name: 'Anlagendruck',
-        type: 'DPT_Value_Pres',
-        rw: 'r',
-        einheit: 'Pa'
-    },
-    191: {
-        name: 'Leistungsaufnahme',
-        type: 'DPT_Power',
-        rw: 'r',
-        einheit: 'kW'
-    }
+    new_devices: []
 };
 
 function get_device(id) {
@@ -1240,28 +92,29 @@ function get_device_rage(id) {
 function decode(type, data, dp) {
 
     if (type == 'DPT_Switch') {
-        var val = data.readInt8();
+        var val = data.readInt8(0);
         if (val == 0) {
             return 'Off'
         } else {
             return 'On'
         }
     } else if (type == 'DPT_Bool') {
-        var val = data.readInt8();
+
+        var val = data.readInt8(0);
         if (val == 0) {
             return 'false'
         } else {
             return 'true'
         }
     } else if (type == 'DPT_Enable') {
-        var val = data.readInt8();
+        var val = data.readInt8(0);
         if (val == 0) {
             return 'Disable'
         } else {
             return 'Enable'
         }
     } else if (type == 'DPT_OpenClose') {
-        var val = data.readInt8();
+        var val = data.readInt8(0);
         if (val == 0) {
             return 'Open'
         } else {
@@ -1269,7 +122,7 @@ function decode(type, data, dp) {
         }
     } else if (type == 'DPT_Scaling') {
         return dec.decodeDPT5(data)
-    } else if (type == 'DPT_Value_Temp' || type == 'DPT_Value_Tempd' || type == 'DPT_Value_Pres' || type == 'DPT_Power' || type == 'DPT_Value_Volume_Flow') {
+    } else if (type == 'DPT_Value_Temp' || type == 'DPT_Tempd' || type == 'DPT_Value_Pres' || type == 'DPT_Power' || type == 'DPT_Value_Volume_Flow') {
         return Math.round(dec.decodeDPT9(data) * 100) / 100
     } else if (type == 'DPT_TimeOfDay') {
         return dec.decodeDPT10(data)
@@ -1278,7 +131,7 @@ function decode(type, data, dp) {
     } else if (type == 'DPT_FlowRate_m3/h') {
         return dec.decodeDPT13(data)
     } else if (type == 'DPT_HVACMode') {
-        var _data = parseInt(data);
+        var _data = data.readInt8();
 
         if (datapoints[dp].name == "Programmwahl Heizkreis" || datapoints[dp].name == "Mischer") {
             if (_data == 2) {
@@ -1292,13 +145,13 @@ function decode(type, data, dp) {
             } else {
                 throw "";
             }
-        }else {
+        } else {
             throw "";
         }
     } else if (type == 'DPT_HVACContrMode') {
         var _data = parseInt(data);
 
-        if(dp < 177){
+        if (dp < 177) {
             if (_data == 0) {
                 return "Auto"
             } else if (_data == 1) {
@@ -1315,7 +168,7 @@ function decode(type, data, dp) {
                 throw "";
             }
 
-        }else{
+        } else {
             if (_data == 0) {
                 return "Auto"
             } else if (_data == 1) {
@@ -1339,6 +192,76 @@ function decode(type, data, dp) {
     }
 }
 
+function bufferIndexOf(buf, search, offset) {
+    offset = offset || 0
+
+    var m = 0;
+    var s = -1;
+    for (var i = offset; i < buf.length; ++i) {
+
+        if (buf[i] != search[m]) {
+            s = -1;
+            m = 0;
+        }
+
+        if (buf[i] == search[m]) {
+            if (s == -1) s = i;
+            ++m;
+            if (m == search.length) break;
+        }
+
+    }
+
+    if (s > -1 && buf.length - s < search.length) return -1;
+    return s;
+}
+
+function read_from_ism8(_data) {
+    var val;
+    var search = -1;
+    var lines = [];
+    var splitter = new Buffer("0620f080", "hex");
+
+    while ((search = bufferIndexOf(_data, splitter)) > -1) {
+        lines.push(_data.slice(0, search));
+        _data = _data.slice(search + splitter.length, _data.length);
+    }
+
+    if (_data.length) lines.push(_data);
+
+    for (var i = 1; i < lines.length; i++) {
+        var dp = lines[i].readUInt16BE(8);
+        var device = get_device(dp);
+
+        try {
+            val = decode(datapoints[dp].type, lines[i].slice(14), dp);
+        }
+        catch (err) {
+            val = "";
+            adapter.log.error("Can't parse DP : " + dp + " - data: " + _data.toString("hex") + " - length: " + _data.length);
+            //console.log("Can't parse DP : " + dp + " - data: " + lines[i].toString("hex") + " - length: " + lines[i].length);
+            //console.log(err)
+        }
+
+        try {
+            adapter.setState(device + '.' + dp, val, true);
+            ack_data[dp]["value"] = val;
+        }
+        catch (err) {
+            adapter.log.error("Can't set DP " + dp);
+            adapter.log.error(err)
+        }
+
+        //console.log('-----------------------------------------');
+        //console.log('Device: ' + device);
+        //console.log('Datapoint: ' + dp);
+        //console.log('Datapoint_name: ' + datapoints[dp].name);
+        //console.log('Datapoint_type: ' + datapoints[dp].type);
+        //console.log('value: ' + val);
+        //console.log('oid: ' + device + '.' + dp);
+    }
+}
+
 function main() {
 
     adapter.getForeignObjects(adapter.namespace + '.*', function (err, list) {
@@ -1350,43 +273,11 @@ function main() {
             ack_data.old_devices[idd.split('.')[2]] = idd.split('.')[2];
         }
 
-
-        console.log(adapter.namespace)
         var devices = adapter.config.devices;
         var names = adapter.config.names;
 
-        var buff_req = new Buffer(17);
-        buff_req[0] = 0x06;
-        buff_req[1] = 0x20;
-        buff_req[2] = 0xF0;
-        buff_req[3] = 0x80;
-        buff_req[4] = 0x00;
-        buff_req[5] = 0x15;
-        buff_req[6] = 0x04;
-        buff_req[7] = 0x00;
-        buff_req[8] = 0x00;
-        buff_req[9] = 0x00;
-        buff_req[10] = 0xF0;
-        buff_req[11] = 0x86;
-        buff_req[12] = 0x00;
-        buff_req[13] = 0x6E;
-        buff_req[14] = 0x00;
-        buff_req[15] = 0x00;
-        buff_req[16] = 0x00;
-
-        var buff_getall = new Buffer(12);
-        buff_getall[0] = 0x06;
-        buff_getall[1] = 0x20;
-        buff_getall[2] = 0xF0;
-        buff_getall[3] = 0x80;
-        buff_getall[4] = 0x00;
-        buff_getall[5] = 0x16;
-        buff_getall[6] = 0x04;
-        buff_getall[7] = 0x00;
-        buff_getall[8] = 0x00;
-        buff_getall[9] = 0x00;
-        buff_getall[10] = 0xF0;
-        buff_getall[11] = 0xD0;
+        var buff_req = new Buffer("0620F080001504000000F086006E000000","hex");
+        var buff_getall = new Buffer("0620F080001604000000F0D0","hex");
 
 
         for (var group in devices) {
@@ -1421,7 +312,7 @@ function main() {
                         type: 'channel',
                         common: {
                             name: names[dev + '_n'] || group_name,
-                            type: 'channel',
+                            type: 'channel'
                         },
                         native: {}
                     });
@@ -1443,7 +334,7 @@ function main() {
                                     enabled: false
                                 },
                                 native: {
-                                    rw: data.rw,
+                                    rw: data.rw
                                 }
                             });
                         }
@@ -1481,41 +372,8 @@ function main() {
                 buff_req[13] = _data[13];
                 sock.write(buff_req);
 
-                var dp = _data.readUInt16BE(12);
-                var device = get_device(dp);
+                read_from_ism8(_data)
 
-
-                if (ack_data[device] == undefined) {
-
-                }
-
-                if (datapoints[dp] && ack_data[dp]) {
-
-                    try {
-                        val = decode(datapoints[dp].type, _data.slice(20), dp);
-                    }
-                    catch (err) {
-                        val = "";
-                        adapter.log.error("Can't parse DP : " + dp + " - data: " + _data.toString("hex") + " - length: " + _data.length)
-                    }
-
-                    try {
-                        adapter.setState(device + '.' + dp, val, true);
-                        ack_data[dp]["value"] = val;
-                    }
-                    catch (err) {
-                        adapter.log.error("Can't set DP " + dp);
-                        adapter.log.error(err)
-                    }
-
-                    //console.log('-----------------------------------------');
-                    //console.log('Device: ' + device);
-                    //console.log('Datapoint: ' + dp);
-                    //console.log('Datapoint_name: ' + datapoints[dp].name);
-                    //console.log('Datapoint_type: ' + datapoints[dp].type);
-                    //console.log('value: ' + val);
-                    //console.log('oid: ' + device + '.' + dp);
-                }
             })
         }).listen(adapter.config.ism8_port, adapter.config.host_ip);
 
@@ -1540,3 +398,24 @@ function main() {
 adapter.on('ready', function () {
     main();
 });
+
+
+// todo 0620f080001504000000f006000b0001000b0301010620f080001504000000f006000c0001000c030100
+// todo
+// todo 0620f080001504000000f00600bd000100bd030100
+// todo
+// todo 0620f080001504000000f00600bb000100bb0301010620f080001504000000f00600bc000100bc0301000620f080001504000000f00600bd000100bd030100
+// todo 0620f080001504000000f00600ba000100ba0301010620f080001504000000f00600bb000100bb0301010620f080001504000000f00600bc000100bc0301000620f080001504000000f00600bd000100bd03010
+// todo
+// todo
+// todo  0620f080001504000000f006003900010039030100
+// todo    0620f080001504000000f006003a0001003a030100
+// todo
+// todo
+// todo   0620f080001604000000f00600410001004103020190
+// todo   0620f080001504000000f006004000010040030100
+// todo   0620f080001604000000f00600420001004203020190
+// todo   0620f080001504000000f006004300010043030100
+// todo   0620f080001504000000f006004600010046030100
+
+//read_from_ism8(new Buffer("0620f080001504000000f00600bb000100bb0301010620f080001504000000f00600bc000100bc0301000620f080001504000000f00600bd000100bd030100", "hex"))
