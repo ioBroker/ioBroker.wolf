@@ -1,15 +1,13 @@
 ﻿//﻿'use strict';
 
-// todo schreiben
-
-
 var net = require('net');
-//var utils = require(__dirname + '/lib/utils');
-//var adapter = utils.adapter('wolf');
+var utils = require(__dirname + '/lib/utils');
+var adapter = utils.adapter('wolf');
 
 
 var dec = new (require('./js/decoder.js'))();
 var datapoints = require('./js/datapoints.json');
+
 
 var ack_data = {
     old_devices: {},
@@ -90,9 +88,11 @@ function get_device_rage(id) {
 }
 
 function decode(type, data, dp) {
+    var val;
+    var _data;
 
     if (type == 'DPT_Switch') {
-        var val = data.readInt8(0);
+         val = data.readInt8(0);
         if (val == 0) {
             return 'Off'
         } else {
@@ -100,21 +100,21 @@ function decode(type, data, dp) {
         }
     } else if (type == 'DPT_Bool') {
 
-        var val = data.readInt8(0);
+         val = data.readInt8(0);
         if (val == 0) {
             return 'false'
         } else {
             return 'true'
         }
     } else if (type == 'DPT_Enable') {
-        var val = data.readInt8(0);
+         val = data.readInt8(0);
         if (val == 0) {
             return 'Disable'
         } else {
             return 'Enable'
         }
     } else if (type == 'DPT_OpenClose') {
-        var val = data.readInt8(0);
+         val = data.readInt8(0);
         if (val == 0) {
             return 'Open'
         } else {
@@ -131,7 +131,7 @@ function decode(type, data, dp) {
     } else if (type == 'DPT_FlowRate_m3/h') {
         return dec.decodeDPT13(data)
     } else if (type == 'DPT_HVACMode') {
-        var _data = data.readInt8();
+        _data = data.readInt8();
 
         if (datapoints[dp].name == "Programmwahl Heizkreis" || datapoints[dp].name == "Mischer") {
             if (_data == 2) {
@@ -149,7 +149,7 @@ function decode(type, data, dp) {
             throw "";
         }
     } else if (type == 'DPT_HVACContrMode') {
-        var _data = parseInt(data);
+         _data = parseInt(data);
 
         if (dp < 177) {
             if (_data == 0) {
@@ -193,7 +193,7 @@ function decode(type, data, dp) {
 }
 
 function bufferIndexOf(buf, search, offset) {
-    offset = offset || 0
+    offset = offset || 0;
 
     var m = 0;
     var s = -1;
@@ -209,58 +209,12 @@ function bufferIndexOf(buf, search, offset) {
             ++m;
             if (m == search.length) break;
         }
-
     }
 
     if (s > -1 && buf.length - s < search.length) return -1;
     return s;
 }
 
-function read_from_ism8(_data) {
-    var val;
-    var search = -1;
-    var lines = [];
-    var splitter = new Buffer("0620f080", "hex");
-
-    while ((search = bufferIndexOf(_data, splitter)) > -1) {
-        lines.push(_data.slice(0, search));
-        _data = _data.slice(search + splitter.length, _data.length);
-    }
-
-    if (_data.length) lines.push(_data);
-
-    for (var i = 1; i < lines.length; i++) {
-        var dp = lines[i].readUInt16BE(8);
-        var device = get_device(dp);
-
-        try {
-            val = decode(datapoints[dp].type, lines[i].slice(14), dp);
-        }
-        catch (err) {
-            val = "";
-            adapter.log.error("Can't parse DP : " + dp + " - data: " + _data.toString("hex") + " - length: " + _data.length);
-            //console.log("Can't parse DP : " + dp + " - data: " + lines[i].toString("hex") + " - length: " + lines[i].length);
-            //console.log(err)
-        }
-
-        try {
-            adapter.setState(device + '.' + dp, val, true);
-            ack_data[dp]["value"] = val;
-        }
-        catch (err) {
-            adapter.log.error("Can't set DP " + dp);
-            adapter.log.error(err)
-        }
-
-        //console.log('-----------------------------------------');
-        //console.log('Device: ' + device);
-        //console.log('Datapoint: ' + dp);
-        //console.log('Datapoint_name: ' + datapoints[dp].name);
-        //console.log('Datapoint_type: ' + datapoints[dp].type);
-        //console.log('value: ' + val);
-        //console.log('oid: ' + device + '.' + dp);
-    }
-}
 
 function main() {
 
@@ -269,15 +223,13 @@ function main() {
 //console.log(list)
         for (var idd in list) {
 
-            ack_data[idd.split('.').pop()] = {id: idd}
+            ack_data[idd.split('.').pop()] = {id: idd};
             ack_data.old_devices[idd.split('.')[2]] = idd.split('.')[2];
         }
 
         var devices = adapter.config.devices;
         var names = adapter.config.names;
 
-        var buff_req = new Buffer("0620F080001504000000F086006E000000","hex");
-        var buff_getall = new Buffer("0620F080001604000000F0D0","hex");
 
 
         for (var group in devices) {
@@ -322,7 +274,7 @@ function main() {
 
                         if (!ack_data[range.lsb]) {
                             var data = datapoints[range.lsb];
-                            ack_data[range.lsb] = {id: adapter.namespace + "." + dev + '.' + range.lsb}
+                            ack_data[range.lsb] = {id: adapter.namespace + "." + dev + '.' + range.lsb};
                             //console.log('add:' + dev + '.' + range.lsb  );
                             adapter.setObject(dev + '.' + range.lsb, {
                                 type: 'state',
@@ -356,27 +308,6 @@ function main() {
             }
         }
 
-
-        net.createServer(function (sock) {
-
-            var val = "";
-            sock.write(buff_getall);
-
-            //sock.on('connect', function (e) {
-            //    console.log(e)
-            //});
-
-            sock.on('data', function (_data) {
-
-                buff_req[12] = _data[12];
-                buff_req[13] = _data[13];
-                sock.write(buff_req);
-
-                read_from_ism8(_data)
-
-            })
-        }).listen(adapter.config.ism8_port, adapter.config.host_ip);
-
         adapter.subscribeStates('*');
         adapter.on('stateChange', function (id, state) {
             if (state && !state.ack && id) {
@@ -391,31 +322,91 @@ function main() {
             }
 
         });
+
+        server();
     });
 }
 
+
+function server(){
+    var buff_req = new Buffer("0620F080001504000000F086006E000000", "hex");
+    var buff_getall = new Buffer("0620F080001604000000F0D0", "hex");
+    var splitter = new Buffer("0620f080", "hex");
+
+    net.createServer(function (sock) {
+
+        sock.write(buff_getall);
+
+        //sock.on('connect', function (e) {
+        //    console.log(e)
+        //});
+
+        var val;
+        var dp;
+        var device;
+        var search;
+        var lines;
+        var data;
+        sock.on('data', function (_data) {
+
+            search = -1;
+            lines = [];
+
+
+            while ((search = bufferIndexOf(_data, splitter)) > -1) {
+                lines.push(_data.slice(0, search + splitter.length));
+                _data = _data.slice(search + splitter.length, _data.length);
+            }
+
+            if (_data.length) lines.push(_data);
+
+            for (var i = 1; i < lines.length; i++) {
+
+                data = Buffer.concat([splitter, lines[i]]);
+
+                buff_req[12] = data[12];
+                buff_req[13] = data[13];
+                sock.write(buff_req);
+
+                dp = data.readUInt16BE(12);
+                device = get_device(dp);
+
+
+                try {
+                    val = decode(datapoints[dp].type, data.slice(20), dp);
+                }
+                catch (err) {
+                    val = "";
+                    adapter.log.error("Can't parse DP : " + dp + " - data: " + data.toString("hex") + " - length: " + data.length);
+                }
+
+                try {
+                    adapter.setState(device + '.' + dp, val, true);
+                    ack_data[dp]["value"] = val;
+                }
+                catch (err) {
+                    adapter.log.info("h");
+
+                }
+
+                adapter.log.debug('incomming'+
+                    '\n Device: ' + device +
+                    '\n Datapoint: ' + dp +
+                    '\n Datapoint_name: ' + datapoints[dp].name +
+                    '\n Datapoint_type: ' + datapoints[dp].type +
+                    '\n Data: ' + data.toString("hex") +
+                    '\n Lengh: ' + data.length +
+                    '\n Value: ' + val +
+                    ''
+                );
+            }
+
+        })
+    }).listen(adapter.config.ism8_port, adapter.config.host_ip);
+}
 
 adapter.on('ready', function () {
     main();
 });
 
 
-// todo 0620f080001504000000f006000b0001000b0301010620f080001504000000f006000c0001000c030100
-// todo
-// todo 0620f080001504000000f00600bd000100bd030100
-// todo
-// todo 0620f080001504000000f00600bb000100bb0301010620f080001504000000f00600bc000100bc0301000620f080001504000000f00600bd000100bd030100
-// todo 0620f080001504000000f00600ba000100ba0301010620f080001504000000f00600bb000100bb0301010620f080001504000000f00600bc000100bc0301000620f080001504000000f00600bd000100bd03010
-// todo
-// todo
-// todo  0620f080001504000000f006003900010039030100
-// todo    0620f080001504000000f006003a0001003a030100
-// todo
-// todo
-// todo   0620f080001604000000f00600410001004103020190
-// todo   0620f080001504000000f006004000010040030100
-// todo   0620f080001604000000f00600420001004203020190
-// todo   0620f080001504000000f006004300010043030100
-// todo   0620f080001504000000f006004600010046030100
-
-//read_from_ism8(new Buffer("0620f080001504000000f00600bb000100bb0301010620f080001504000000f00600bc000100bc0301000620f080001504000000f00600bd000100bd030100", "hex"))
