@@ -3,11 +3,12 @@
 
 ## Einsatzbereiche: Heizung / Solar / Wohnraumlüftung
 der Adapter kann über das ISM8i maximal 4  von den nachfolgenden Heizgeräten auswerten:
-  * Gasbrennwertgerät: CGB-2 (beinhaltet: CGW-2, CGS-2, CSZ-2), MGK-2 Öl
-  * Brennwertkessel:   TOB 
+  * Gasbrennwertgerät: CGB-2 (beinhaltet: CGW-2, CGS-2, CSZ-2), MGK-2 
+  * Öl Brennwertkessel:   TOB 
   * Split-Wärmepumpe:  BWL-1-S 
+  * Wohnraumlüftung CWL Excellent
   Es ist immer ein System-Bedienmodul BM-2 erforderlich. 
-  Weiterhin können zusätzliche Komponenten, wie Mischermodul MM, Kaskadenmodul KM, Solarmodul SM1 oder SM2, im eBusSystem vorhanden sein. 
+  Weiterhin können zusätzliche Komponenten wie Mischermodul MM, Kaskadenmodul KM, Solarmodul SM1 oder SM2, im eBusSystem vorhanden sein. 
   
   
   Maximale Anzahl der einzelnen Module: 
@@ -20,7 +21,7 @@ der Adapter kann über das ISM8i maximal 4  von den nachfolgenden Heizgeräten a
 
 
 ## Changelog
-### 0.0.4 [2015.10.16]
+### 0.0.5 [2015.10.16]
 * (smiling_Jack) Add support for multiple data
 * (smiling_Jack) Add debug output 
 * (smiling_Jack) Bugfixes
