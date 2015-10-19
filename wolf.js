@@ -92,7 +92,7 @@ function decode(type, data, dp) {
     var _data;
 
     if (type == 'DPT_Switch') {
-         val = data.readInt8(0);
+        val = data.readInt8(0);
         if (val == 0) {
             return 'Off'
         } else {
@@ -100,21 +100,21 @@ function decode(type, data, dp) {
         }
     } else if (type == 'DPT_Bool') {
 
-         val = data.readInt8(0);
+        val = data.readInt8(0);
         if (val == 0) {
             return 'false'
         } else {
             return 'true'
         }
     } else if (type == 'DPT_Enable') {
-         val = data.readInt8(0);
+        val = data.readInt8(0);
         if (val == 0) {
             return 'Disable'
         } else {
             return 'Enable'
         }
     } else if (type == 'DPT_OpenClose') {
-         val = data.readInt8(0);
+        val = data.readInt8(0);
         if (val == 0) {
             return 'Open'
         } else {
@@ -130,10 +130,37 @@ function decode(type, data, dp) {
         return dec.decodeDPT11(data)
     } else if (type == 'DPT_FlowRate_m3/h') {
         return dec.decodeDPT13(data)
-    } else if (type == 'DPT_HVACMode') {
-        _data = data.readInt8();
+    } else if (type == 'DPT_DHWMode') {
+        _data = data.readInt8(0);
+        if (datapoints[dp].name == "Programmwahl Warmwasser") {
+            if (_data == 0) {
+                return "Automatikbetrieb"
+            } else if (_data == 2) {
+                return "Dauerbetrieb"
+            } else if (_data == 4) {
+                return "Standby"
+            } else {
+                throw "";
+            }
+        } else if (datapoints[dp].name == "Programmwahl CWL") {
+            if (_data == 0) {
+                return "Automatikbetrieb"
+            } else if (_data == 1) {
+                return "Nennlüftung"
+            } else if (_data == 3) {
+                return "Reduzierte Lüftung"
+            } else {
+                throw "";
+            }
+        } else {
+            throw "";
+        }
 
-        if (datapoints[dp].name == "Programmwahl Heizkreis" || datapoints[dp].name == "Mischer") {
+    }
+    else if (type == 'DPT_HVACMode') {
+        _data = data.readInt8(0);
+
+        if (datapoints[dp].name == "Programmwahl Heizkreis" || datapoints[dp].name == "Programmwahl Mischer") {
             if (_data == 2) {
                 return "Standby"
             } else if (_data == 0) {
@@ -149,8 +176,7 @@ function decode(type, data, dp) {
             throw "";
         }
     } else if (type == 'DPT_HVACContrMode') {
-         _data = parseInt(data);
-
+        _data = data.readInt8(0);
         if (dp < 177) {
             if (_data == 0) {
                 return "Auto"
@@ -167,7 +193,6 @@ function decode(type, data, dp) {
             } else {
                 throw "";
             }
-
         } else {
             if (_data == 0) {
                 return "Auto"
@@ -185,8 +210,6 @@ function decode(type, data, dp) {
                 throw "";
             }
         }
-
-
     } else {
         throw "";
     }
@@ -229,7 +252,6 @@ function main() {
 
         var devices = adapter.config.devices;
         var names = adapter.config.names;
-
 
 
         for (var group in devices) {
@@ -328,7 +350,7 @@ function main() {
 }
 
 
-function server(){
+function server() {
     var buff_req = new Buffer("0620F080001504000000F086006E000000", "hex");
     var buff_getall = new Buffer("0620F080001604000000F0D0", "hex");
     var splitter = new Buffer("0620f080", "hex");
@@ -378,6 +400,16 @@ function server(){
                 catch (err) {
                     val = "";
                     adapter.log.error("Can't parse DP : " + dp + " - data: " + data.toString("hex") + " - length: " + data.length);
+                    adapter.log.debug('incomming' +
+                        '\n Device: ' + device +
+                        '\n Datapoint: ' + dp +
+                        '\n Datapoint_name: ' + datapoints[dp].name +
+                        '\n Datapoint_type: ' + datapoints[dp].type +
+                        '\n Data: ' + data.toString("hex") +
+                        '\n Lengh: ' + data.length +
+                        '\n Value: ' + val +
+                        ''
+                    );
                 }
 
                 try {
@@ -388,19 +420,7 @@ function server(){
                     adapter.log.info("h");
 
                 }
-
-                adapter.log.debug('incomming'+
-                    '\n Device: ' + device +
-                    '\n Datapoint: ' + dp +
-                    '\n Datapoint_name: ' + datapoints[dp].name +
-                    '\n Datapoint_type: ' + datapoints[dp].type +
-                    '\n Data: ' + data.toString("hex") +
-                    '\n Lengh: ' + data.length +
-                    '\n Value: ' + val +
-                    ''
-                );
             }
-
         })
     }).listen(adapter.config.ism8_port, adapter.config.host_ip);
 }
@@ -410,3 +430,31 @@ adapter.on('ready', function () {
 });
 
 
+//function test(_data) {
+//    var _data = new Buffer("0620f080001504000000f00600020001000203010b", "hex");
+//    var val;
+//    var dp = _data.readUInt16BE(12);
+//    var device = get_device(dp);
+//
+//
+//    try {
+//        val = decode(datapoints[dp].type, _data.slice(20), dp);
+//    }
+//    catch (err) {
+//        val = "";
+//        console.log("Can't parse DP : " + dp + " - data: " + _data.toString("hex") + " - length: " + _data.length)
+//        console.log(err)
+//    }
+//
+//    console.log('-----------------------------------------');
+//    console.log('Device: ' + device);
+//    console.log('Datapoint: ' + dp);
+//    console.log('Datapoint_name: ' + datapoints[dp].name);
+//    console.log('Datapoint_type: ' + datapoints[dp].type);
+//    console.log('value: ' + val);
+//    console.log('oid: ' + device + '.' + dp);
+//}
+//test()
+
+//todo DPT_HVACContrMode 0620f080001504000000f00600020001000203010b
+//todo DPT_HVACContrMode 0620f080001504000000f006000200010002030101
