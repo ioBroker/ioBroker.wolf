@@ -165,7 +165,7 @@ function decode(type, data, dp) {
                 return "Standby"
             } else if (_data == 0) {
                 return "Automatikbetrieb"
-            } else if (_data == 2) {
+            } else if (_data == 1) {
                 return "Heizbetrieb"
             } else if (_data == 3) {
                 return "Sparbetrieb"
@@ -331,19 +331,23 @@ function main() {
         }
 
         adapter.subscribeStates('*');
-        adapter.on('stateChange', function (id, state) {
-            if (state && !state.ack && id) {
-                var dp = id.split('.').pop();
-                if (datapoints[dp].rw == "r") {
-                    adapter.setState(id, ack_data[dp].value, true);
-                    adapter.log.error("oid: " + id + " is only readable")
-                } else {
-                    adapter.setState(id, ack_data[dp].value, true); // todo hier an ism8 senden
-                }
 
-            }
-
-        });
+        //var buff_req = new Buffer("0620F080001504000000F086003B000001", "hex");
+        //adapter.on('stateChange', function (id, state) {
+        //    if (state && !state.ack && id) {
+        //        var dp = id.split('.').pop();
+        //        if (datapoints[dp].rw == "r") {
+        //            adapter.setState(id, ack_data[dp].value, true);
+        //            adapter.log.error("oid: " + id + " is only readable")
+        //        } else {
+        //            //adapter.setState(id, ack_data[dp].value, true); // todo hier an ism8 senden
+        //
+        //
+        //        }
+        //
+        //    }
+        //
+        //});
 
         server();
     });
@@ -351,11 +355,30 @@ function main() {
 
 
 function server() {
-    var buff_req = new Buffer("0620F080001504000000F086006E000000", "hex");
+    var buff_req = new Buffer("0620F080001104000000F086006E000000", "hex");
     var buff_getall = new Buffer("0620F080001604000000F0D0", "hex");
     var splitter = new Buffer("0620f080", "hex");
 
     net.createServer(function (sock) {
+
+        var buff_set = new Buffer("0620F080001504000000F006003B00010087030101", "hex");
+                                 //0620F080001504000000F006006E0001006E030101
+        adapter.on('stateChange', function (id, state) {
+            if (state && !state.ack && id) {
+                var dp = id.split('.').pop();
+                if (datapoints[dp].rw == "r") {
+                    adapter.setState(id, ack_data[dp].value, true);
+                    adapter.log.error("oid: " + id + " is only readable")
+                } else {
+
+                    //adapter.setState(id, ack_data[dp].value, true); // todo hier an ism8 senden
+
+                    //sock.write(buff_set)
+                }
+
+            }
+
+        });
 
         sock.write(buff_getall);
 
@@ -417,7 +440,16 @@ function server() {
                     ack_data[dp]["value"] = val;
                 }
                 catch (err) {
-                    adapter.log.info("h");
+                    adapter.log.debug("Can't set" +
+                        '\n Device: ' + device +
+                        '\n Datapoint: ' + dp +
+                        '\n Datapoint_name: ' + datapoints[dp].name +
+                        '\n Datapoint_type: ' + datapoints[dp].type +
+                        '\n Data: ' + data.toString("hex") +
+                        '\n Lengh: ' + data.length +
+                        '\n Value: ' + val +
+                        ''
+                    );
 
                 }
             }
