@@ -20,6 +20,8 @@ der Adapter kann über das ISM8i maximal 4  von den nachfolgenden Heizgeräten a
 
 
 ## Changelog
+### 0.0.8 [2015.11.02]
+* (smiling_Jack) Bugfix io-package
 
 ### 0.0.7 [2015.11.02]
 * (smiling_Jack) new object management
