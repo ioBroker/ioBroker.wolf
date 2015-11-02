@@ -8,49 +8,49 @@ var adapter = utils.adapter('wolf');
 var dec = new (require('./js/decoder.js'))();
 var datapoints = require('./js/datapoints.json');
 
-
+var names = ""
 var ack_data = {
     old_devices: {},
     new_devices: []
 };
 
-function get_device(id) {
-    if (id >= 1 && id <= 13) {
+function getDevice(dp) {
+    if (dp >= 1 && dp <= 13) {
         return 'hg1'
-    } else if (id >= 14 && id <= 26) {
+    } else if (dp >= 14 && dp <= 26) {
         return 'hg2'
-    } else if (id >= 27 && id <= 39) {
+    } else if (dp >= 27 && dp <= 39) {
         return 'hg3'
-    } else if (id >= 40 && id <= 52) {
+    } else if (dp >= 40 && dp <= 52) {
         return 'hg4'
-    } else if (id >= 53 && id <= 66) {
+    } else if (dp >= 53 && dp <= 66) {
         return 'bm1'
-    } else if (id >= 67 && id <= 79) {
+    } else if (dp >= 67 && dp <= 79) {
         return 'bm2'
-    } else if (id >= 80 && id <= 92) {
+    } else if (dp >= 80 && dp <= 92) {
         return 'bm3'
-    } else if (id >= 93 && id <= 105) {
+    } else if (dp >= 93 && dp <= 105) {
         return 'bm4'
-    } else if (id >= 106 && id <= 113) {
+    } else if (dp >= 106 && dp <= 113) {
         return 'km1'
-    } else if (id >= 114 && id <= 120) {
+    } else if (dp >= 114 && dp <= 120) {
         return 'mm1'
-    } else if (id >= 121 && id <= 127) {
+    } else if (dp >= 121 && dp <= 127) {
         return 'mm2'
-    } else if (id >= 128 && id <= 134) {
+    } else if (dp >= 128 && dp <= 134) {
         return 'mm3'
-    } else if (id >= 135 && id <= 147) {
+    } else if (dp >= 135 && dp <= 147) {
         return 'sm1'
-    } else if (id >= 148 && id <= 175) {
+    } else if (dp >= 148 && dp <= 175) {
         return 'cwl'
-    } else if (id >= 176 && id <= 191) {
+    } else if (dp >= 176 && dp <= 191) {
         return 'hg0'
     } else {
-        return parseInt(id);
+        return null;
     }
 }
 
-function get_device_rage(id) {
+function getDeviceRage(id) {
     if (id == 'hg1') {
         return {'lsb': 1, 'msb': 13}
     } else if (id == 'hg2') {
@@ -238,12 +238,76 @@ function bufferIndexOf(buf, search, offset) {
     return s;
 }
 
+function addGroup(dev) {
+    var group_name = '';
+    if (adapter.config.names[dev+"_n"] == "") {
+        if (dev.match(/hg/)) {
+            group_name = 'Heizgeräte ' + dev.slice(-1)
+        } else if (dev.match(/bm/)) {
+            group_name = 'Bediengeräte ' + dev.slice(-1)
+        } else if (dev.match(/mm/)) {
+            group_name = 'Mischermodule ' + dev.slice(-1)
+        } else if (dev.match(/km/)) {
+            group_name = 'Kaskadenmodul'
+        } else if (dev.match(/sm/)) {
+            group_name = 'Solarmodul'
+        } else if (dev.match(/cwl/)) {
+            group_name = 'Comfort-Wohnungs-Lüftung'
+        }
+    } else {
+        group_name = adapter.config.names[dev+"_n"];
+    }
+
+    adapter.setObject(dev, {
+        type: 'channel',
+        common: {
+            name: group_name,
+            type: 'channel'
+        },
+        native: {}
+    });
+}
+
+function addDevice(dp, callback) {
+    var dev = getDevice(dp)
+    if (dev) {
+        //ack_data.new_devices.push(dev);
+        var range = getDeviceRage(dev);
+
+
+        addGroup(dev)
+
+
+        for (range.lsb; range.lsb <= range.msb; range.lsb++) {
+
+            if (!ack_data[range.lsb]) {
+                var data = datapoints[range.lsb];
+                ack_data[range.lsb] = {id: adapter.namespace + "." + dev + '.' + range.lsb};
+                //console.log('add:' + dev + '.' + range.lsb  );
+                adapter.setObject(dev + '.' + range.lsb, {
+                    type: 'state',
+                    common: {
+                        name: data.name,
+                        role: data.type.replace('DPT_', ''),
+                        type: 'state',
+                        unit: data.einheit,
+                        enabled: false
+                    },
+                    native: {
+                        rw: data.rw
+                    }
+                });
+            }
+        }
+        callback()
+    }
+
+}
 
 function main() {
 
     adapter.getForeignObjects(adapter.namespace + '.*', function (err, list) {
 
-//console.log(list)
         for (var idd in list) {
 
             ack_data[idd.split('.').pop()] = {id: idd};
@@ -251,108 +315,24 @@ function main() {
         }
 
         var devices = adapter.config.devices;
-        var names = adapter.config.names;
+        names = adapter.config.names;
 
-
-        for (var group in devices) {
-            var parent = false;
-            for (var dev in devices[group]) {
-
-
-                if (devices[group][dev] == 'on') {
-                    ack_data.new_devices.push(dev);
-                    var range = get_device_rage(dev);
-
-                    if (parent == false) {  //todo muss das parent sein ?
-                        parent = true;
-                        var group_name = '';
-
-                        if (dev.match(/hg/)) {
-                            group_name = 'Heizgeräte ' + dev.slice(-1)
-                        } else if (dev.match(/bm/)) {
-                            group_name = 'Bediengeräte ' + dev.slice(-1)
-                        } else if (dev.match(/mm/)) {
-                            group_name = 'Mischermodule ' + dev.slice(-1)
-                        } else if (dev.match(/km/)) {
-                            group_name = 'Kaskadenmodul'
-                        } else if (dev.match(/sm/)) {
-                            group_name = 'Solarmodul'
-                        } else if (dev.match(/cwl/)) {
-                            group_name = 'Comfort-Wohnungs-Lüftung'
-                        }
-                    }
-
-                    adapter.setObject(dev, {
-                        type: 'channel',
-                        common: {
-                            name: names[dev + '_n'] || group_name,
-                            type: 'channel'
-                        },
-                        native: {}
+        for (var dev in devices) {
+            if (ack_data.old_devices[dev]) {
+                if (devices[dev] == "off") {
+                    adapter.deleteChannel(dev, function () {
                     });
-
-
-                    for (range.lsb; range.lsb <= range.msb; range.lsb++) {
-
-                        if (!ack_data[range.lsb]) {
-                            var data = datapoints[range.lsb];
-                            ack_data[range.lsb] = {id: adapter.namespace + "." + dev + '.' + range.lsb};
-                            //console.log('add:' + dev + '.' + range.lsb  );
-                            adapter.setObject(dev + '.' + range.lsb, {
-                                type: 'state',
-                                common: {
-                                    name: data.name,
-                                    role: data.type.replace('DPT_', ''),
-                                    type: 'state',
-                                    unit: data.einheit,
-                                    enabled: false
-                                },
-                                native: {
-                                    rw: data.rw
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
-
-        for (var dev in ack_data.old_devices) {
-            if (ack_data.new_devices.indexOf(dev) == -1) {
-                //console.log('delete ' + dev)
-                adapter.deleteChannel(dev, function () {
-                });
-                var range = get_device_rage();
-                for (range.lsb; range.lsb <= range.msb; range.lsb++) {
-                    delete ack_data[range.lsb]
+                } else {
+                    addGroup(dev)
                 }
             }
         }
 
         adapter.subscribeStates('*');
 
-        //var buff_req = new Buffer("0620F080001504000000F086003B000001", "hex");
-        //adapter.on('stateChange', function (id, state) {
-        //    if (state && !state.ack && id) {
-        //        var dp = id.split('.').pop();
-        //        if (datapoints[dp].rw == "r") {
-        //            adapter.setState(id, ack_data[dp].value, true);
-        //            adapter.log.error("oid: " + id + " is only readable")
-        //        } else {
-        //            //adapter.setState(id, ack_data[dp].value, true); // todo hier an ism8 senden
-        //
-        //
-        //        }
-        //
-        //    }
-        //
-        //});
-
         server();
     });
 }
-
 
 function server() {
     var buff_req = new Buffer("0620F080001104000000F086006E000000", "hex");
@@ -362,7 +342,7 @@ function server() {
     net.createServer(function (sock) {
 
         var buff_set = new Buffer("0620F080001504000000F006003B00010087030101", "hex");
-                                 //0620F080001504000000F006006E0001006E030101
+        //0620F080001504000000F006006E0001006E030101
         adapter.on('stateChange', function (id, state) {
             if (state && !state.ack && id) {
                 var dp = id.split('.').pop();
@@ -375,16 +355,9 @@ function server() {
 
                     //sock.write(buff_set)
                 }
-
             }
-
         });
 
-        sock.write(buff_getall);
-
-        //sock.on('connect', function (e) {
-        //    console.log(e)
-        //});
 
         var val;
         var dp;
@@ -413,47 +386,61 @@ function server() {
                 buff_req[13] = data[13];
                 sock.write(buff_req);
 
+
                 dp = data.readUInt16BE(12);
-                device = get_device(dp);
+                device = getDevice(dp);
+                if (adapter.config.devices[device] == "Auto")
+                    if (ack_data[dp]) {
+                        setState()
+                    } else {
+                        addDevice(dp, function () {
+                            setState()
+                        })
+                    }
 
 
-                try {
-                    val = decode(datapoints[dp].type, data.slice(20), dp);
-                }
-                catch (err) {
-                    val = "";
-                    adapter.log.error("Can't parse DP : " + dp + " - data: " + data.toString("hex") + " - length: " + data.length);
-                    adapter.log.debug('incomming' +
-                        '\n Device: ' + device +
-                        '\n Datapoint: ' + dp +
-                        '\n Datapoint_name: ' + datapoints[dp].name +
-                        '\n Datapoint_type: ' + datapoints[dp].type +
-                        '\n Data: ' + data.toString("hex") +
-                        '\n Lengh: ' + data.length +
-                        '\n Value: ' + val +
-                        ''
-                    );
+                function setState() {
+                    try {
+                        val = decode(datapoints[dp].type, data.slice(20), dp);
+                    }
+                    catch (err) {
+                        val = "";
+                        adapter.log.error("Can't parse DP : " + dp + " - data: " + data.toString("hex") + " - length: " + data.length);
+                        adapter.log.debug('incomming' +
+                            '\n Device: ' + device +
+                            '\n Datapoint: ' + dp +
+                            '\n Datapoint_name: ' + datapoints[dp].name +
+                            '\n Datapoint_type: ' + datapoints[dp].type +
+                            '\n Data: ' + data.toString("hex") +
+                            '\n Lengh: ' + data.length +
+                            '\n Value: ' + val +
+                            ''
+                        );
+                    }
+
+                    try {
+                        adapter.setState(device + '.' + dp, val, true);
+                        ack_data[dp]["value"] = val;
+                    }
+                    catch (err) {
+                        adapter.log.debug("Can't set" +
+                            '\n Device: ' + device +
+                            '\n Datapoint: ' + dp +
+                            '\n Datapoint_name: ' + datapoints[dp].name +
+                            '\n Datapoint_type: ' + datapoints[dp].type +
+                            '\n Data: ' + data.toString("hex") +
+                            '\n Lengh: ' + data.length +
+                            '\n Value: ' + val +
+                            ''
+                        );
+
+                    }
                 }
 
-                try {
-                    adapter.setState(device + '.' + dp, val, true);
-                    ack_data[dp]["value"] = val;
-                }
-                catch (err) {
-                    adapter.log.debug("Can't set" +
-                        '\n Device: ' + device +
-                        '\n Datapoint: ' + dp +
-                        '\n Datapoint_name: ' + datapoints[dp].name +
-                        '\n Datapoint_type: ' + datapoints[dp].type +
-                        '\n Data: ' + data.toString("hex") +
-                        '\n Lengh: ' + data.length +
-                        '\n Value: ' + val +
-                        ''
-                    );
-
-                }
             }
         })
+
+        sock.write(buff_getall);
     }).listen(adapter.config.ism8_port, adapter.config.host_ip);
 }
 
@@ -466,7 +453,7 @@ adapter.on('ready', function () {
 //    var _data = new Buffer("0620f080001504000000f00600020001000203010b", "hex");
 //    var val;
 //    var dp = _data.readUInt16BE(12);
-//    var device = get_device(dp);
+//    var device = getDevice(dp);
 //
 //
 //    try {

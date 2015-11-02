@@ -32,32 +32,21 @@
     "ism8_port": "12004",
     "host_ip": "0.0.0.0",
     "devices": {
-      "hg": {
-        "hg2": "off",
-        "hg3": "off",
-        "hg4": "off",
-        "hg0": "off",
-        "hg1": "on"
-      },
-      "bm": {
-        "bm1": "on",
-        "bm2": "off",
-        "bm3": "off",
-        "bm4": "off"
-      },
-      "mm": {
-        "mm1": "off",
-        "mm2": "off",
-        "mm3": "off"
-      },
-      "km": {
-        "km1": "off"
-      },
-      "sm": {
-        "sm1": "off"
-      },
-      "cw": {
-        "cwl": "off"
+        "hg0": "Auto",
+        "hg1": "Auto",
+        "hg2": "Auto",
+        "hg3": "Auto",
+        "hg4": "Auto",
+        "bm1": "Auto",
+        "bm2": "Auto",
+        "bm3": "Auto",
+        "bm4": "Auto",
+        "mm1": "Auto",
+        "mm2": "Auto",
+        "mm3": "Auto",
+        "km1": "Auto",
+        "sm1": "Auto",
+        "cwl": "Auto"
       }
     },
     "names": {
