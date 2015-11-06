@@ -13,6 +13,9 @@ var ack_data = {
     old_devices: {},
     new_devices: []
 };
+var ignore = {
+
+};
 
 function getDevice(dp) {
     if (dp >= 1 && dp <= 13) {
@@ -122,8 +125,12 @@ function decode(type, data, dp) {
         }
     } else if (type == 'DPT_Scaling') {
         return dec.decodeDPT5(data)
-    } else if (type == 'DPT_Value_Temp' || type == 'DPT_Tempd' || type == 'DPT_Value_Pres' || type == 'DPT_Power' || type == 'DPT_Value_Volume_Flow') {
+    } else if (type == 'DPT_Value_Temp' || type == 'DPT_Tempd' || type == 'DPT_Value_Pres' ) {
         return Math.round(dec.decodeDPT9(data) * 100) / 100
+    } else if (type == 'DPT_Power') {
+        return Math.round(dec.decodeDPT9(data))
+    } else if ( type == 'DPT_Value_Volume_Flow') {
+        return Math.round(dec.decodeDPT9(data))
     } else if (type == 'DPT_TimeOfDay') {
         return dec.decodeDPT10(data)
     } else if (type == 'DPT_Date') {
@@ -393,15 +400,41 @@ function server() {
                     if (ack_data[dp]) {
                         setState()
                     } else {
-                        addDevice(dp, function () {
-                            setState()
-                        })
+                        if(datapoints[dp].name == "Störung"  ){
+                            if(data.slice(20).readInt8(0) == 1){
+                                ignore[device] = true;
+                            }else{
+                                ignore[device]= undefined;
+                            }
+                        }
+
+                        if (!ignore[device]){
+                            addDevice(dp, function () {
+                                setState()
+                            })
+                        }
                     }
 
 
                 function setState() {
                     try {
                         val = decode(datapoints[dp].type, data.slice(20), dp);
+
+                        adapter.setState(device + '.' + dp, val, true);
+                        ack_data[dp]["value"] = val;
+
+                        if(datapoints[dp].type == "DPT_Power" || datapoints[dp].type == "DPT_Value_Volume_Flow"  ){
+                            adapter.log.info('incomming' +
+                                '\n Device: ' + device +
+                                '\n Datapoint: ' + dp +
+                                '\n Datapoint_name: ' + datapoints[dp].name +
+                                '\n Datapoint_type: ' + datapoints[dp].type +
+                                '\n Data: ' + data.toString("hex") +
+                                '\n Lengh: ' + data.length +
+                                '\n Value: ' + val +
+                                ''
+                            );
+                        }
                     }
                     catch (err) {
                         val = "";
@@ -417,26 +450,7 @@ function server() {
                             ''
                         );
                     }
-
-                    try {
-                        adapter.setState(device + '.' + dp, val, true);
-                        ack_data[dp]["value"] = val;
-                    }
-                    catch (err) {
-                        adapter.log.debug("Can't set" +
-                            '\n Device: ' + device +
-                            '\n Datapoint: ' + dp +
-                            '\n Datapoint_name: ' + datapoints[dp].name +
-                            '\n Datapoint_type: ' + datapoints[dp].type +
-                            '\n Data: ' + data.toString("hex") +
-                            '\n Lengh: ' + data.length +
-                            '\n Value: ' + val +
-                            ''
-                        );
-
-                    }
                 }
-
             }
         })
 
