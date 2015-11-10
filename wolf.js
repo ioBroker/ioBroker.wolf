@@ -125,12 +125,8 @@ function decode(type, data, dp) {
         }
     } else if (type == 'DPT_Scaling') {
         return dec.decodeDPT5(data)
-    } else if (type == 'DPT_Value_Temp' || type == 'DPT_Tempd' || type == 'DPT_Value_Pres' ) {
+    } else if (type == 'DPT_Value_Temp' || type == 'DPT_Tempd' || type == 'DPT_Value_Pres' || type == 'DPT_Power' || type == 'DPT_Value_Volume_Flow'  ) {
         return Math.round(dec.decodeDPT9(data) * 100) / 100
-    } else if (type == 'DPT_Power') {
-        return Math.round(dec.decodeDPT9(data))
-    } else if ( type == 'DPT_Value_Volume_Flow') {
-        return Math.round(dec.decodeDPT9(data))
     } else if (type == 'DPT_TimeOfDay') {
         return dec.decodeDPT10(data)
     } else if (type == 'DPT_Date') {
