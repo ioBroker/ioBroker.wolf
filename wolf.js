@@ -6,6 +6,7 @@ var adapter = utils.adapter('wolf');
 
 
 var dec = new (require('./js/decoder.js'))();
+var enc = new (require('./js/encoder.js'))();
 var datapoints = require('./js/datapoints.json');
 
 var names = ""
@@ -13,9 +14,7 @@ var ack_data = {
     old_devices: {},
     new_devices: []
 };
-var ignore = {
-
-};
+var ignore = {};
 
 function getDevice(dp) {
     if (dp >= 1 && dp <= 13) {
@@ -119,13 +118,13 @@ function decode(type, data, dp) {
     } else if (type == 'DPT_OpenClose') {
         val = data.readInt8(0);
         if (val == 0) {
-            return 'Open'
+            return 'Close'
         } else {
-            return 'On'
+            return 'Open'
         }
     } else if (type == 'DPT_Scaling') {
         return dec.decodeDPT5(data)
-    } else if (type == 'DPT_Value_Temp' || type == 'DPT_Tempd' || type == 'DPT_Value_Pres' || type == 'DPT_Power' || type == 'DPT_Value_Volume_Flow'  ) {
+    } else if (type == 'DPT_Value_Temp' || type == 'DPT_Tempd' || type == 'DPT_Value_Pres' || type == 'DPT_Power' || type == 'DPT_Value_Volume_Flow') {
         return Math.round(dec.decodeDPT9(data) * 100) / 100
     } else if (type == 'DPT_TimeOfDay') {
         return dec.decodeDPT10(data)
@@ -218,6 +217,82 @@ function decode(type, data, dp) {
     }
 }
 
+function encode(data, dp) {
+    var val;
+    var _data;
+    var type = datapoints[dp].type
+    var name = datapoints[dp].name
+    //"DPT_Value_Temp",
+    //"DPT_HVACMode",
+    //"DPT_DHWMode",
+    //"DPT_Switch",
+    //"DPT_Tempd",
+    //"DPT_TimeOfDay"
+    //"DPT_Date"
+
+    if (type == 'DPT_Switch') {
+
+        if (['On', 'on', 'Enable', '1', 'true', 1, true].indexOf(data) > -1) {
+            return [new Buffer("01", "hex"), "On"];
+        } else {
+            return [new Buffer("00", "hex"), "0ff"];
+        }
+    } else if (type == 'DPT_Tempd' && name == "Sollwertkorrektur") {
+        val = Math.round(data * 2) / 2
+        if (val > 4) {
+            val = 4
+        }
+        if (val < -4) {
+            val = 4
+        }
+        return [enc.encodeDPT9(data), val]
+    } else if (type == 'DPT_Tempd' && name == "Sparfaktor") {
+        val = Math.round(data * 2) / 2
+        if (val > 10) {
+            val = 10
+        }
+        if (val < 0) {
+            val = 0
+        }
+        return [enc.encodeDPT9(data), val]
+
+    } else if (name == "Programmwahl Warmwasser") {
+        if (data == 0 || data == "Standby") {
+            return [new Buffer("04", "hex"), "Standby"];
+        }
+        else if (data == 2 || data == "Dauerbetrieb") {
+            return [new Buffer("02", "hex"), "Dauerbetrieb"];
+        } else {
+            return [new Buffer("00", "hex"), "Automatikbetrieb"];
+        }
+    } else if (name == "Programmwahl Mischer" || name == "Programmwahl Heizkreis") {
+        if (data == 0 || data == "Standby") {
+            return [new Buffer("02", "hex"), "Standby"];
+        }
+        else if (data == 1 || data == "Automatikbetrieb") {
+            return [new Buffer("00", "hex"), "Automatikbetrieb"];
+        } else if (data == 2 || data == "Heizbetrieb") {
+            return [new Buffer("01", "hex"), "Heizbetrieb"];
+        } else {
+            return [new Buffer("03", "hex"), "Sparbetrieb"];
+        }
+    }
+    if (name == "Warmwassersolltemperatur") {
+        val = parseInt(data)
+        if (val > 65) {
+            val = 65
+        }
+        if (val < 20) {
+            val = 20
+        }
+        return [enc.encodeDPT9(data), val]
+    }
+    else {
+        return "error"
+    }
+
+}
+
 function bufferIndexOf(buf, search, offset) {
     offset = offset || 0;
 
@@ -243,7 +318,7 @@ function bufferIndexOf(buf, search, offset) {
 
 function addGroup(dev) {
     var group_name = '';
-    if (adapter.config.names[dev+"_n"] == "") {
+    if (adapter.config.names[dev + "_n"] == "") {
         if (dev.match(/hg/)) {
             group_name = 'Heizgeräte ' + dev.slice(-1)
         } else if (dev.match(/bm/)) {
@@ -258,7 +333,7 @@ function addGroup(dev) {
             group_name = 'Comfort-Wohnungs-Lüftung'
         }
     } else {
-        group_name = adapter.config.names[dev+"_n"];
+        group_name = adapter.config.names[dev + "_n"];
     }
 
     adapter.setObject(dev, {
@@ -344,19 +419,26 @@ function server() {
 
     net.createServer(function (sock) {
 
-        var buff_set = new Buffer("0620F080001504000000F006003B00010087030101", "hex");
+        //var buff_set = new Buffer("0620F080001404000000F0C10039000100390001", "hex");
         //0620F080001504000000F006006E0001006E030101
         adapter.on('stateChange', function (id, state) {
             if (state && !state.ack && id) {
-                var dp = id.split('.').pop();
+                var dp = parseInt(id.split('.').pop());
                 if (datapoints[dp].rw == "r") {
                     adapter.setState(id, ack_data[dp].value, true);
                     adapter.log.error("oid: " + id + " is only readable")
                 } else {
+                    var enc = encode(state.val, dp)
+                    var bufVal = enc[0]
+                    if (bufVal != 'error') {
+                        var _buff_set = Buffer.concat([new Buffer("0620F08000" + (20 + bufVal.length).toString(16) + "04000000F0C100" + dp.toString(16) + "000100" + dp.toString(16) + "000" + bufVal.length.toString(16) + "", "hex"), bufVal], bufVal.length + 20)
+                        adapter.setState(id, enc[1], true); // todo hier an ism8 senden
 
-                    //adapter.setState(id, ack_data[dp].value, true); // todo hier an ism8 senden
+                        sock.write(_buff_set)
+                    } else {
+                        adapter.log.error("Can't encode DP : " + dp + " - data: " + enc[1] + " - type: " + datapoints[dp].type);
+                    }
 
-                    //sock.write(buff_set)
                 }
             }
         });
@@ -369,7 +451,7 @@ function server() {
         var lines;
         var data;
         sock.on('data', function (_data) {
-
+            //console.log(_data)
             search = -1;
             lines = [];
 
@@ -396,15 +478,15 @@ function server() {
                     if (ack_data[dp]) {
                         setState()
                     } else {
-                        if(datapoints[dp].name == "Störung"  ){
-                            if(data.slice(20).readInt8(0) == 1){
+                        if (datapoints[dp].name == "Störung") {
+                            if (data.slice(20).readInt8(0) == 1) {
                                 ignore[device] = true;
-                            }else{
-                                ignore[device]= undefined;
+                            } else {
+                                ignore[device] = undefined;
                             }
                         }
 
-                        if (!ignore[device]){
+                        if (!ignore[device]) {
                             addDevice(dp, function () {
                                 setState()
                             })
@@ -419,18 +501,6 @@ function server() {
                         adapter.setState(device + '.' + dp, val, true);
                         ack_data[dp]["value"] = val;
 
-                        if(datapoints[dp].type == "DPT_Power" || datapoints[dp].type == "DPT_Value_Volume_Flow"  ){
-                            adapter.log.info('incomming' +
-                                '\n Device: ' + device +
-                                '\n Datapoint: ' + dp +
-                                '\n Datapoint_name: ' + datapoints[dp].name +
-                                '\n Datapoint_type: ' + datapoints[dp].type +
-                                '\n Data: ' + data.toString("hex") +
-                                '\n Lengh: ' + data.length +
-                                '\n Value: ' + val +
-                                ''
-                            );
-                        }
                     }
                     catch (err) {
                         val = "";
