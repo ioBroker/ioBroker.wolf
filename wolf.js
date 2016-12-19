@@ -148,7 +148,7 @@ function decode(type, data, dp) {
             }
         }
     } else if (type == 'DPT_Scaling') {
-        return Match.round(dec.decodeDPT5(data) /0.4)
+        return Math.round(parseInt(dec.decodeDPT5(data)) * 0.4)
     } else if (type == 'DPT_Value_Temp' || type == 'DPT_Tempd' || type == 'DPT_Value_Pres' || type == 'DPT_Power' || type == 'DPT_Value_Volume_Flow') {
         if(adapter.config.bool_bar && type == 'DPT_Value_Pres' ){
             return Math.round((dec.decodeDPT9(data) / 100000) * 100) / 100
