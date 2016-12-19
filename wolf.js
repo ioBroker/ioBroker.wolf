@@ -390,7 +390,7 @@ function addDevice(dp, callback) {
 
             if (!ack_data[range.lsb]) {
                 var data = datapoints[range.lsb];
-                if(data.einheit == "Pa" && adapter.config.bool_bar){
+                if(data.einheit == "Pa" && adapter.config.bool_bar == true){
                     data.einheit == "bar"
                 }
                 ack_data[range.lsb] = {id: adapter.namespace + "." + dev + '.' + range.lsb};
