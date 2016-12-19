@@ -96,9 +96,18 @@ function decode(type, data, dp) {
     if (type == 'DPT_Switch') {
         val = data.readInt8(0);
         if (val == 0) {
-            return 'Off'
+            if(adapter.config.bool_status){
+                return false
+            }else{
+                return 'Off'
+            }
+
         } else {
-            return 'On'
+            if(adapter.config.bool_status){
+                return true
+            }else{
+                return 'On'
+            }
         }
     } else if (type == 'DPT_Bool') {
 
@@ -111,21 +120,42 @@ function decode(type, data, dp) {
     } else if (type == 'DPT_Enable') {
         val = data.readInt8(0);
         if (val == 0) {
-            return 'Disable'
+            if(adapter.config.bool_status){
+                return false
+            }else {
+                return 'Disable'
+            }
         } else {
-            return 'Enable'
+            if(adapter.config.bool_status){
+                return true
+            }else {
+                return 'Enable'
+            }
         }
     } else if (type == 'DPT_OpenClose') {
         val = data.readInt8(0);
         if (val == 0) {
-            return 'Close'
+            if(adapter.config.bool_status){
+                return false
+            }else {
+                return 'Close'
+            }
         } else {
-            return 'Open'
+            if(adapter.config.bool_status){
+                return true
+            }else {
+                return 'Open'
+            }
         }
     } else if (type == 'DPT_Scaling') {
-        return dec.decodeDPT5(data)
+        return Match.round(dec.decodeDPT5(data) /0.4)
     } else if (type == 'DPT_Value_Temp' || type == 'DPT_Tempd' || type == 'DPT_Value_Pres' || type == 'DPT_Power' || type == 'DPT_Value_Volume_Flow') {
-        return Math.round(dec.decodeDPT9(data) * 100) / 100
+        if(adapter.config.bool_bar && type == 'DPT_Value_Pres' ){
+            return Math.round((dec.decodeDPT9(data) / 100000) * 100) / 100
+        }else {
+            return Math.round(dec.decodeDPT9(data) * 100) / 100
+        }
+
     } else if (type == 'DPT_TimeOfDay') {
         return dec.decodeDPT10(data)
     } else if (type == 'DPT_Date') {

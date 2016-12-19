@@ -111,23 +111,40 @@
         });
 
         $('.checkbox').button().click(function () {
-            if ($(this).is(':checked')) {
-                $(this).siblings('label').html('Auto');
+
+            if ($(this).hasClass("bool")) {
+                if ($(this).is(':checked')) {
+                    $(this).siblings('label').html('ON');
+                } else {
+                    $(this).siblings('label').html('off');
+                }
             } else {
-                $(this).siblings('label').html('off');
+                if ($(this).is(':checked')) {
+                    $(this).siblings('label').html('Auto');
+                } else {
+                    $(this).siblings('label').html('off');
+                }
             }
         });
 
 
         $('.checkbox').each(function () {
-
-            if (settings.devices[$(this).attr("id").substring(0, 3)] == "Auto") {
-                $(this).trigger("click")
+            if ($(this).hasClass("bool")) {
+                if (settings[$(this).attr("id")] == true) {
+                    $(this).trigger("click")
+                } else {
+                    $(this).siblings('label').html('off');
+                }
             } else {
-                $(this).siblings('label').html('off');
+                if (settings.devices[$(this).attr("id").substring(0, 3)] == "Auto") {
+                    $(this).trigger("click")
+                } else {
+                    $(this).siblings('label').html('off');
+                }
             }
-        });
 
+
+        });
 
 
         $('.names').each(function () {
@@ -155,16 +172,23 @@
 
 
         $('.checkbox').each(function () {
+            if ($(this).hasClass("bool")) {
+                if ($(this).is(':checked'))
+                    obj[$(this).attr("id")] = true;
+                else
+                    obj[$(this).attr("id")] = false
+            } else {
+                if ($(this).is(':checked'))
+                    obj.devices[$(this).attr("id").substring(0, 3)] = "Auto";
+                else
+                    obj.devices[$(this).attr("id").substring(0, 3)] = "off"
+            }
 
-            if ($(this).is(':checked'))
-                obj.devices[$(this).attr("id").substring(0, 3)] = "Auto";
-            else
-                obj.devices[$(this).attr("id").substring(0, 3)] = "off"
         });
 
-        if(obj.devices.hg1 == "Auto"){
+        if (obj.devices.hg1 == "Auto") {
             obj.devices['hg0'] = "Auto"
-        }else{
+        } else {
             obj.devices['hg0'] = "off"
         }
 
@@ -202,6 +226,19 @@
             <td style="width: 100px;  text-align: right">Port:</td>
             <td><input id="ism8_port" type="number" value="12004" style="width: 100px!important"/></td>
         </tr>
+        <tr>
+            <td>Status als Bool</td>
+            <td>
+                <input type="checkbox" class="checkbox bool" id="bool_status"/><label for="bool_status">ON</label>
+            </td>
+        </tr>
+        <tr>
+            <td>Druck in Bar</td>
+            <td>
+                <input type="checkbox" class="checkbox bool" id="bool_bar"/><label for="bool_bar">ON</label>
+            </td>
+        </tr>
+
     </table>
     <br>
 
