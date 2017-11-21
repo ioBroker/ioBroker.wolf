@@ -1,10 +1,21 @@
 {
     "common": {
         "name": "wolf",
-        "version": "0.9.1",
+        "version": "1.0.0",
         "title": "wolf",
-        "desc": "Wolf Heating over ISM8i",
-        "authors": [
+		"news": {
+            "1.0.0": {
+              "en": "Resize logo",
+              "de": "Ändere Logo",
+              "ru": "Изменено лого"
+            }
+		},
+        "desc": {
+			"en": "Wolf Heating over ISM8i",
+			"de": "Wolf Heizung über ISM8i",			
+			"ru": "Отопление Wolf через ISM8i",
+		},
+		"authors": [
             "smiling_Jack <smiling_Jack@iobroker.net>"
         ],
         "license": "MIT",

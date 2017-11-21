@@ -1,6 +1,7 @@
 <html lang="de">
+<head>
 <meta charset="UTF-8">
-<!-- these 4 files always have to be included -->
+
 <link rel="stylesheet" type="text/css" href="../../lib/css/themes/jquery-ui/redmond/jquery-ui.min.css"/>
 
 <script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
@@ -8,7 +9,6 @@
 <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
 
 
-<!-- these two file always have to be included -->
 <link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
 <script type="text/javascript" src="../../js/translate.js"></script>
 <script type="text/javascript" src="../../js/adapter-settings.js"></script>
@@ -94,25 +94,22 @@
     // the function loadSettings has to exist ...
     function load(settings, onchange) {
         getIPs(function (data) {
-
             $.each(data, function () {
-                if (this.family == "ipv4") {
-                    $("#host_ip").append("<option>" + this.address + "</option>")
+                if (this.family === 'ipv4') {
+                    $('#host_ip').append('<option>' + this.address + '</option>')
                 }
 
             });
 
-            $("#ism8_ip").val(settings.ism8_ip);
-            $("#ism8_port").val(settings.ism8_port);
-            $("#host_ip").val(settings.host_ip);
-
+            $('#ism8_ip').val(settings.ism8_ip);
+            $('#ism8_port').val(settings.ism8_port);
+            $('#host_ip').val(settings.host_ip);
 
             $('select').selectmenu({})
         });
 
         $('.checkbox').button().click(function () {
-
-            if ($(this).hasClass("bool")) {
+            if ($(this).hasClass('bool')) {
                 if ($(this).is(':checked')) {
                     $(this).siblings('label').html('ON');
                 } else {
@@ -125,85 +122,63 @@
                     $(this).siblings('label').html('off');
                 }
             }
-        });
-
-
-        $('.checkbox').each(function () {
-            if ($(this).hasClass("bool")) {
-                if (settings[$(this).attr("id")] == true) {
-                    $(this).trigger("click")
+        }).each(function () {
+            if ($(this).hasClass('bool')) {
+                if (settings[$(this).attr('id')] == true) {
+                    $(this).trigger('click')
                 } else {
                     $(this).siblings('label').html('off');
                 }
             } else {
-                if (settings.devices[$(this).attr("id").substring(0, 3)] == "Auto") {
-                    $(this).trigger("click")
+                if (settings.devices[$(this).attr('id').substring(0, 3)] === 'Auto') {
+                    $(this).trigger('click')
                 } else {
                     $(this).siblings('label').html('off');
                 }
             }
-
-
         });
 
 
         $('.names').each(function () {
-            var key = $(this).attr("id");
-
+            var key = $(this).attr('id');
             $(this).val(settings.names[key]);
         });
-
-
-//        console.log(adapter.getForeignObjects("*"));
-
     }
 
-
-    // ... and the function save has to exist.
-    // you have to make sure the callback is called with the settings object as first param!
     function save(callback) {
-        // example: select elements with class=value and build settings object
         var obj = {
             devices: {},
             names: {},
-            ism8_port: $("#ism8_port").val(),
-            host_ip: $("#host_ip").val(),
+            ism8_port: $('#ism8_port').val(),
+            host_ip: $('#host_ip').val()
         };
 
 
         $('.checkbox').each(function () {
-            if ($(this).hasClass("bool")) {
-                if ($(this).is(':checked'))
-                    obj[$(this).attr("id")] = true;
-                else
-                    obj[$(this).attr("id")] = false
+            if ($(this).hasClass('bool')) {
+                obj[$(this).attr('id')] = $(this).is(':checked');
             } else {
-                if ($(this).is(':checked'))
-                    obj.devices[$(this).attr("id").substring(0, 3)] = "Auto";
-                else
-                    obj.devices[$(this).attr("id").substring(0, 3)] = "off"
+                obj.devices[$(this).attr('id').substring(0, 3)] = $(this).is(':checked') ? 'Auto' : 'off';
             }
-
         });
 
-        if (obj.devices.hg1 == "Auto") {
-            obj.devices['hg0'] = "Auto"
+        if (obj.devices.hg1 === 'Auto') {
+            obj.devices['hg0'] = 'Auto';
         } else {
-            obj.devices['hg0'] = "off"
+            obj.devices['hg0'] = 'off';
         }
 
         $('.names').each(function () {
-            var key = $(this).attr("id");
+            var key = $(this).attr('id');
 
             obj.names[key] = $(this).val();
         });
 
         callback(obj);
     }
-
-
 </script>
-
+</head>
+<body>
 <!-- you have to put your config page in a div with id adapter-container -->
 <div id="adapter-container"
      style="height: calc(100% - 95px);width: calc(100% - 7px); overflow: auto; text-align: center; font-family: arial, helvetica; font-size: 1.2em; padding-bottom: 50px"
@@ -407,4 +382,5 @@
         </tr>
     </table>
 </div>
+</body>
 </html>
