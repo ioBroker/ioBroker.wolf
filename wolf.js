@@ -1,7 +1,7 @@
 ﻿//﻿'use strict';
 
 var net     = require('net');
-var utils   = require(__dirname + '/lib/utils');
+var utils = require('@iobroker/adapter-core');
 var adapter = new utils.Adapter('wolf');
 
 
