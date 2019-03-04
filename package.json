@@ -27,7 +27,9 @@
     "url": "https://github.com/ioBroker/ioBroker.wolf"
   },
   "optionalDependencies": {},
-  "dependencies": {},
+  "dependencies": {
+    "@iobroker/adapter-core": "^1.0.3"
+  },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-replace": "^1.0.1",
@@ -39,8 +41,7 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-exec": "^3.0.0",
     "mocha": "^4.1.0",
-    "chai": "^4.1.2",
-    "@iobroker/adapter-core": "^1.0.3"
+    "chai": "^4.1.2"
   },
   "main": "wolf.js",
   "bugs": {
