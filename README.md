@@ -3,7 +3,7 @@
 
 ======================
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.wolf.svg)](https://www.npmjs.com/package/iobroker.wolf)
+![Number of Installations](http://iobroker.live/badges/wolf-installed.svg) ![Number of Installations](http://iobroker.live/badges/wolf-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.wolf.svg)](https://www.npmjs.com/package/iobroker.wolf)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.wolf.svg)](https://www.npmjs.com/package/iobroker.wolf)
 
 [![NPM](https://nodei.co/npm/iobroker.wolf.png?downloads=true)](https://nodei.co/npm/iobroker.wolf/)
