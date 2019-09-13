@@ -1,13 +1,14 @@
 {
-    "common": {
-        "name": "wolf",
-        "version": "1.0.0",
-        "title": "wolf",
-        "news": {
-            "1.0.0": {
-              "en": "Resize logo",
-              "de": "Ändere Logo",
-              "ru": "Изменено лого"
+  "common": {
+    "compact": true,
+    "name": "wolf",
+    "version": "1.1.0",
+    "title": "wolf",
+    "news": {
+            "1.1.0": {
+              "en": "ISM8i Firmware v1.50",
+              "de": "ISM8i Firmware v1.50",
+              "ru": "ISM8i Firmware v1.50"
             }
         },
         "desc": {
@@ -15,65 +16,70 @@
 			"de": "Wolf Heizung über ISM8i",
 			"ru": "Отопление Wolf через ISM8i"
 		},
-		"authors": [
-            "smiling_Jack <smiling_Jack@iobroker.net>"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "loglevel": "info",
-        "icon": "wolf_logo.png",
-        "messagebox": true,
-        "keywords": [
-            "Heating",
-            "Solar",
-            "Wolf"
-        ],
-        "enabled": false,
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.wolf/master/admin/wolf_logo.png",
-        "readme": "https://github.com/ioBroker/ioBroker.wolf/blob/master/README.md",
-        "type": "climate-control",
-        "config": {
-            "minWidth": 650,
-            "minHeight": 800,
-            "width ": 800
-        }
-    },
-    "native": {
-        "ism8_port": "12004",
-        "host_ip": "0.0.0.0",
-        "devices": {
-            "hg0": "Auto",
-            "hg1": "Auto",
-            "hg2": "Auto",
-            "hg3": "Auto",
-            "hg4": "Auto",
-            "bm1": "Auto",
-            "bm2": "Auto",
-            "bm3": "Auto",
-            "bm4": "Auto",
-            "mm1": "Auto",
-            "mm2": "Auto",
-            "mm3": "Auto",
-            "km1": "Auto",
-            "sm1": "Auto",
-            "cwl": "Auto"
-        }
+
+    "desc": "Wolf Heating over ISM8i",
+    "authors": [
+      "smiling_Jack <smiling_Jack@iobroker.net>"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "loglevel": "info",
+    "icon": "wolf_logo.png",
+    "messagebox": true,
+    "keywords": [
+      "Heating",
+      "Solar",
+      "Wolf"
+    ],
+    "enabled": false,
+    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.wolf/master/admin/wolf_logo.png",
+    "readme": "https://github.com/ioBroker/ioBroker.wolf/blob/master/README.md",
+    "type": "hardware",
+    "config": {
+      "minWidth": 650,
+      "minHeight": 800,
+      "width ": 800
+    }
+  },
+  "native": {
+    "ism8_port": "12004",
+    "host_ip": "0.0.0.0",
+    "devices": {
+        "hg0": "Auto",
+        "hg1": "Auto",
+        "hg2": "Auto",
+        "hg3": "Auto",
+        "hg4": "Auto",
+        "bm0": "Auto",
+        "bm1": "Auto",
+        "bm2": "Auto",
+        "bm3": "Auto",
+        "bm4": "Auto",
+        "mm1": "Auto",
+        "mm2": "Auto",
+        "mm3": "Auto",
+        "km1": "Auto",
+        "sm1": "Auto",
+        "cwl": "Auto"
+      }
     },
     "names": {
-        "hg1_n": "",
-        "hg2_n": "",
-        "hg3_n": "",
-        "hg4_n": "",
-        "bm1_n": "",
-        "bm2_n": "",
-        "bm3_n": "",
-        "bm4_n": "",
-        "mm1_n": "",
-        "mm2_n": "",
-        "mm3_n": "",
-        "km1_n": "",
-        "sm1_n": "",
-        "cwl_n": ""
+      "hg0_n": "",
+      "hg1_n": "",
+      "hg2_n": "",
+      "hg3_n": "",
+      "hg4_n": "",
+      "bm0_n": "",
+      "bm1_n": "",
+      "bm2_n": "",
+      "bm3_n": "",
+      "bm4_n": "",
+      "mm1_n": "",
+      "mm2_n": "",
+      "mm3_n": "",
+      "km1_n": "",
+      "sm1_n": "",
+      "cwl_n": ""
     }
-}
+  }
