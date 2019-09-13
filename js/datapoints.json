@@ -1144,5 +1144,119 @@
     "type": "DPT_Power",
     "rw": "r",
     "einheit": "kW"
-  }
+  },
+ "192": {
+    "name": "Filterwarnung aktiv",
+    "type": "DPT_Switch",
+    "rw": "r",
+    "einheit": ""
+  },
+ "193": {
+    "name": "Filerwarnung zurücksetzen",
+    "type": "DPT_Switch",
+    "rw": "rw",
+    "einheit": ""
+  },
+ "194": {
+    "name": "1x Warmwasserladung (global)",
+    "type": "DPT_Switch",
+    "rw": "rw",
+    "einheit": ""
+  },
+ "195": {
+    "name": "Tagesertrag",
+    "type": "DPT_ActiveEnergy",
+    "rw": "r",
+    "einheit": "Wh"
+  },
+ "196": {
+    "name": "Gesamtertrag",
+    "type": "DPT_ActiveEnergy_kWh",
+    "rw": "r",
+    "einheit": "kWh"
+  },
+ "197": {
+    "name": "Abgastemperatur",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "einheit": "°C"
+  },
+ "198": {
+    "name": "Leistungsvorgabe",
+    "type": "DPT_Scaling",
+    "rw": "rw",
+    "einheit": "%"
+  },
+ "199": {
+    "name": "Kesselsolltemperaturvorgabe",
+    "type": "DPT_Value_Temp",
+    "rw": "rw",
+    "einheit": "°C"
+  },
+ "200": {
+    "name": "Abgastemperatur",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "einheit": "°C"
+  },
+ "201": {
+    "name": "Leistungsvorgabe",
+    "type": "DPT_Scaling",
+    "rw": "rw",
+    "einheit": "%"
+  },
+ "202": {
+    "name": "Kesselsolltemperaturvorgabe",
+    "type": "DPT_Value_Temp",
+    "rw": "rw",
+    "einheit": "°C"
+  },
+ "203": {
+    "name": "Abgastemperatur",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "einheit": "°C"
+  },
+ "204": {
+    "name": "Leistungsvorgabe",
+    "type": "DPT_Scaling",
+    "rw": "rw",
+    "einheit": "%"
+  },
+ "205": {
+    "name": "Kesselsolltemperaturvorgabe",
+    "type": "DPT_Value_Temp",
+    "rw": "rw",
+    "einheit": "°C"
+  },
+ "206": {
+    "name": "Abgastemperatur",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "einheit": "°C"
+  },
+ "207": {
+    "name": "Leistungsvorgabe",
+    "type": "DPT_Scaling",
+    "rw": "rw",
+    "einheit": "%"
+  },
+ "208": {
+    "name": "Kesselsolltemperaturvorgabe",
+    "type": "DPT_Value_Temp",
+    "rw": "rw",
+    "einheit": "°C"
+  }, 
+ "209": {
+    "name": "Gesamtmodulationsgradvorgabe",
+    "type": "DPT_Scaling",
+    "rw": "rw",
+    "einheit": "%"
+  },
+ "210": {
+    "name": "Sammlersolltemperaturvorgabe",
+    "type": "DPT_Value_Temp",
+    "rw": "rw",
+    "einheit": "°C"
+  } 
 }
