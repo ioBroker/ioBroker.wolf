@@ -344,7 +344,6 @@ function encode(data, dp) {
     } else {
         return 'error';
     }
-
 }
 
 function bufferIndexOf(buf, search, offset) {
@@ -406,9 +405,7 @@ function addDevice(dp, callback) {
         //ack_data.new_devices.push(dev);
         var range = getDeviceRage(dev);
 
-
         addGroup(dev);
-
 
         for (range.lsb; range.lsb <= range.msb; range.lsb++) {
 
@@ -441,8 +438,8 @@ function addDevice(dp, callback) {
 
                 if (!ack_data[range.lsb2]) {
                     var data = datapoints[range.lsb2];
-                    if(data.einheit == "Pa" && adapter.config.bool_bar){
-                        data.einheit = "bar"
+                    if(data.einheit === 'Pa' && adapter.config.bool_bar){
+                        data.einheit = 'bar'
                     }
                     ack_data[range.lsb2] = {id: adapter.namespace + '.' + dev + '.' + range.lsb2};
                     //console.log('add:' + dev + '.' + range.lsb2  );
