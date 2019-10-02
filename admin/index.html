@@ -162,10 +162,10 @@
             }
         });
 
-        if (obj.devices.hg1 === 'Auto') {
-            obj.devices['hg0'] = 'Auto';
+        if (obj.devices.bm1 === 'Auto' || obj.devices.bm2 === 'Auto' || obj.devices.bm3 === 'Auto' || obj.devices.bm4 === 'Auto') {
+            obj.devices['bm0'] = 'Auto';
         } else {
-            obj.devices['hg0'] = 'off';
+            obj.devices['bm0'] = 'off';
         }
 
         $('.names').each(function () {
@@ -379,6 +379,23 @@
             </td>
             <td>Name:</td>
             <td><input class="names" id="cwl_n" type="text"/></td>
+        </tr>
+        <!------------------------------------------------------------------------------------------------>
+        <tr>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">
+                Split-Luft/Wasser-Wärmepumpe
+            </td>
+        </tr>
+        <tr>
+            <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
+                <image src="image/heating.png" style="height: 100px"></image>
+            </td>
+            <td class="number">(1)</td>
+            <td>
+                <input type="checkbox" class="checkbox" id="hg0_t"/><label for="hg0_t">Auto</label>
+            </td>
+            <td>Name:</td>
+            <td><input class="names" id="hg0_n" type="text"/></td>
         </tr>
     </table>
 </div>

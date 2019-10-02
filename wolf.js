@@ -1,12 +1,12 @@
-﻿//﻿'use strict';
+//﻿'use strict';
 
-var net     = require('net');
+var net = require('net');
 var utils = require('@iobroker/adapter-core');
 var adapter = new utils.Adapter('wolf');
 
 
-var dec        = new (require('./js/decoder.js'))();
-var enc        = new (require('./js/encoder.js'))();
+var dec = new (require('./js/decoder.js'))();
+var enc = new (require('./js/encoder.js'))();
 var datapoints = require('./js/datapoints.json');
 
 var names = '';
@@ -17,23 +17,23 @@ var ack_data = {
 var ignore = {};
 
 function getDevice(dp) {
-    if (dp >= 1 && dp <= 13) {
+    if ((dp >= 1 && dp <= 13) || (dp >= 197 && dp <= 199)) {
         return 'hg1';
-    } else if (dp >= 14 && dp <= 26) {
+    } else if ((dp >= 14 && dp <= 26) || (dp >= 200 && dp <= 202)) {
         return 'hg2';
-    } else if (dp >= 27 && dp <= 39) {
+    } else if ((dp >= 27 && dp <= 39) || (dp >= 203 && dp <= 205)) {
         return 'hg3';
-    } else if (dp >= 40 && dp <= 52) {
+    } else if ((dp >= 40 && dp <= 52) || (dp >= 206 && dp <= 208)) {
         return 'hg4';
     } else if (dp >= 53 && dp <= 66) {
         return 'bm1';
     } else if (dp >= 67 && dp <= 79) {
         return 'bm2';
     } else if (dp >= 80 && dp <= 92) {
-        return 'bm3'
+        return 'bm3';
     } else if (dp >= 93 && dp <= 105) {
         return 'bm4';
-    } else if (dp >= 106 && dp <= 113) {
+    } else if ((dp >= 106 && dp <= 113) || (dp >= 209 && dp <= 210)) {
         return 'km1';
     } else if (dp >= 114 && dp <= 120) {
         return 'mm1';
@@ -41,12 +41,14 @@ function getDevice(dp) {
         return 'mm2';
     } else if (dp >= 128 && dp <= 134) {
         return 'mm3';
-    } else if (dp >= 135 && dp <= 147) {
+    } else if ((dp >= 135 && dp <= 147) || (dp >= 195 && dp <= 196)) {
         return 'sm1';
-    } else if (dp >= 148 && dp <= 175) {
+    } else if ((dp >= 148 && dp <= 175) || (dp >= 192 && dp <= 193)) {
         return 'cwl';
     } else if (dp >= 176 && dp <= 191) {
         return 'hg0';
+    } else if (dp == 194) {
+        return 'bm0';
     } else {
         return null;
     }
@@ -54,13 +56,13 @@ function getDevice(dp) {
 
 function getDeviceRage(id) {
     if (id === 'hg1') {
-        return {'lsb': 1, 'msb': 13};
+        return {'lsb': 1, 'msb': 13, 'lsb2': 197, 'msb2': 199};
     } else if (id === 'hg2') {
-        return {'lsb': 14, 'msb': 26};
+        return {'lsb': 14, 'msb': 26, 'lsb2': 200, 'msb2': 202};
     } else if (id === 'hg3') {
-        return {'lsb': 27, 'msb': 39};
+        return {'lsb': 27, 'msb': 39, 'lsb2': 203, 'msb2': 205};
     } else if (id === 'hg4') {
-        return {'lsb': 40, 'msb': 52};
+        return {'lsb': 40, 'msb': 52, 'lsb2': 206, 'msb2': 208};
     } else if (id === 'bm1') {
         return {'lsb': 53, 'msb': 66};
     } else if (id === 'bm2') {
@@ -70,7 +72,7 @@ function getDeviceRage(id) {
     } else if (id === 'bm4') {
         return {'lsb': 93, 'msb': 105};
     } else if (id === 'km1') {
-        return {'lsb': 106, 'msb': 113};
+        return {'lsb': 106, 'msb': 113, 'lsb2': 209, 'msb2': 210};
     } else if (id === 'mm1') {
         return {'lsb': 114, 'msb': 120};
     } else if (id === 'mm2') {
@@ -78,11 +80,13 @@ function getDeviceRage(id) {
     } else if (id === 'mm3') {
         return {'lsb': 128, 'msb': 134};
     } else if (id === 'sm1') {
-        return {'lsb': 135, 'msb': 147};
+        return {'lsb': 135, 'msb': 147, 'lsb2': 195, 'msb2': 196};
     } else if (id === 'cwl') {
-        return {'lsb': 148, 'msb': 175};
+        return {'lsb': 148, 'msb': 175, 'lsb2': 192, 'msb2': 193};
     } else if (id === 'hg0') {
         return {'lsb': 176, 'msb': 191};
+    } else if (id === 'bm0') {
+        return {'lsb': 194, 'msb': 194};
     } else {
         return false;
     }
@@ -101,10 +105,11 @@ function decode(type, data, dp) {
             } else {
                 return 'Off';
             }
+
         } else {
-            if(adapter.config.bool_status){
+            if (adapter.config.bool_status) {
                 return true;
-            }else{
+            } else {
                 return 'On';
             }
         }
@@ -120,7 +125,7 @@ function decode(type, data, dp) {
         if (val === 0) {
             if (adapter.config.bool_status) {
                 return false;
-            }else {
+            } else {
                 return 'Disable';
             }
         } else {
@@ -155,30 +160,34 @@ function decode(type, data, dp) {
         }
 
     } else if (type === 'DPT_TimeOfDay') {
-        return dec.decodeDPT10(data)
+        return dec.decodeDPT10(data);
     } else if (type === 'DPT_Date') {
-        return dec.decodeDPT11(data)
+        return dec.decodeDPT11(data);
     } else if (type === 'DPT_FlowRate_m3/h') {
-        return dec.decodeDPT13(data)
+        return Math.round((dec.decodeDPT13(data) / 10000) * 100) / 100;
+    } else if (type === 'DPT_ActiveEnergy') {
+        return dec.decodeDPT13(data);
+    } else if (type === 'DPT_ActiveEnergy_kWh') {
+        return dec.decodeDPT13(data);
     } else if (type === 'DPT_DHWMode') {
         _data = data.readInt8(0);
         if (datapoints[dp].name === 'Programmwahl Warmwasser') {
             if (_data === 0) {
-                return 'Automatikbetrieb'
+                return 'Automatikbetrieb';
             } else if (_data === 2) {
-                return 'Dauerbetrieb'
+                return 'Dauerbetrieb';
             } else if (_data === 4) {
-                return 'Standby'
+                return 'Standby';
             } else {
                 throw '';
             }
         } else if (datapoints[dp].name === 'Programmwahl CWL') {
             if (_data === 0) {
-                return 'Automatikbetrieb'
+                return 'Automatikbetrieb';
             } else if (_data === 1) {
-                return 'Nennlüftung'
+                return 'Nennlüftung';
             } else if (_data === 3) {
-                return 'Reduzierte Lüftung'
+                return 'Reduzierte Lüftung';
             } else {
                 throw '';
             }
@@ -192,13 +201,13 @@ function decode(type, data, dp) {
 
         if (datapoints[dp].name === 'Programmwahl Heizkreis' || datapoints[dp].name === 'Programmwahl Mischer') {
             if (_data === 2) {
-                return 'Standby'
+                return 'Standby';
             } else if (_data === 0) {
-                return 'Automatikbetrieb'
+                return 'Automatikbetrieb';
             } else if (_data === 1) {
-                return 'Heizbetrieb'
+                return 'Heizbetrieb';
             } else if (_data === 3) {
-                return 'Sparbetrieb'
+                return 'Sparbetrieb';
             } else {
                 throw '';
             }
@@ -215,11 +224,11 @@ function decode(type, data, dp) {
             } else if (_data === 6) {
                 return 'Off';
             } else if (_data === 7) {
-                return 'Test';
+                return 'GLT / Test';
             } else if (_data === 11) {
                 return 'Ice';
             } else if (_data === 15) {
-                return 'calibrations Mode';
+                return 'Calibration Mode';
             } else {
                 throw '';
             }
@@ -257,6 +266,7 @@ function encode(data, dp) {
     //"DPT_Tempd",
     //"DPT_TimeOfDay"
     //"DPT_Date"
+    //"DPT_Scaling"
 
     if (type === 'DPT_Switch') {
 
@@ -265,6 +275,15 @@ function encode(data, dp) {
         } else {
             return [new Buffer('00', 'hex'), '0ff'];
         }
+    } else if (type === 'DPT_Scaling') {
+        val = Math.round(data * 2) / 2;
+        if (val > 100) {
+            val = 100
+        }
+        if (val < 0) {
+            val = 0
+        }
+        return [enc.encodeDPT5(data), val];
     } else if (type === 'DPT_Tempd' && name === 'Sollwertkorrektur') {
         val = Math.round(data * 2) / 2;
         if (val > 4) {
@@ -309,12 +328,20 @@ function encode(data, dp) {
         if (val > 65) {
             val = 65;
         }
-        if (val < 20) {
-            val = 20;
+        if (val < 0) {
+            val = 0;
         }
         return [enc.encodeDPT9(data), val];
-    }
-    else {
+    } else if (name === 'Kesselsolltemperaturvorgabe') {
+        val = parseInt(data);
+        if (val > 90) {
+            val = 90;
+        }
+        if (val < 0) {
+            val = 0;
+        }
+        return [enc.encodeDPT9(data), val];
+    } else {
         return 'error';
     }
 }
@@ -384,7 +411,7 @@ function addDevice(dp, callback) {
 
             if (!ack_data[range.lsb]) {
                 var data = datapoints[range.lsb];
-                if (data.einheit === 'Pa' && adapter.config.bool_bar === true) {
+                if (data.einheit === 'Pa' && adapter.config.bool_bar) {
                     data.einheit = 'bar';
                 }
                 ack_data[range.lsb] = {id: adapter.namespace + '.' + dev + '.' + range.lsb};
@@ -403,6 +430,35 @@ function addDevice(dp, callback) {
                     }
                 });
             }
+        }
+
+        if (range.lsb2 != null && range.msb2 != null) {
+
+            for (range.lsb2; range.lsb2 <= range.msb2; range.lsb2++) {
+
+                if (!ack_data[range.lsb2]) {
+                    var data = datapoints[range.lsb2];
+                    if(data.einheit === 'Pa' && adapter.config.bool_bar){
+                        data.einheit = 'bar'
+                    }
+                    ack_data[range.lsb2] = {id: adapter.namespace + '.' + dev + '.' + range.lsb2};
+                    //console.log('add:' + dev + '.' + range.lsb2  );
+                    adapter.setObject(dev + '.' + range.lsb2, {
+                        type: 'state',
+                        common: {
+                            name: data.name,
+                            role: data.type.replace('DPT_', ''),
+                            type: 'state',
+                            unit: data.einheit,
+                            enabled: false
+                        },
+                        native: {
+                            rw: data.rw
+                        }
+                    });
+                }
+            }
+
         }
         callback && callback();
     }
@@ -427,7 +483,7 @@ function main() {
                     adapter.deleteChannel(dev, function () {
                     });
                 } else {
-                    addGroup(dev)
+                    addGroup(dev);
                 }
             }
         }
@@ -441,7 +497,7 @@ function main() {
 function server() {
     var buff_req    = new Buffer('0620F080001104000000F086006E000000', 'hex');
     var buff_getall = new Buffer('0620F080001604000000F0D0', 'hex');
-    var splitter    = new Buffer('0620f080', 'hex');
+    var splitter    = new Buffer('0620F080', 'hex');
 
     net.createServer(function (sock) {
 
@@ -452,7 +508,7 @@ function server() {
                 var dp = parseInt(id.split('.').pop());
                 if (datapoints[dp].rw === 'r') {
                     adapter.setState(id, ack_data[dp].value, true);
-                    adapter.log.error('oid: ' + id + ' is only readable')
+                    adapter.log.error('oid: ' + id + ' is only readable');
                 } else {
                     var enc = encode(state.val, dp);
                     var bufVal = enc[0];
@@ -460,7 +516,7 @@ function server() {
                         var _buff_set = Buffer.concat([new Buffer('0620F08000' + (20 + bufVal.length).toString(16) + '04000000F0C100' + dp.toString(16) + '000100' + dp.toString(16) + '000' + bufVal.length.toString(16) + '', 'hex'), bufVal], bufVal.length + 20);
                         adapter.setState(id, enc[1], true); // todo hier an ism8 senden
 
-                        sock.write(_buff_set)
+                        sock.write(_buff_set);
                     } else {
                         adapter.log.error('Can\'t encode DP : ' + dp + ' - data: ' + enc[1] + ' - type: ' + datapoints[dp].type);
                     }
