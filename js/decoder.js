@@ -92,13 +92,24 @@ Decoder.prototype.decodeDPT10 = function (buffer) {
 
     value.setHours(hour);
     value.setMinutes(min);
-    value.setSecondes(sec);
+    value.setSeconds(sec);
     var currentDay = value.getDay();
-    if (currentDay !== weekDay) {
-        if (currentDay > weekDay) {
-            value.setDate(value.getDate() + (weekDay - currentDay));
+    if (weekDay == 0) {
+        // no change
+    } else if (currentDay == weekDay) {
+        // weekday fits
+        if (value < Date.now()) {
+            // same weekday but earlier time => date must be one week later
+            value.setDate(value.getDate() + 7);
+        }
+    } else {
+        // wrong weekday
+        if (currentDay < weekDay) {
+            // later weekday
+            value.setDate(value.getDate() - currentDay + weekDay);
         } else {
-            value.setDate(value.getDate() - (weekDay - currentDay));
+            // earlier weekday => weekday one week later
+            value.setDate(value.getDate() - currentDay + weekDay + 7);
         }
     }
     return value;
@@ -110,7 +121,7 @@ Decoder.prototype.decodeDPT10 = function (buffer) {
 Decoder.prototype.decodeDPT11 = function (buffer) {
 
     var day = buffer[0] & 0x1f;
-    var mon = buffer[1] & 0xf;
+    var mon = buffer[1] & 0xf - 1; // month 0...11
     var year = buffer[2] & 0x7f;
 
     if (year < 90) {
