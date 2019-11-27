@@ -112,7 +112,7 @@ Decoder.prototype.decodeDPT10 = function (buffer) {
             value.setDate(value.getDate() - currentDay + weekDay + 7);
         }
     }
-    return value;
+    return value.toUTCString();
 };
 
 /**
@@ -130,7 +130,7 @@ Decoder.prototype.decodeDPT11 = function (buffer) {
         year += 1900;
     }
 
-    return new Date(year, mon, day);
+    return new Date(year, mon, day).toUTCString();
 };
 
 /**
