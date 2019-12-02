@@ -40,7 +40,7 @@
         width: 120px;
     }
 
-    image {
+    img {
         text-align: center;
     }
 
@@ -98,7 +98,6 @@
                 if (this.family === 'ipv4') {
                     $('#host_ip').append('<option>' + this.address + '</option>')
                 }
-
             });
 
             $('#ism8_ip').val(settings.ism8_ip);
@@ -108,7 +107,7 @@
             $('select').selectmenu({})
         });
 
-        $('.checkbox').button().click(function () {
+        $('.checkbox').button().on('click', function () {
             if ($(this).hasClass('bool')) {
                 if ($(this).is(':checked')) {
                     $(this).siblings('label').html('ON');
@@ -185,7 +184,7 @@
      class="ui-widget-content">
 
     <div style="position: relative; padding: 5px">
-        <image src="wolf_logo.png" id="logo"></image>
+        <img src="wolf_logo.png" id="logo"/>
         <span id="headText">Heiztechnik</span>
     </div>
     <table style="width: 600px; display: inline-block; text-align: left">
@@ -230,7 +229,7 @@
         </tr>
         <tr>
             <td rowspan="4" style="text-align: center; height: 120px; vertical-align: middle">
-                <image src="image/heating.png" style="height: 100px"></image>
+                <img src="image/heating.png" style="height: 100px"/>
             </td>
             <td class="number">(1)</td>
             <td>
@@ -269,7 +268,7 @@
         </tr>
         <tr>
             <td rowspan="4" style="text-align: center; height: 120px; vertical-align: middle">
-                <image src="image/bm2.png" style="height: 100px"></image>
+                <img src="image/bm2.png" style="height: 100px"/>
             </td>
             <td class="number">(1)</td>
             <td>
@@ -308,7 +307,7 @@
         </tr>
         <tr>
             <td rowspan="3" style="text-align: center; height: 120px; vertical-align: middle">
-                <image src="image/uni.png" style="height: 100px"></image>
+                <img src="image/uni.png" style="height: 100px"/>
             </td>
             <td class="number">(1)</td>
             <td>
@@ -339,7 +338,7 @@
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
-                <image src="image/uni.png" style="height: 100px"></image>
+                <img src="image/uni.png" style="height: 100px"/>
             </td>
             <td class="number">(1)</td>
             <td>
@@ -354,7 +353,7 @@
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
-                <image src="image/uni.png" style="height: 100px"></image>
+                <img src="image/uni.png" style="height: 100px"/>
             </td>
             <td class="number">(1)</td>
             <td>
@@ -365,13 +364,11 @@
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">
-                Comfort-Wohnungs-Lüftung
-            </td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Comfort-Wohnungs-Lüftung</td>
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
-                <image src="image/cwl.png" style="height: 100px"></image>
+                <img src="image/cwl.png" style="height: 100px"/>
             </td>
             <td class="number">(1)</td>
             <td>
@@ -382,13 +379,11 @@
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">
-                Split-Luft/Wasser-Wärmepumpe
-            </td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Split-Luft/Wasser-Wärmepumpe</td>
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
-                <image src="image/heating.png" style="height: 100px"></image>
+                <img src="image/heating.png" style="height: 100px"></img>
             </td>
             <td class="number">(1)</td>
             <td>

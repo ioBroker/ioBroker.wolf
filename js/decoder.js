@@ -24,7 +24,7 @@ Decoder.prototype.decodeDPT3 = function (buffer) {
  * decode eis 13 / dpt 4 values
  */
 Decoder.prototype.decodeDPT4 = function (buffer) {
-    var value = buffer.readUInt8(0);
+    let value = buffer.readUInt8(0);
     if (value <= 127) {
         value = buffer.toString('ascii', 0);
     } else {
@@ -65,11 +65,11 @@ Decoder.prototype.decodeDPT8 = function (buffer) {
  * decode eis 5 / dpt 9 values
  */
 Decoder.prototype.decodeDPT9 = function (buffer) {
-    var value = buffer.readUInt16BE(0);
+    let value = buffer.readUInt16BE(0);
 
-    var sign = (value & 0x8000) >> 15;
-    var exp = (value & 0x7800) >> 11;
-    var mant = (value & 0x07ff);
+    const sign = (value & 0x8000) >> 15;
+    const exp = (value & 0x7800) >> 11;
+    let mant = (value & 0x07ff);
 
     if (sign !== 0) {
         mant = -(~(mant - 1) & 0x07ff);
@@ -83,17 +83,17 @@ Decoder.prototype.decodeDPT9 = function (buffer) {
  */
 Decoder.prototype.decodeDPT10 = function (buffer) {
 
-    var value = new Date();
+    const value = new Date();
 
-    var weekDay = (buffer[0] & 0xe0) >> 5;
-    var hour = buffer[0] & 0x1f;
-    var min = buffer[1] & 0x3f;
-    var sec = buffer[2] & 0x3f;
+    const weekDay = (buffer[0] & 0xe0) >> 5;
+    const hour = buffer[0] & 0x1f;
+    const min = buffer[1] & 0x3f;
+    const sec = buffer[2] & 0x3f;
 
     value.setHours(hour);
     value.setMinutes(min);
     value.setSeconds(sec);
-    var currentDay = value.getDay();
+    const currentDay = value.getDay();
     if (weekDay == 0) {
         // no change
     } else if (currentDay == weekDay) {
@@ -120,9 +120,9 @@ Decoder.prototype.decodeDPT10 = function (buffer) {
  */
 Decoder.prototype.decodeDPT11 = function (buffer) {
 
-    var day = buffer[0] & 0x1f;
-    var mon = buffer[1] & 0xf - 1; // month 0...11
-    var year = buffer[2] & 0x7f;
+    const day = buffer[0] & 0x1f;
+    const mon = buffer[1] & 0xf - 1; // month 0...11
+    let year = buffer[2] & 0x7f;
 
     if (year < 90) {
         year += 2000;
@@ -155,8 +155,8 @@ Decoder.prototype.decodeDPT14 = function (buffer) {
 };
 
 Decoder.prototype.decodeDPT16 = function (buffer) {
-    var value = '';
-    for (var i = 0; i < buffer.length; i++) {
+    let value = '';
+    for (let i = 0; i < buffer.length; i++) {
         value += String.fromCharCode(buffer.readUInt8(i));
     }
     return value;
@@ -167,9 +167,9 @@ Decoder.prototype.decodeDPT16 = function (buffer) {
  */
 Decoder.prototype.decode = function (len, data, callback) {
 
-    var err = null;
-    var type = 'DPT1';
-    var value = null;
+    let err = null;
+    let type = 'DPT1';
+    let value = null;
 
     // eis 1 / dpt 1.xxx
     if (len === 8) {
