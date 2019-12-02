@@ -58,7 +58,6 @@
     "mode": "daemon",
     "loglevel": "info",
     "icon": "wolf_logo.png",
-    "materialize": true,
     "compact": true,
     "messagebox": true,
     "keywords": [
