@@ -532,7 +532,7 @@ function main() {
 
         adapter.subscribeStates('*');
 
-        createServer();
+        createServer(adapter);
     });
 }
 
