@@ -21,7 +21,39 @@ function startAdapter(options) {
     options.name = adapterName;
 
     adapter = new utils.Adapter(options);
+
+    adapter._connections = [];
+
     adapter.on('ready', () => main());
+    adapter.on('unload', cb => {
+        if (adapter._server) {
+            adapter._server.close(cb);
+        } else {
+            cb && cb();
+        }
+    });
+
+    adapter.on('stateChange', (id, state) => {
+        if (state && !state.ack && id) {
+            const dp = parseInt(id.split('.').pop());
+            if (datapoints[dp].rw === 'r') {
+                adapter.setState(id, ack_data[dp].value, true);
+                adapter.log.error('oid: ' + id + ' is only readable');
+            } else {
+                const enc = encode(state.val, dp);
+                const bufVal = enc[0];
+                if (bufVal !== 'error') {
+                    const _buff_set = Buffer.concat([new Buffer('0620F08000' + (20 + bufVal.length).toString(16) + '04000000F0C100' + dp.toString(16) + '000100' + dp.toString(16) + '000' + bufVal.length.toString(16) + '', 'hex'), bufVal], bufVal.length + 20);
+                    adapter.setState(id, enc[1], true); // TODO: here send to  ism8
+
+                    adapter._connections.forEach(sock => sock.write(_buff_set));
+                } else {
+                    adapter.log.error('Can\'t encode DP : ' + dp + ' - data: ' + enc[1] + ' - type: ' + datapoints[dp].type);
+                }
+
+            }
+        }
+    });
 
     return adapter;
 }
@@ -500,41 +532,42 @@ function main() {
 
         adapter.subscribeStates('*');
 
-        server();
+        createServer();
     });
 }
 
-function server() {
-    const buff_req    = new Buffer('0620F080001104000000F086006E000000', 'hex');
-    const buff_getall = new Buffer('0620F080001604000000F0D0', 'hex');
-    const splitter    = new Buffer('0620F080', 'hex');
+function setState(adapter, dp, val, data, device) {
+    try {
+        val = decode(datapoints[dp].type, data.slice(20), dp);
 
-    net.createServer(sock => {
+        adapter.setState(device + '.' + dp, val, true);
+        ack_data[dp]['value'] = val;
+    } catch (err) {
+        val = '';
+        adapter.log.error('Can\'t parse DP : ' + dp + ' - data: ' + data.toString('hex') + ' - length: ' + data.length);
+        adapter.log.debug('incoming' +
+            '\n Device: ' + device +
+            '\n Datapoint: ' + dp +
+            '\n Datapoint_name: ' + datapoints[dp].name +
+            '\n Datapoint_type: ' + datapoints[dp].type +
+            '\n Data: ' + data.toString('hex') +
+            '\n Lengh: ' + data.length +
+            '\n Value: ' + val +
+            ''
+        );
+    }
+}
+
+function createServer(adapter) {
+    const buffReq    = new Buffer('0620F080001104000000F086006E000000', 'hex');
+    const buffGetAll = new Buffer('0620F080001604000000F0D0', 'hex');
+    const splitter   = new Buffer('0620F080', 'hex');
+
+    adapter._server = net.createServer(sock => {
+        !adapter._connections.includes(sock) && adapter._connections.push(sock);
 
         //const buff_set = new Buffer('0620F080001404000000F0C10039000100390001', 'hex');
         //0620F080001504000000F006006E0001006E030101
-        adapter.on('stateChange', (id, state) => {
-            if (state && !state.ack && id) {
-                const dp = parseInt(id.split('.').pop());
-                if (datapoints[dp].rw === 'r') {
-                    adapter.setState(id, ack_data[dp].value, true);
-                    adapter.log.error('oid: ' + id + ' is only readable');
-                } else {
-                    const enc = encode(state.val, dp);
-                    const bufVal = enc[0];
-                    if (bufVal !== 'error') {
-                        const _buff_set = Buffer.concat([new Buffer('0620F08000' + (20 + bufVal.length).toString(16) + '04000000F0C100' + dp.toString(16) + '000100' + dp.toString(16) + '000' + bufVal.length.toString(16) + '', 'hex'), bufVal], bufVal.length + 20);
-                        adapter.setState(id, enc[1], true); // todo hier an ism8 senden
-
-                        sock.write(_buff_set);
-                    } else {
-                        adapter.log.error('Can\'t encode DP : ' + dp + ' - data: ' + enc[1] + ' - type: ' + datapoints[dp].type);
-                    }
-
-                }
-            }
-        });
-
         let val;
         let dp;
         let device;
@@ -542,35 +575,33 @@ function server() {
         let lines;
         let data;
 
+        sock.on('error', err => adapter.log.error('Socket error: ' + err.toString()));
+
         sock.on('data', _data => {
             //console.log(_data)
             search = -1;
             lines = [];
-
 
             while ((search = bufferIndexOf(_data, splitter)) > -1) {
                 lines.push(_data.slice(0, search + splitter.length));
                 _data = _data.slice(search + splitter.length, _data.length);
             }
 
-            if (_data.length) {
-                lines.push(_data);
-            }
+            _data.length && lines.push(_data);
 
             for (let i = 1; i < lines.length; i++) {
-
                 data = Buffer.concat([splitter, lines[i]]);
 
-                buff_req[12] = data[12];
-                buff_req[13] = data[13];
-                sock.write(buff_req);
-
+                buffReq[12] = data[12];
+                buffReq[13] = data[13];
+                sock.write(buffReq);
 
                 dp = data.readUInt16BE(12);
                 device = getDevice(dp);
+
                 if (adapter.config.devices[device] === 'Auto') {
                     if (ack_data[dp]) {
-                        setState();
+                        setState(adapter, dp, val, data, device);
                     } else {
                         if (datapoints[dp].name === 'Störung') {
                             if (data.slice(20).readInt8(0) === 1) {
@@ -580,38 +611,24 @@ function server() {
                             }
                         }
 
-                        if (!ignore[device]) {
-                            addDevice(dp, () => setState());
-                        }
-                    }
-                }
-
-                function setState() {
-                    try {
-                        val = decode(datapoints[dp].type, data.slice(20), dp);
-
-                        adapter.setState(device + '.' + dp, val, true);
-                        ack_data[dp]['value'] = val;
-                    } catch (err) {
-                        val = '';
-                        adapter.log.error('Can\'t parse DP : ' + dp + ' - data: ' + data.toString('hex') + ' - length: ' + data.length);
-                        adapter.log.debug('incoming' +
-                            '\n Device: ' + device +
-                            '\n Datapoint: ' + dp +
-                            '\n Datapoint_name: ' + datapoints[dp].name +
-                            '\n Datapoint_type: ' + datapoints[dp].type +
-                            '\n Data: ' + data.toString('hex') +
-                            '\n Lengh: ' + data.length +
-                            '\n Value: ' + val +
-                            ''
-                        );
+                        !ignore[device] && addDevice(dp, () =>
+                            setState(adapter, dp, val, data, device));
                     }
                 }
             }
         });
 
-        sock.write(buff_getall);
-    }).listen(adapter.config.ism8_port, adapter.config.host_ip);
+        sock.on('end', () => {
+            const pos = adapter._connections.indexOf(sock);
+            pos !== -1 && adapter._connections.splice(pos);
+        })
+
+        sock.write(buffGetAll);
+    });
+
+    adapter._server.on('error', err => adapter.log.error('Cannot start server: ' + err.toString()));
+
+    adapter._server.listen(adapter.config.ism8_port, adapter.config.host_ip);
 }
 
 

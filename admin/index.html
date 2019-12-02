@@ -185,29 +185,29 @@
 
     <div style="position: relative; padding: 5px">
         <img src="wolf_logo.png" id="logo"/>
-        <span id="headText">Heiztechnik</span>
+        <span id="headText" class="translate">Heiztechnik</span>
     </div>
     <table style="width: 600px; display: inline-block; text-align: left">
         <tr>
-            <td colspan="4" style="text-align: center; font-size: 1.4em;" class="ui-widget-header">Verbindung</td>
+            <td colspan="4" style="text-align: center; font-size: 1.4em;" class="ui-widget-header translate">Verbindung</td>
         </tr>
         <tr>
-            <td style="width: 120px">Adapter IP:</td>
+            <td style="width: 120px" class="translate">Adapter IP:</td>
             <td>
                 <select id="host_ip" style="width: 280px">
                 </select>
             </td>
-            <td style="width: 100px;  text-align: right">Port:</td>
+            <td style="width: 100px;  text-align: right" class="translate">Port:</td>
             <td><input id="ism8_port" type="number" value="12004" style="width: 100px!important"/></td>
         </tr>
         <tr>
-            <td>Status als Bool</td>
+            <td class="translate">Status als Bool</td>
             <td>
                 <input type="checkbox" class="checkbox bool" id="bool_status"/><label for="bool_status">ON</label>
             </td>
         </tr>
         <tr>
-            <td>Druck in Bar</td>
+            <td class="translate">Druck in Bar</td>
             <td>
                 <input type="checkbox" class="checkbox bool" id="bool_bar"/><label for="bool_bar">ON</label>
             </td>
@@ -225,7 +225,7 @@
             <th style="width: 230px"></th>
         </tr>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em;" class="ui-widget-header">Heizgeräte</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em;" class="ui-widget-header translate">Heizgeräte</td>
         </tr>
         <tr>
             <td rowspan="4" style="text-align: center; height: 120px; vertical-align: middle">
@@ -233,38 +233,38 @@
             </td>
             <td class="number">(1)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="hg1_t"/><label for="hg1_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="hg1_t"/><label for="hg1_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="hg1_n" type="text"/></td>
         </tr>
         <tr>
             <td class="number">(2)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="hg2_t"/><label for="hg2_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="hg2_t"/><label for="hg2_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="hg2_n" type="text"/></td>
         </tr>
         <tr>
             <td class="number">(3)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="hg3_t"/><label for="hg3_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="hg3_t"/><label for="hg3_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="hg3_n" type="text"/></td>
         </tr>
         <tr>
             <td class="number">(4)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="hg4_t"/><label for="hg4_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="hg4_t"/><label for="hg4_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="hg4_n" type="text"/></td>
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Bedienmodule</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Bedienmodule</td>
         </tr>
         <tr>
             <td rowspan="4" style="text-align: center; height: 120px; vertical-align: middle">
@@ -272,38 +272,38 @@
             </td>
             <td class="number">(1)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="bm1_t"/><label for="bm1_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="bm1_t"/><label for="bm1_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="bm1_n" type="text"/></td>
         </tr>
         <tr>
             <td class="number">(2)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="bm2_t"/><label for="bm2_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="bm2_t"/><label for="bm2_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="bm2_n" type="text"/></td>
         </tr>
         <tr>
             <td class="number">(3)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="bm3_t"/><label for="bm3_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="bm3_t"/><label for="bm3_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="bm3_n" type="text"/></td>
         </tr>
         <tr>
             <td class="number">(4)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="bm4_t"/><label for="bm4_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="bm4_t"/><label for="bm4_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="bm4_n" type="text"/></td>
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Mischermodule</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Mischermodule</td>
         </tr>
         <tr>
             <td rowspan="3" style="text-align: center; height: 120px; vertical-align: middle">
@@ -311,30 +311,30 @@
             </td>
             <td class="number">(1)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="mm1_t"/><label for="mm1_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="mm1_t"/><label for="mm1_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="mm1_n" type="text"/></td>
         </tr>
         <tr>
             <td class="number">(2)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="mm2_t"/><label for="mm2_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="mm2_t"/><label for="mm2_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="mm2_n" type="text"/></td>
         </tr>
         <tr>
             <td class="number">(3)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="mm3_t"/><label for="mm3_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="mm3_t"/><label for="mm3_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="mm3_n" type="text"/></td>
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Kaskadenmodule</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Kaskadenmodule</td>
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
@@ -342,14 +342,14 @@
             </td>
             <td class="number">(1)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="km1_t"/><label for="km1_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="km1_t"/><label for="km1_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="km1_n" type="text"/></td>
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Solarmodule</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Solarmodule</td>
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
@@ -357,14 +357,14 @@
             </td>
             <td class="number">(1)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="sm1_t"/><label for="sm1_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="sm1_t"/><label for="sm1_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="sm1_n" type="text"/></td>
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Comfort-Wohnungs-Lüftung</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Comfort-Wohnungs-Lüftung</td>
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
@@ -372,14 +372,14 @@
             </td>
             <td class="number">(1)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="cwl_t"/><label for="cwl_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="cwl_t"/><label for="cwl_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="cwl_n" type="text"/></td>
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header">Split-Luft/Wasser-Wärmepumpe</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Split-Luft/Wasser-Wärmepumpe</td>
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
@@ -387,9 +387,9 @@
             </td>
             <td class="number">(1)</td>
             <td>
-                <input type="checkbox" class="checkbox" id="hg0_t"/><label for="hg0_t">Auto</label>
+                <input type="checkbox" class="checkbox" id="hg0_t"/><label for="hg0_t" class="translate">Auto</label>
             </td>
-            <td>Name:</td>
+            <td class="translate">Name:</td>
             <td><input class="names" id="hg0_n" type="text"/></td>
         </tr>
     </table>
