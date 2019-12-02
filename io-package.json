@@ -34,6 +34,10 @@
         "ru": "ISM8i Firmware v1.50"
       }
     },
+    "docs": {
+      "en": "docs/en/README.md",
+      "de": "docs/de/README.md"
+    },
     "desc": {
       "en": "Wolf Heating over ISM8i",
       "de": "Wolf Heizung über ISM8i",
