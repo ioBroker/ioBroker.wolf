@@ -12,6 +12,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
 <script type="text/javascript" src="../../js/translate.js"></script>
 <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+<script type="text/javascript" src="words.js"></script>
 
 <style>
     #headText {
@@ -86,11 +87,6 @@
 
 <!-- you have to define 2 functions in the global scope: -->
 <script type="text/javascript">
-
-    // Dictionary (systemDictionary is global variable from adapter-settings.js)
-    systemDictionary = {};
-
-
     // the function loadSettings has to exist ...
     function load(settings, onchange) {
         getIPs(function (data) {
@@ -185,11 +181,11 @@
 
     <div style="position: relative; padding: 5px">
         <img src="wolf_logo.png" id="logo"/>
-        <span id="headText" class="translate">Heiztechnik</span>
+        <span id="headText" class="translate">Heating</span>
     </div>
     <table style="width: 600px; display: inline-block; text-align: left">
         <tr>
-            <td colspan="4" style="text-align: center; font-size: 1.4em;" class="ui-widget-header translate">Verbindung</td>
+            <td colspan="4" style="text-align: center; font-size: 1.4em;" class="ui-widget-header translate">Connection</td>
         </tr>
         <tr>
             <td style="width: 120px" class="translate">Adapter IP:</td>
@@ -201,15 +197,15 @@
             <td><input id="ism8_port" type="number" value="12004" style="width: 100px!important"/></td>
         </tr>
         <tr>
-            <td class="translate">Status als Bool</td>
+            <td class="translate">Status as Bool</td>
             <td>
-                <input type="checkbox" class="checkbox bool" id="bool_status"/><label for="bool_status">ON</label>
+                <input type="checkbox" class="checkbox bool" id="bool_status"/><label for="bool_status" class="translate">ON</label>
             </td>
         </tr>
         <tr>
-            <td class="translate">Druck in Bar</td>
+            <td class="translate">Pressure in bar</td>
             <td>
-                <input type="checkbox" class="checkbox bool" id="bool_bar"/><label for="bool_bar">ON</label>
+                <input type="checkbox" class="checkbox bool" id="bool_bar"/><label for="bool_bar" class="translate">ON</label>
             </td>
         </tr>
 
@@ -225,7 +221,7 @@
             <th style="width: 230px"></th>
         </tr>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em;" class="ui-widget-header translate">Heizgeräte</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em;" class="ui-widget-header translate">Heaters</td>
         </tr>
         <tr>
             <td rowspan="4" style="text-align: center; height: 120px; vertical-align: middle">
@@ -264,7 +260,7 @@
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Bedienmodule</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Operating modules</td>
         </tr>
         <tr>
             <td rowspan="4" style="text-align: center; height: 120px; vertical-align: middle">
@@ -303,7 +299,7 @@
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Mischermodule</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Mixing modules</td>
         </tr>
         <tr>
             <td rowspan="3" style="text-align: center; height: 120px; vertical-align: middle">
@@ -334,7 +330,7 @@
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Kaskadenmodule</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Cascade modules</td>
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
@@ -349,7 +345,7 @@
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Solarmodule</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Solar cells</td>
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
@@ -364,7 +360,7 @@
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Comfort-Wohnungs-Lüftung</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Comfort domestic ventilation system</td>
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
@@ -379,7 +375,7 @@
         </tr>
         <!------------------------------------------------------------------------------------------------>
         <tr>
-            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Split-Luft/Wasser-Wärmepumpe</td>
+            <td colspan="5" style="text-align: center; font-size: 1.4em" class="ui-widget-header translate">Split air/water heat pump</td>
         </tr>
         <tr>
             <td rowspan="1" style="text-align: center; height: 120px; vertical-align: middle">
