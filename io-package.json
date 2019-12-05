@@ -1,22 +1,55 @@
 {
   "common": {
     "name": "wolf",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "title": "wolf",
+    "titleLang": {
+      "en": "WOLF Heating over ISM8i",
+      "de": "WOLF heizt über ISM8i",
+      "ru": "WOLF отопление через ISM8i",
+      "pt": "Aquecimento WOLF sobre o ISM8i",
+      "nl": "WOLF verwarming via ISM8i",
+      "fr": "WOLF chauffage sur ISM8i",
+      "it": "Riscaldamento WOLF su ISM8i",
+      "es": "Calentamiento WOLF sobre ISM8i",
+      "pl": "WOLF Ogrzewanie nad ISM8i",
+      "zh-cn": "ISM8i上的“狼”加热"
+    },
     "news": {
-            "1.1.0": {
-              "en": "ISM8i Firmware v1.50",
-              "de": "ISM8i Firmware v1.50",
-              "ru": "ISM8i Firmware v1.50"
-            }
-        },
-        "desc": {
-			"en": "Wolf Heating over ISM8i",
-			"de": "Wolf Heizung über ISM8i",
-			"ru": "Отопление Wolf через ISM8i"
-		},
-
-    "desc": "Wolf Heating over ISM8i",
+      "1.1.1": {
+        "en": "Fixed error: DPT_Date is wrong\nFixed error: CWL - DPT_TimeOfDay - error",
+        "de": "Behobener Fehler: DPT_Date ist falsch\nBehobener Fehler: CWL - DPT_TimeOfDay - Fehler",
+        "ru": "Исправлена ошибка: дата DPT неверна\nИсправлена ошибка: CWL - DPT_TimeOfDay - ошибка",
+        "pt": "Corrigido o erro: DPT_Date está errado\nCorrigido o erro: CWL - DPT_TimeOfDay - erro",
+        "nl": "Fout opgelost: DPT_Date is verkeerd\nFout opgelost: CWL - DPT_TimeOfDay - fout",
+        "fr": "Erreur fixe: DPT_Date est erroné\nErreur fixe: CWL - DPT_TimeOfDay - erreur",
+        "it": "Errore risolto: DPT_Date è errato\nErrore risolto: CWL - DPT_TimeOfDay - errore",
+        "es": "Error solucionado: DPT_Date está mal\nError solucionado: CWL - DPT_TimeOfDay - error",
+        "pl": "Naprawiono błąd: DPT_Date jest niepoprawna\nNaprawiono błąd: CWL - DPT_TimeOfDay - błąd",
+        "zh-cn": "修复错误：DPT_Date错误\n修复错误：CWL-DPT_TimeOfDay-错误"
+      },
+      "1.1.0": {
+        "en": "ISM8i Firmware v1.50",
+        "de": "ISM8i Firmware v1.50",
+        "ru": "ISM8i Firmware v1.50"
+      }
+    },
+    "docs": {
+      "en": "docs/en/README.md",
+      "de": "docs/de/README.md"
+    },
+    "desc": {
+      "en": "Wolf Heating over ISM8i",
+      "de": "Wolf Heizung über ISM8i",
+      "ru": "Отопление Wolf через ISM8i",
+      "pt": "Aquecimento Wolf sobre o ISM8i",
+      "nl": "Wolf verwarming via ISM8i",
+      "fr": "Wolf chauffage sur ISM8i",
+      "it": "Riscaldamento Wolf su ISM8i",
+      "es": "Calentamiento Wolf sobre ISM8i",
+      "pl": "„Wolf” Ogrzewanie nad ISM8i",
+      "zh-cn": "ISM8i上的“狼”加热"
+    },
     "authors": [
       "smiling_Jack <smiling_Jack@iobroker.net>"
     ],
@@ -25,6 +58,7 @@
     "mode": "daemon",
     "loglevel": "info",
     "icon": "wolf_logo.png",
+    "compact": true,
     "messagebox": true,
     "keywords": [
       "Heating",
@@ -45,40 +79,40 @@
     "ism8_port": "12004",
     "host_ip": "0.0.0.0",
     "devices": {
-        "hg0": "Auto",
-        "hg1": "Auto",
-        "hg2": "Auto",
-        "hg3": "Auto",
-        "hg4": "Auto",
-        "bm0": "Auto",
-        "bm1": "Auto",
-        "bm2": "Auto",
-        "bm3": "Auto",
-        "bm4": "Auto",
-        "mm1": "Auto",
-        "mm2": "Auto",
-        "mm3": "Auto",
-        "km1": "Auto",
-        "sm1": "Auto",
-        "cwl": "Auto"
-      }
-    },
-    "names": {
-      "hg0_n": "",
-      "hg1_n": "",
-      "hg2_n": "",
-      "hg3_n": "",
-      "hg4_n": "",
-      "bm0_n": "",
-      "bm1_n": "",
-      "bm2_n": "",
-      "bm3_n": "",
-      "bm4_n": "",
-      "mm1_n": "",
-      "mm2_n": "",
-      "mm3_n": "",
-      "km1_n": "",
-      "sm1_n": "",
-      "cwl_n": ""
+      "hg0": "Auto",
+      "hg1": "Auto",
+      "hg2": "Auto",
+      "hg3": "Auto",
+      "hg4": "Auto",
+      "bm0": "Auto",
+      "bm1": "Auto",
+      "bm2": "Auto",
+      "bm3": "Auto",
+      "bm4": "Auto",
+      "mm1": "Auto",
+      "mm2": "Auto",
+      "mm3": "Auto",
+      "km1": "Auto",
+      "sm1": "Auto",
+      "cwl": "Auto"
     }
+  },
+  "names": {
+    "hg0_n": "",
+    "hg1_n": "",
+    "hg2_n": "",
+    "hg3_n": "",
+    "hg4_n": "",
+    "bm0_n": "",
+    "bm1_n": "",
+    "bm2_n": "",
+    "bm3_n": "",
+    "bm4_n": "",
+    "mm1_n": "",
+    "mm2_n": "",
+    "mm3_n": "",
+    "km1_n": "",
+    "sm1_n": "",
+    "cwl_n": ""
   }
+}

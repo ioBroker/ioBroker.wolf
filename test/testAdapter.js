@@ -1,7 +1,7 @@
 /* jshint -W097 */// jshint strict:false
 /*jslint node: true */
 var expect = require('chai').expect;
-var setup  = require(__dirname + '/lib/setup');
+var setup  = require('./lib/setup');
 
 var objects = null;
 var states  = null;

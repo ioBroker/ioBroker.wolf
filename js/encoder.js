@@ -9,7 +9,7 @@ function Encoder() {
  * encode dpt 1 values
  */
 Encoder.prototype.encodeDPT1 = function(value) {
-  var buffer = new Buffer(1);
+  const buffer = new Buffer(1);
   buffer.writeUInt8(value & 0x1, 0);
   return buffer;
 };
@@ -18,7 +18,7 @@ Encoder.prototype.encodeDPT1 = function(value) {
  * encode dpt 2 values
  */
 Encoder.prototype.encodeDPT2 = function(value) {
-  var buffer = new Buffer(1);
+  const buffer = new Buffer(1);
   buffer.writeUInt8(value & 0x3, 0);
   return buffer;
 };
@@ -27,7 +27,7 @@ Encoder.prototype.encodeDPT2 = function(value) {
  * encode dpt 3 values
  */
 Encoder.prototype.encodeDPT3 = function(value) {
-  var buffer = new Buffer(1);
+  const buffer = new Buffer(1);
   buffer.writeUInt8(value & 0xF, 0);
   return buffer;
 };
@@ -36,7 +36,7 @@ Encoder.prototype.encodeDPT3 = function(value) {
  * encode dpt 5 values
  */
 Encoder.prototype.encodeDPT5 = function(value) {
-  var buffer = new Buffer(1);
+  const buffer = new Buffer(1);
   buffer.writeUInt8(value & 0xFF, 0);
   return buffer;
 };
@@ -45,16 +45,16 @@ Encoder.prototype.encodeDPT5 = function(value) {
  * encode 9 values
  */
 Encoder.prototype.encodeDPT9 = function(value, exp) {
-  var data = [0,0];
+  const data = [0,0];
   
   if(exp === undefined) {
     exp = 2;
   }
   
-  var mant = value * 100 / (1 << exp);
+  let mant = value * 100 / (1 << exp);
   
   //Fill in sign bit
-  if(value < 0) {
+  if (value < 0) {
     data[0] |= 0x80;
     mant = (~(mant * -1) + 1) & 0x07ff;
   }
@@ -66,7 +66,7 @@ Encoder.prototype.encodeDPT9 = function(value, exp) {
   data[0] |= (mant >> 8) & 0x7;
   data[1] |= mant & 0xFF;
   
-  var buffer = new Buffer(2);
+  const buffer = new Buffer(2);
   buffer.writeUInt8(data[0], 0);
   buffer.writeUInt8(data[1], 1);
   return buffer;
