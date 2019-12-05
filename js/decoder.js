@@ -121,7 +121,7 @@ Decoder.prototype.decodeDPT10 = function (buffer) {
 Decoder.prototype.decodeDPT11 = function (buffer) {
 
     const day = buffer[0] & 0x1f;
-    const mon = buffer[1] & 0xf - 1; // month 0...11
+    const mon = (buffer[1] & 0xf) - 1; // month 0...11
     let year = buffer[2] & 0x7f;
 
     if (year < 90) {
