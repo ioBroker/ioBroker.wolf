@@ -68,7 +68,7 @@
     "enabled": false,
     "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.wolf/master/admin/wolf_logo.png",
     "readme": "https://github.com/ioBroker/ioBroker.wolf/blob/master/README.md",
-    "type": "hardware",
+    "type": "climate-control",
     "config": {
       "minWidth": 650,
       "minHeight": 800,
