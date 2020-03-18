@@ -465,6 +465,8 @@ function addDevice(dp, callback) {
                         name: data.name,
                         role: data.type.replace('DPT_', ''),
                         type: 'state',
+                        read: data.read,
+                        write: data.write,
                         unit: data.einheit,
                         enabled: false
                     },
@@ -492,8 +494,10 @@ function addDevice(dp, callback) {
                             name: data.name,
                             role: data.type.replace('DPT_', ''),
                             type: 'state',
+                            read: data.read,
+                            write: data.write,
                             unit: data.einheit,
-                            enabled: false
+                            enabled: false,
                         },
                         native: {
                             rw: data.rw

@@ -3,384 +3,512 @@
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "2": {
     "name": "Betriebsart",
     "type": "DPT_HVACContrMode",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "3": {
     "name": "Modulationsgrad  Brennerleistung",
     "type": "DPT_Scaling",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "%"
   },
   "4": {
     "name": "Kesseltemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "5": {
     "name": "Sammlertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "6": {
     "name": "Rücklauftemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "7": {
     "name": "Warmwassertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "8": {
     "name": "Außentemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "9": {
     "name": "Status Brenner / Flamme",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "10": {
     "name": "Status Heizkreispumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "11": {
     "name": "Status Speicherladepumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "12": {
     "name": "Status 3-Wege-Umschaltventil",
     "type": "DPT_OpenClose",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "13": {
     "name": "Anlagendruck",
     "type": "DPT_Value_Pres",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "Pa"
   },
   "14": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "15": {
     "name": "Betriebsart",
     "type": "DPT_HVACContrMode",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "16": {
     "name": "Modulationsgrad / Brennerleistung",
     "type": "DPT_Scaling",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "%"
   },
   "17": {
     "name": "Kesseltemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "18": {
     "name": "Sammlertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "19": {
     "name": "Rücklauftemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "20": {
     "name": "Warmwassertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "21": {
     "name": "Außentemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "22": {
     "name": "Status Brenner / Flamme",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "23": {
     "name": "Status Heizkreispumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "24": {
     "name": "Status Speicherladepumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "25": {
     "name": "Status 3-Wege-Umschaltventil",
     "type": "DPT_OpenClose",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "26": {
     "name": "Anlagendruck",
     "type": "DPT_Value_Pres",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "Pa"
   },
   "27": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "28": {
     "name": "Betriebsart",
     "type": "DPT_HVACContrMode",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "29": {
     "name": "Modulationsgrad / Brennerleistung",
     "type": "DPT_Scaling",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "%"
   },
   "30": {
     "name": "Kesseltemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "31": {
     "name": "Sammlertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "32": {
     "name": "Rücklauftemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "33": {
     "name": "Warmwassertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "34": {
     "name": "Außentemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "35": {
     "name": "Status Brenner / Flamme",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "36": {
     "name": "Status Heizkreispumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "37": {
     "name": "Status Speicherladepumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "38": {
     "name": "Status 3-Wege-Umschaltventil",
     "type": "DPT_OpenClose",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "39": {
     "name": "Anlagendruck",
     "type": "DPT_Value_Pres",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "Pa"
   },
   "40": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "41": {
     "name": "Betriebsart",
     "type": "DPT_HVACContrMode",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "42": {
     "name": "Modulationsgrad / Brennerleistung",
     "type": "DPT_Scaling",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "%"
   },
   "43": {
     "name": "Kesseltemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "44": {
     "name": "Sammlertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "45": {
     "name": "Rücklauftemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "46": {
     "name": "Warmwassertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "47": {
     "name": "Außentemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "48": {
     "name": "Status Brenner / Flamme",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "49": {
     "name": "Status Heizkreispumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "50": {
     "name": "Status Speicherladepumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "51": {
     "name": "Status 3-Wege-Umschaltventil",
     "type": "DPT_OpenClose",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "52": {
     "name": "Anlagendruck",
     "type": "DPT_Value_Pres",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "Pa"
   },
   "53": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "54": {
     "name": "Außentemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "55": {
     "name": "Raumtemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "56": {
     "name": "Warmwassersolltemperatur",
     "type": "DPT_Value_Temp",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "°C"
   },
   "57": {
     "name": "Programmwahl Heizkreis",
     "type": "DPT_HVACMode",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "58": {
     "name": "Programmwahl Warmwasser",
     "type": "DPT_DHWMode",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "59": {
     "name": "Heizkreis Zeitprogramm 1",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "60": {
     "name": "Heizkreis Zeitprogramm 2",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "61": {
     "name": "Heizkreis Zeitprogramm 3",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "62": {
     "name": "Warmwasser Zeitprogramm 1",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "63": {
     "name": "Warmwasser Zeitprogramm 2",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "64": {
     "name": "Warmwasser Zeitprogramm 3",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "65": {
@@ -395,870 +523,1160 @@
     "name": "Sparfaktor",
     "type": "DPT_Tempd",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "K"
   },
   "67": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "68": {
     "name": "Raumtemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "69": {
     "name": "Warmwassersolltemperatur",
     "type": "DPT_Value_Temp",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "°C"
   },
   "70": {
     "name": "Programmwahl Mischer",
     "type": "DPT_HVACMode",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "71": {
     "name": "Programmwahl Warmwasser",
     "type": "DPT_DHWMode",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "72": {
     "name": "Mischer Zeitprogramm 1",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "73": {
     "name": "Mischer Zeitprogramm 2",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "74": {
     "name": "Mischer Zeitprogramm 3",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "75": {
     "name": "Warmwasser Zeitprogramm 1",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "76": {
     "name": "Warmwasser Zeitprogramm 2",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "77": {
     "name": "Warmwasser Zeitprogramm 3",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "78": {
     "name": "Sollwertkorrektur",
     "type": "DPT_Tempd",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "K"
   },
   "79": {
     "name": "Sparfaktor",
     "type": "DPT_Tempd",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "K"
   },
   "80": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "81": {
     "name": "Raumtemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "82": {
     "name": "Warmwassersolltemperatur",
     "type": "DPT_Value_Temp",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "°C"
   },
   "83": {
     "name": "Programmwahl Mischer",
     "type": "DPT_HVACMode",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "84": {
     "name": "Programmwahl Warmwasser",
     "type": "DPT_DHWMode",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "85": {
     "name": "Mischer Zeitprogramm 1",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "86": {
     "name": "Mischer Zeitprogramm 2",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "87": {
     "name": "Mischer Zeitprogramm 3",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "88": {
     "name": "Warmwasser Zeitprogramm 1",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "89": {
     "name": "Warmwasser Zeitprogramm 2",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "90": {
     "name": "Warmwasser Zeitprogramm 3",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "91": {
     "name": "Sollwertkorrektur",
     "type": "DPT_Tempd",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "K"
   },
   "92": {
     "name": "Sparfaktor",
     "type": "DPT_Tempd",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "K"
   },
   "93": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "94": {
     "name": "Raumtemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "95": {
     "name": "Warmwassersolltemperatur",
     "type": "DPT_Value_Temp",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "°C"
   },
   "96": {
     "name": "Programmwahl Mischer",
     "type": "DPT_HVACMode",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "97": {
     "name": "Programmwahl Warmwasser",
     "type": "DPT_DHWMode",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "98": {
     "name": "Mischer Zeitprogramm 1",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "99": {
     "name": "Mischer Zeitprogramm 2",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "100": {
     "name": "Mischer Zeitprogramm 3",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "101": {
     "name": "Warmwasser Zeitprogramm 1",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "102": {
     "name": "Warmwasser Zeitprogramm 2",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "103": {
     "name": "Warmwasser Zeitprogramm 3",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
   "104": {
     "name": "Sollwertkorrektur",
     "type": "DPT_Tempd",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "K"
   },
   "105": {
     "name": "Sparfaktor",
     "type": "DPT_Tempd",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "K"
   },
   "106": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
   "107": {
     "name": "Sammlertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
   "108": {
     "name": "Gesamtmodulationsgrad",
     "type": "DPT_Scaling",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "%"
   },
   "109": {
     "name": "Vorlauftemperatur Mischerkreis",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "110": {
+  "110": {
     "name": "Status Mischerkreispumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "111": {
+  "111": {
     "name": "Status Ausgang A1",
     "type": "DPT_Enable",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "112": {
+  "112": {
     "name": "Eingang E1",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "113": {
+  "113": {
     "name": "Eingang E2",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "114": {
+  "114": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "115": {
+  "115": {
     "name": "Warmwassertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "116": {
+  "116": {
     "name": "Vorlauftemperatur Mischerkreis",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "117": {
+  "117": {
     "name": "Status Mischerkreispumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "118": {
+  "118": {
     "name": "Status Ausgang A1",
     "type": "DPT_Enable",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "119": {
+  "119": {
     "name": "Eingang E1",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "120": {
+  "120": {
     "name": "Eingang E2",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "121": {
+  "121": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "122": {
+  "122": {
     "name": "Warmwassertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "123": {
+  "123": {
     "name": "Vorlauftemperatur Mischerkreis",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "124": {
+  "124": {
     "name": "Status Mischerkreispumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "125": {
+  "125": {
     "name": "Status Ausgang A1",
     "type": "DPT_Enable",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "126": {
+  "126": {
     "name": "Eingang E1",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "127": {
+  "127": {
     "name": "Eingang E2",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "128": {
+  "128": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "129": {
+  "129": {
     "name": "Warmwassertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "130": {
+  "130": {
     "name": "Vorlauftemperatur Mischerkreis",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "131": {
+  "131": {
     "name": "Status Mischerkreispumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "132": {
+  "132": {
     "name": "Status Ausgang A1",
     "type": "DPT_Enable",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "133": {
+  "133": {
     "name": "Eingang E1",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "134": {
+  "134": {
     "name": "Eingang E2",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "135": {
+  "135": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "136": {
+  "136": {
     "name": "Warmwassertemperatur Solar 1",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "137": {
+  "137": {
     "name": "Temperatur Kollektor 1",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "138": {
+  "138": {
     "name": "Eingang E1",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "139": {
+  "139": {
     "name": "Eingang E2 (Durchfluss)",
     "type": "DPT_Value_Volume_Flow",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "l/h"
   },
- "140": {
+  "140": {
     "name": "Eingang E3",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "141": {
+  "141": {
     "name": "Status Solarkreispumpe SKP1",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "142": {
+  "142": {
     "name": "Status Ausgang A1",
     "type": "DPT_Enable",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "143": {
+  "143": {
     "name": "Status Ausgang A2",
     "type": "DPT_Enable",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "144": {
+  "144": {
     "name": "Status Ausgang A3",
     "type": "DPT_Enable",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "145": {
+  "145": {
     "name": "Status Ausgang A4",
     "type": "DPT_Enable",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "146": {
+  "146": {
     "name": "Durchfluss",
     "type": "DPT_Value_Volume_Flow",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "l/h"
   },
- "147": {
+  "147": {
     "name": "aktuelle Leistung",
     "type": "DPT_Power",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "kW"
   },
- "148": {
+  "148": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "149": {
+  "149": {
     "name": "Programmwahl CWL",
     "type": "DPT_DHWMode",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "150": {
+  "150": {
     "name": "Zeitprogramm 1",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "151": {
+  "151": {
     "name": "Zeitprogramm 2",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "152": {
+  "152": {
     "name": "Zeitprogramm 3",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "153": {
+  "153": {
     "name": "Zeitweise Intensivlüftung AN/AUS",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "154": {
+  "154": {
     "name": "Zeitweise Intensivlüftung Startdatum",
     "type": "DPT_Date",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "155": {
+  "155": {
     "name": "Zeitweise Intensivlüftung Enddatum",
     "type": "DPT_Date",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "156": {
+  "156": {
     "name": "Zeitweise Intensivlüftung Startzeit",
     "type": "DPT_TimeOfDay",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "157": {
+  "157": {
     "name": "Zeitweise Intensivlüftung Endzeit",
     "type": "DPT_TimeOfDay",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "158": {
+  "158": {
     "name": "Zeitweiser Feuchteschutz AN/AUS",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "159": {
+  "159": {
     "name": "Zeitweiser Feuchteschutz Startdatum",
     "type": "DPT_Date",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "160": {
+  "160": {
     "name": "Zeitweiser Feuchteschutz Enddatum",
     "type": "DPT_Date",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "161": {
+  "161": {
     "name": "Zeitweiser Feuchteschutz Startzeit",
     "type": "DPT_TimeOfDay",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "162": {
+  "162": {
     "name": "Zeitweiser Feuchteschutz Endzeit",
     "type": "DPT_TimeOfDay",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "163": {
+  "163": {
     "name": "Lüftungsstufe",
     "type": "DPT_Scaling",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "%"
   },
- "164": {
+  "164": {
     "name": "Ablufttemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "165": {
+  "165": {
     "name": "Frischlufttemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "166": {
+  "166": {
     "name": "Luftdurchsatz Zuluft",
     "type": "DPT_FlowRate_m3/h",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "m³/h"
   },
- "167": {
+  "167": {
     "name": "Luftdurchsatz Abluft",
     "type": "DPT_FlowRate_m3/h",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "m³/h"
   },
- "168": {
+  "168": {
     "name": "Bypass Initialisierung",
     "type": "DPT_Bool",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "169": {
+  "169": {
     "name": "Bypass öffnet/offen",
     "type": "DPT_Bool",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "170": {
+  "170": {
     "name": "Bypass schließt/geschlossen",
     "type": "DPT_Bool",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "171": {
+  "171": {
     "name": "Bypass Fehler",
     "type": "DPT_Bool",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "172": {
+  "172": {
     "name": "Frost Status: Initialisierung/Warte",
     "type": "DPT_Bool",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "173": {
+  "173": {
     "name": "Frost Status: Kein Frost",
     "type": "DPT_Bool",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "174": {
+  "174": {
     "name": "Frost Status: Vorwärmer",
     "type": "DPT_Bool",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "175": {
+  "175": {
     "name": "Frost Status: Fehler/Unausgeglichen",
     "type": "DPT_Bool",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "Heizgerät(1)"
   },
- "176": {
+  "176": {
     "name": "Störung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "177": {
+  "177": {
     "name": "Betriebsart",
     "type": "DPT_HVACContrMode",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "178": {
+  "178": {
     "name": "Heizleistung",
     "type": "DPT_Power",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "kW"
   },
- "179": {
+  "179": {
     "name": "Kühlleistung",
     "type": "DPT_Power",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "kW"
   },
- "180": {
+  "180": {
     "name": "Kesseltemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "181": {
+  "181": {
     "name": "Sammlertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "182": {
+  "182": {
     "name": "Rücklauftemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "183": {
+  "183": {
     "name": "Warmwassertemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "184": {
+  "184": {
     "name": "Außentemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "185": {
+  "185": {
     "name": "Status Heizkreispumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "186": {
+  "186": {
     "name": "Status Zubringer-/Heizkreispumpe",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "187": {
+  "187": {
     "name": "Status 3-Wege-Umschaltventil HZ/WW",
     "type": "DPT_OpenClose",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "188": {
+  "188": {
     "name": "Status 3-Wege-Umschaltventil HZ/K",
     "type": "DPT_OpenClose",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "189": {
+  "189": {
     "name": "Status E-Heizung",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "190": {
+  "190": {
     "name": "Anlagendruck",
     "type": "DPT_Value_Pres",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "Pa"
   },
- "191": {
+  "191": {
     "name": "Leistungsaufnahme",
     "type": "DPT_Power",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "kW"
   },
- "192": {
+  "192": {
     "name": "Filterwarnung aktiv",
     "type": "DPT_Switch",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": ""
   },
- "193": {
+  "193": {
     "name": "Filerwarnung zurücksetzen",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "194": {
+  "194": {
     "name": "1x Warmwasserladung (global)",
     "type": "DPT_Switch",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": ""
   },
- "195": {
+  "195": {
     "name": "Tagesertrag",
     "type": "DPT_ActiveEnergy",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "Wh"
   },
- "196": {
+  "196": {
     "name": "Gesamtertrag",
     "type": "DPT_ActiveEnergy_kWh",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "kWh"
   },
- "197": {
+  "197": {
     "name": "Abgastemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "198": {
+  "198": {
     "name": "Leistungsvorgabe",
     "type": "DPT_Scaling",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "%"
   },
- "199": {
+  "199": {
     "name": "Kesselsolltemperaturvorgabe",
     "type": "DPT_Value_Temp",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "°C"
   },
- "200": {
+  "200": {
     "name": "Abgastemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "201": {
+  "201": {
     "name": "Leistungsvorgabe",
     "type": "DPT_Scaling",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "%"
   },
- "202": {
+  "202": {
     "name": "Kesselsolltemperaturvorgabe",
     "type": "DPT_Value_Temp",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "°C"
   },
- "203": {
+  "203": {
     "name": "Abgastemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "204": {
+  "204": {
     "name": "Leistungsvorgabe",
     "type": "DPT_Scaling",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "%"
   },
- "205": {
+  "205": {
     "name": "Kesselsolltemperaturvorgabe",
     "type": "DPT_Value_Temp",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "°C"
   },
- "206": {
+  "206": {
     "name": "Abgastemperatur",
     "type": "DPT_Value_Temp",
     "rw": "r",
+    "read": true,
+    "write": false,
     "einheit": "°C"
   },
- "207": {
+  "207": {
     "name": "Leistungsvorgabe",
     "type": "DPT_Scaling",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "%"
   },
- "208": {
+  "208": {
     "name": "Kesselsolltemperaturvorgabe",
     "type": "DPT_Value_Temp",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "°C"
-  }, 
- "209": {
+  },
+  "209": {
     "name": "Gesamtmodulationsgradvorgabe",
     "type": "DPT_Scaling",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "%"
   },
- "210": {
+  "210": {
     "name": "Sammlersolltemperaturvorgabe",
     "type": "DPT_Value_Temp",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "°C"
   } 
 }
