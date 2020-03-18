@@ -387,6 +387,8 @@
     "name": "Sollwertkorrektur",
     "type": "DPT_Tempd",
     "rw": "rw",
+    "read": true,
+    "write": true,
     "einheit": "K"
   },
   "66": {
