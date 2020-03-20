@@ -1,0 +1,568 @@
+<html>
+<head>
+    <!-- Materialze style -->
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+
+    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+    <script type="text/javascript" src="words.js"></script>
+
+    <style>
+        .device-img {
+            width: 100px;
+        }
+        .iob-values .input-field {
+            margin-bottom: 5px;
+            margin-top: 0;
+        }
+        .iob-values .number {
+            margin-top: 11px;
+            font-size: 16px;
+        }
+        .iob-values .row {
+            margin-bottom: 0;
+        }
+        .iob-values .checkbox {
+            margin-top: 10px;
+        }
+    </style>
+<script type="text/javascript">
+    var wires = [];
+
+    var possibleProperties = [
+        'humidity',
+        'pressure',
+        'inHg',
+        'vib_level',
+        'vib_peak',
+        'vib_min',
+        'vib_max',
+        'current.0',
+        'current.1',
+        'current.2',
+        'current.ALL',
+        'counter.ALL',
+        'counter.A',
+        'counter.B',
+        'min_current.0',
+        'min_current.1',
+        'min_current.2',
+        'min_current.ALL',
+        'max_current.0',
+        'max_current.1',
+        'max_current.2',
+        'max_current.ALL',
+        'volts.0',
+        'volts.1',
+        'volts.2',
+        'volts.ALL',
+        'min_volts.0',
+        'min_volts.1',
+        'min_volts.2',
+        'min_volts.ALL',
+        'max_volts.0',
+        'max_volts.1',
+        'max_volts.2',
+        'max_volts.ALL',
+        'gain',
+        'offset',
+        'current',
+        'illuminance',
+        'relay/state',
+        'relay/control',
+        'LED/state',
+        'LED/control',
+        'resistance',
+        'dew_point',
+        'heat_index',
+        'humidex',
+        'light',
+        'temperature',
+        'fasttemp',
+        'set_alarm',
+        'date',
+        'PIO',
+        'PIO.A',
+        'PIO.B',
+        'PIO.0',
+        'PIO.1',
+        'PIO.2',
+        'PIO.3',
+        'PIO.4',
+        'PIO.5',
+        'PIO.6',
+        'PIO.7',
+        'PIO.ALL',
+        'PIO.BYTE',
+        'latch.0',
+        'latch.1',
+        'latch.2',
+        'latch.3',
+        'latch.4',
+        'latch.5',
+        'latch.6',
+        'latch.7',
+        'latch.ALL',
+        'latch.BYTE',
+        'sensed.BYTE'
+    ];
+
+    function getUniqueIndex(_wires, prefix) {
+        var i = 1;
+        var found;
+        do {
+            found = false;
+            for (var w = 0; w < _wires.length; w++) {
+                if (_wires[w].name.substring(0, (prefix + i).length) === prefix + i) {
+                    found = true;
+                    i++;
+                    break;
+                }
+            }
+        } while (found);
+
+        return prefix + i;
+    }
+
+    function setValue(id, value, onChange) {
+        var $value = $('#' + id + '.value');
+        if ($value.attr('type') === 'checkbox') {
+            $value.prop('checked', value).on('change', function() {
+                onChange();
+            });
+        } else {
+            $value.val(value).on('change', function() {
+                onChange();
+            }).on('keyup', function() {
+                onChange();
+            });
+        }
+    }
+
+    // the function loadSettings has to exist ...
+    function load(settings, onChange) {
+        if (!settings) return;
+
+        getIPs(function(ips) {
+            for (var i = 0; i < ips.length; i++) {
+                $('#bind').append('<option value="' + ips[i].address + '">' + ips[i].name + '</option>');
+            }
+            $('#bind.value').val(settings.bind).on('change', () => onChange()).select();
+        });
+
+        $('#port').val(settings.port).on('change', () => onChange()).on('keyup', () => onChange());
+
+        // bool_status
+        $('#bool_status').prop('checked', settings.bool_status).on('change', () => onChange());
+
+        // bool_bar
+        $('#bool_bar').prop('checked', settings.bool_bar).on('change', () => onChange());
+
+        // auto checkboxes
+        $('.auto').each(function () {
+            var $this = $(this);
+            var id = $this.attr('id');
+            var auto = settings.devices[id] === 'Auto';
+            $this.prop('checked', auto).on('change', () => {
+                var $this = $(this);
+                var id = $this.attr('id');
+                var auto = $this.prop('checked');
+                $('span[for="' + id + '"]').text(auto ? _('Auto') : _('off'));
+                onChange();
+            });
+            $('span[for="' + id + '"]').text(auto ? _('Auto') : _('off'));
+        });
+        $('.name').each(function () {
+            var $this = $(this);
+            $this.val(settings.names[$this.attr('id')]).on('change', () => onChange()).on('keyup', () => onChange());
+        });
+
+        onChange(false);
+        M && M.updateTextFields();
+    }
+
+    function save(callback) {
+        var obj = {
+            devices: {},
+            names: {},
+            bool_status: $('#bool_status').prop('checked'),
+            bool_bar: $('#bool_bar').prop('checked'),
+            port: $('#port').val(),
+            bind: $('#bind').val()
+        };
+
+        $('.auto').each(function () {
+            var $this = $(this);
+            obj.devices[$this.attr('id')] = $this.prop('checked') ? 'Auto' : 'off';
+        });
+        $('.name').each(function () {
+            var $this = $(this);
+            obj.names[$this.attr('id')] = $this.val();
+        });
+
+        if (obj.devices.bm1 === 'Auto' || obj.devices.bm2 === 'Auto' || obj.devices.bm3 === 'Auto' || obj.devices.bm4 === 'Auto') {
+            obj.devices['bm0'] = 'Auto';
+        } else {
+            obj.devices['bm0'] = 'off';
+        }
+
+        callback(obj);
+    }
+</script>
+</head>
+<body>
+<div class="m adapter-container">
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s2"><a href="#tab-connection" class="translate">Connection</a></li>
+                <li class="tab col s2"><a href="#tab-devices"    class="translate">Devices</a></li>
+            </ul>
+        </div>
+        <div id="tab-connection" class="col s12 page">
+            <div class="row">
+                <div class="col s12 m4 l2">
+                    <img src="wolf.png" class="logo">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m6 l4" id="_bind">
+                    <select class="value" id="bind"></select>
+                    <label class="translate" for="bind">Adapter IP:</label>
+                </div>
+                <div class="input-field col s12 m2 l1">
+                    <input class="value" id="port" type="number" min="1" max="65565" value="12004"/>
+                    <label class="translate" for="port">Port:</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m4">
+                    <input class="value" id="bool_status" type="checkbox"/>
+                    <span class="translate" for="bool_status">Status as Bool</span>
+                </div>
+                <div class="input-field col s12 m4">
+                    <input class="value" id="bool_bar" type="checkbox"/>
+                    <span class="translate" for="bool_bar">Pressure in bar</span>
+                </div>
+            </div>
+        </div>
+        <div id="tab-devices" class="col s12 page">
+
+
+            <!-----------------------  HEATERS ------------------------->
+            <div class="col s12">
+                <div class="row">
+                    <div class="col s12">
+                        <h5 class="translate" >Heaters</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s2 m1">
+                        <img src="image/heating.png" class="device-img" alt="heating" style="margin-top: 30px;"/>
+                    </div>
+                    <div class="col s10 m6 iob-values">
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">1.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="hg1_t" type="checkbox"/>
+                                    <span class="translate" for="hg1_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="hg1_n" type="text"/>
+                                    <label class="translate" for="hg1_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">2.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="hg2_t" type="checkbox"/>
+                                    <span class="translate" for="hg2_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="hg2_n" type="text"/>
+                                    <label class="translate" for="hg1_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">3.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="hg3_t" type="checkbox"/>
+                                    <span class="translate" for="hg3_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="hg3_n" type="text"/>
+                                    <label class="translate" for="hg3_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">4.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="hg4_t" type="checkbox"/>
+                                    <span class="translate" for="hg4_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="hg4_n" type="text"/>
+                                    <label class="translate" for="hg4_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-----------------------  Operating modules ------------------------->
+            <div class="col s12">
+                <div class="row">
+                    <div class="col s12">
+                        <h5 class="translate">Operating modules</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s2 m1">
+                        <img src="image/bm2.png" class="device-img" alt="heating" style="margin-top: 70px;"/>
+                    </div>
+                    <div class="col s10 m6 iob-values">
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">1.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="bm1_t" type="checkbox"/>
+                                    <span class="translate" for="bm1_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="bm1_n" type="text"/>
+                                    <label class="translate" for="bm1_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">2.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="bm2_t" type="checkbox"/>
+                                    <span class="translate" for="bm2_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="bm2_n" type="text"/>
+                                    <label class="translate" for="bm1_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">3.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="bm3_t" type="checkbox"/>
+                                    <span class="translate" for="bm3_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="bm3_n" type="text"/>
+                                    <label class="translate" for="bm3_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">4.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="bm4_t" type="checkbox"/>
+                                    <span class="translate" for="bm4_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="bm4_n" type="text"/>
+                                    <label class="translate" for="bm4_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-----------------------  Mixing modules ------------------------->
+            <div class="col s12">
+                <div class="row">
+                    <div class="col s12">
+                        <h5 class="translate">Mixing modules</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s2 m1">
+                        <img src="image/uni.png" class="device-img" alt="heating" style="margin-top: 30px;"/>
+                    </div>
+                    <div class="col s10 m6 iob-values">
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">1.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="mm11_t" type="checkbox"/>
+                                    <span class="translate" for="mm11_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="mm11_n" type="text"/>
+                                    <label class="translate" for="mm11_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">2.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="mm12_t" type="checkbox"/>
+                                    <span class="translate" for="mm12_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="mm12_n" type="text"/>
+                                    <label class="translate" for="mm11_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">3.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="mm13_t" type="checkbox"/>
+                                    <span class="translate" for="mm13_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="mm13_n" type="text"/>
+                                    <label class="translate" for="mm13_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-----------------------  Cascade modules ------------------------->
+            <div class="col s12">
+                <div class="row">
+                    <div class="col s12">
+                        <h5 class="translate">Cascade modules</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s2 m1">
+                        <img src="image/uni.png" class="device-img" alt="heating"/>
+                    </div>
+                    <div class="col s10 m6 iob-values" style="margin-top: 30px;">
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">1.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="km1_t" type="checkbox"/>
+                                    <span class="translate" for="km1_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="km1_n" type="text"/>
+                                    <label class="translate" for="km1_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-----------------------  Solar cells ------------------------->
+            <div class="col s12">
+                <div class="row">
+                    <div class="col s12">
+                        <h5 class="translate">Solar cells</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s2 m1">
+                        <img src="image/uni.png" class="device-img" alt="heating"/>
+                    </div>
+                    <div class="col s10 m6 iob-values" style="margin-top: 30px;">
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">1.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="sm1_t" type="checkbox"/>
+                                    <span class="translate" for="sm1_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="sm1_n" type="text"/>
+                                    <label class="translate" for="sm1_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!----------------------- Comfort domestic ventilation system ------------------------->
+            <div class="col s12">
+                <div class="row">
+                    <div class="col s12">
+                        <h5 class="translate">Comfort domestic ventilation system</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s2 m1">
+                        <img src="image/cwl.png" class="device-img" alt="heating"/>
+                    </div>
+                    <div class="col s10 m6 iob-values" style="margin-top: 30px;">
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">1.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="cwl_t" type="checkbox"/>
+                                    <span class="translate" for="cwl_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="cwl_n" type="text"/>
+                                    <label class="translate" for="cwl_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!----------------------- Comfort domestic ventilation system ------------------------->
+            <div class="col s12">
+                <div class="row">
+                    <div class="col s12">
+                        <h5 class="translate">Split air/water heat pump</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s2 m1">
+                        <img src="image/heating.png" class="device-img" alt="heating"/>
+                    </div>
+                    <div class="col s10 m6 iob-values" style="margin-top: 50px;">
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="col s1 number">1.</div>
+                                <div class="input-field col s1 m2 checkbox">
+                                    <input class="auto" id="hg0_t" type="checkbox"/>
+                                    <span class="translate" for="hg0_t">Auto</span>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input class="name" id="hg0_n" type="text"/>
+                                    <label class="translate" for="hg0_n">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

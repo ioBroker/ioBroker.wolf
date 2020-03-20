@@ -92,13 +92,12 @@
         getIPs(function (data) {
             $.each(data, function () {
                 if (this.family === 'ipv4') {
-                    $('#host_ip').append('<option>' + this.address + '</option>')
+                    $('#bind').append('<option>' + this.address + '</option>')
                 }
             });
 
-            $('#ism8_ip').val(settings.ism8_ip);
-            $('#ism8_port').val(settings.ism8_port);
-            $('#host_ip').val(settings.host_ip);
+            $('#port').val(settings.port);
+            $('#bind').val(settings.bind);
 
             $('select').selectmenu({})
         });
@@ -144,8 +143,8 @@
         var obj = {
             devices: {},
             names: {},
-            ism8_port: $('#ism8_port').val(),
-            host_ip: $('#host_ip').val()
+            port: $('#port').val(),
+            bind: $('#bind').val()
         };
 
 
@@ -180,7 +179,7 @@
      class="ui-widget-content">
 
     <div style="position: relative; padding: 5px">
-        <img src="wolf_logo.png" id="logo"/>
+        <img src="wolf.png" id="logo"/>
         <span id="headText" class="translate">Heating</span>
     </div>
     <table style="width: 600px; display: inline-block; text-align: left">
@@ -190,11 +189,11 @@
         <tr>
             <td style="width: 120px" class="translate">Adapter IP:</td>
             <td>
-                <select id="host_ip" style="width: 280px">
+                <select id="bind" style="width: 280px">
                 </select>
             </td>
             <td style="width: 100px;  text-align: right" class="translate">Port:</td>
-            <td><input id="ism8_port" type="number" value="12004" style="width: 100px!important"/></td>
+            <td><input id="port" type="number" value="12004" style="width: 100px!important"/></td>
         </tr>
         <tr>
             <td class="translate">Status as Bool</td>

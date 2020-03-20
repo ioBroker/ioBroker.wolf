@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wolf",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "title": "wolf",
     "titleLang": {
       "en": "WOLF Heating over ISM8i",
@@ -16,6 +16,18 @@
       "zh-cn": "ISM8i上的“狼”加热"
     },
     "news": {
+      "1.2.0": {
+        "en": "Added for all variables \"write\" as Bool value\nAdmin3 compatibility\n",
+        "de": "Für alle Variablen \"write\" als Bool-Wert hinzugefügt\nAdmin3-Kompatibilität\n",
+        "ru": "Добавлено для всех переменных «запись» как значение Bool\nAdmin3 совместимость\n",
+        "pt": "Adicionado para todas as variáveis \"write\" como valor Bool\nCompatibilidade com Admin3\n",
+        "nl": "Toegevoegd voor alle variabelen \"schrijven\" als Bool-waarde\nAdmin3-compatibiliteit\n",
+        "fr": "Ajouté pour toutes les variables \"écrire\" comme valeur booléenne\nCompatibilité Admin3\n",
+        "it": "Aggiunto per tutte le variabili \"write\" come valore Bool\nCompatibilità con Admin3\n",
+        "es": "Se agregó para todas las variables \"escribir\" como valor Bool\nCompatibilidad Admin3\n",
+        "pl": "Dodano dla wszystkich zmiennych „zapis” jako wartość Bool\nKompatybilność z Admin3\n",
+        "zh-cn": "为所有变量“写”添加为布尔值\nAdmin3兼容性\n"
+      },
       "1.1.1": {
         "en": "Fixed error: DPT_Date is wrong\nFixed error: CWL - DPT_TimeOfDay - error",
         "de": "Behobener Fehler: DPT_Date ist falsch\nBehobener Fehler: CWL - DPT_TimeOfDay - Fehler",
@@ -57,8 +69,9 @@
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "loglevel": "info",
-    "icon": "wolf_logo.png",
+    "icon": "wolf.png",
     "compact": true,
+    "materialize": true,
     "messagebox": true,
     "keywords": [
       "Heating",
@@ -66,7 +79,7 @@
       "Wolf"
     ],
     "enabled": false,
-    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.wolf/master/admin/wolf_logo.png",
+    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.wolf/master/admin/wolf.png",
     "readme": "https://github.com/ioBroker/ioBroker.wolf/blob/master/README.md",
     "type": "climate-control",
     "config": {
@@ -76,8 +89,8 @@
     }
   },
   "native": {
-    "ism8_port": "12004",
-    "host_ip": "0.0.0.0",
+    "port": "12004",
+    "bind": "0.0.0.0",
     "devices": {
       "hg0": "Auto",
       "hg1": "Auto",
@@ -95,24 +108,24 @@
       "km1": "Auto",
       "sm1": "Auto",
       "cwl": "Auto"
+    },
+    "names": {
+      "hg0_n": "",
+      "hg1_n": "",
+      "hg2_n": "",
+      "hg3_n": "",
+      "hg4_n": "",
+      "bm0_n": "",
+      "bm1_n": "",
+      "bm2_n": "",
+      "bm3_n": "",
+      "bm4_n": "",
+      "mm1_n": "",
+      "mm2_n": "",
+      "mm3_n": "",
+      "km1_n": "",
+      "sm1_n": "",
+      "cwl_n": ""
     }
-  },
-  "names": {
-    "hg0_n": "",
-    "hg1_n": "",
-    "hg2_n": "",
-    "hg3_n": "",
-    "hg4_n": "",
-    "bm0_n": "",
-    "bm1_n": "",
-    "bm2_n": "",
-    "bm3_n": "",
-    "bm4_n": "",
-    "mm1_n": "",
-    "mm2_n": "",
-    "mm3_n": "",
-    "km1_n": "",
-    "sm1_n": "",
-    "cwl_n": ""
   }
 }

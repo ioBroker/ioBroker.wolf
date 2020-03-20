@@ -44,13 +44,12 @@ function startAdapter(options) {
                 const bufVal = enc[0];
                 if (bufVal !== 'error') {
                     const _buff_set = Buffer.concat([new Buffer('0620F08000' + (20 + bufVal.length).toString(16) + '04000000F0C100' + dp.toString(16) + '000100' + dp.toString(16) + '000' + bufVal.length.toString(16) + '', 'hex'), bufVal], bufVal.length + 20);
-                    adapter.setState(id, enc[1], true); // TODO: here send to  ism8
+                    adapter.setState(id, enc[1], true); // TODO: here send to ism8
 
                     adapter._connections.forEach(sock => sock.write(_buff_set));
                 } else {
                     adapter.log.error('Can\'t encode DP : ' + dp + ' - data: ' + enc[1] + ' - type: ' + datapoints[dp].type);
                 }
-
             }
         }
     });
@@ -632,7 +631,7 @@ function createServer(adapter) {
 
     adapter._server.on('error', err => adapter.log.error('Cannot start server: ' + err.toString()));
 
-    adapter._server.listen(adapter.config.ism8_port, adapter.config.host_ip);
+    adapter._server.listen(adapter.config.port, adapter.config.bind);
 }
 
 

@@ -94,9 +94,9 @@ Decoder.prototype.decodeDPT10 = function (buffer) {
     value.setMinutes(min);
     value.setSeconds(sec);
     const currentDay = value.getDay();
-    if (weekDay == 0) {
+    if (weekDay === 0) {
         // no change
-    } else if (currentDay == weekDay) {
+    } else if (currentDay === weekDay) {
         // weekday fits
         if (value < Date.now()) {
             // same weekday but earlier time => date must be one week later

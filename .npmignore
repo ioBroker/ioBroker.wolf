@@ -1,4 +1,10 @@
-Gruntfile.js
+gulpfile.js
+.github
+.vs
+.gitignire
+.npmignore
+iob_npm.done
+package-lock.json
 tasks
 node_modules
 .idea
