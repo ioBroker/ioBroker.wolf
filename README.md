@@ -13,7 +13,7 @@ Lese auf [deutsch](docs/de/README.md).
 
 ## Changelog
 ### 1.2.0 [2020.03.20]
-* (schweigel) Added for all variables "write" as Bool value
+* (LHBL2003) Added for all variables "write" as Bool value
 * (bluefox) Admin3 compatibility
 
 ### 1.1.1 [2019.12.02]
