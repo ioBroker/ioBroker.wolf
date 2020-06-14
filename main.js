@@ -311,9 +311,17 @@ function encode(data, dp) {
     if (type === 'DPT_Switch') {
 
         if (['On', 'on', 'Enable', '1', 'true', 1, true].indexOf(data) > -1) {
-            return [new Buffer('01', 'hex'), 'On'];
+            if (adapter.config.bool_status) {
+                return [new Buffer('01', 'hex'), 'true'];
+            } else {
+                return [new Buffer('01', 'hex'), 'On'];
+            }
         } else {
-            return [new Buffer('00', 'hex'), '0ff'];
+            if (adapter.config.bool_status) {
+                return [new Buffer('00', 'hex'), 'false'];
+            } else {
+                return [new Buffer('00', 'hex'), '0ff'];
+            }
         }
     } else if (type === 'DPT_Scaling') {
         val = Math.round(data * 2) / 2;
