@@ -1397,7 +1397,7 @@
     "rw": "r",
     "read": true,
     "write": false,
-    "einheit": "Heizgerät(1)"
+    "einheit": ""
   },
   "176": {
     "name": "Störung",
