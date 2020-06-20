@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wolf",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "title": "wolf",
     "titleLang": {
       "en": "WOLF Heating over ISM8i",
@@ -16,6 +16,18 @@
       "zh-cn": "ISM8i上的“狼”加热"
     },
     "news": {
+      "1.2.1": {
+        "en": "Corrected error: DPT_Switch in boolean mode didn't work correct",
+        "de": "Behobener Fehler: DPT_Switch im Booleschen Modus funktionierte nicht richtig",
+        "ru": "Исправленная ошибка: DPT_Switch в логическом режиме не работает правильно",
+        "pt": "Erro corrigido: DPT_Switch no modo booleano não funcionou corretamente",
+        "nl": "Gecorrigeerde fout: DPT_Switch in booleaanse modus werkte niet correct",
+        "fr": "Erreur corrigée: DPT_Switch en mode booléen ne fonctionnait pas correctement",
+        "it": "Errore corretto: DPT_Switch in modalità booleana non funzionava correttamente",
+        "es": "Error corregido: DPT_Switch en modo booleano no funcionó correctamente",
+        "pl": "Poprawiony błąd: DPT_Switch w trybie logicznym nie działał poprawnie",
+        "zh-cn": "已更正错误：布尔模式下的DPT_Switch无法正常工作"
+      },
       "1.2.0": {
         "en": "Added for all variables \"write\" as Bool value\nAdmin3 compatibility\n",
         "de": "Für alle Variablen \"write\" als Bool-Wert hinzugefügt\nAdmin3-Kompatibilität\n",
@@ -91,6 +103,8 @@
   "native": {
     "port": "12004",
     "bind": "0.0.0.0",
+    "bool_status": false,
+    "bool_bar": false,
     "devices": {
       "hg0": "Auto",
       "hg1": "Auto",

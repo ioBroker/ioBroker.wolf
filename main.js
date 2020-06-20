@@ -1,19 +1,19 @@
 'use strict';
 
-const net = require('net');
-const utils = require('@iobroker/adapter-core');
+const net         = require('net');
+const utils       = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 
-const dec = new (require('./js/decoder.js'))();
-const enc = new (require('./js/encoder.js'))();
-const datapoints = require('./js/datapoints.json');
+const dec         = new (require('./js/decoder.js'))();
+const enc         = new (require('./js/encoder.js'))();
+const datapoints  = require('./js/datapoints.json');
 
-let names = '';
+let names      = '';
 const ack_data = {
     old_devices: {},
     new_devices: []
 };
-const ignore = {};
+const ignore   = {};
 let adapter;
 
 function startAdapter(options) {
@@ -56,7 +56,9 @@ function startAdapter(options) {
 
     return adapter;
 }
+
 function getDevice(dp) {
+    dp = parseInt(dp, 10);
     if ((dp >= 1 && dp <= 13) || (dp >= 197 && dp <= 199)) {
         return 'hg1';
     } else if ((dp >= 14 && dp <= 26) || (dp >= 200 && dp <= 202)) {
@@ -87,7 +89,7 @@ function getDevice(dp) {
         return 'cwl';
     } else if (dp >= 176 && dp <= 191) {
         return 'hg0';
-    } else if (dp == 194) {
+    } else if (dp === 194) {
         return 'bm0';
     } else {
         return null;
@@ -309,7 +311,6 @@ function encode(data, dp) {
     //"DPT_Scaling"
 
     if (type === 'DPT_Switch') {
-
         if (['On', 'on', 'Enable', '1', 'true', 1, true].indexOf(data) > -1) {
             if (adapter.config.bool_status) {
                 return [new Buffer('01', 'hex'), 'true'];
@@ -632,7 +633,7 @@ function createServer(adapter) {
         sock.on('end', () => {
             const pos = adapter._connections.indexOf(sock);
             pos !== -1 && adapter._connections.splice(pos);
-        })
+        });
 
         sock.write(buffGetAll);
     });
@@ -669,8 +670,8 @@ function createServer(adapter) {
 //}
 //test()
 
-//todo DPT_HVACContrMode 0620f080001504000000f00600020001000203010b
-//todo DPT_HVACContrMode 0620f080001504000000f006000200010002030101
+// todo DPT_HVACContrMode 0620f080001504000000f00600020001000203010b
+// todo DPT_HVACContrMode 0620f080001504000000f006000200010002030101
 
 // If started as allInOne mode => return function to create instance
 if (module.parent) {

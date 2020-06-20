@@ -12,6 +12,9 @@ Read in [english](docs/en/README.md).
 Lese auf [deutsch](docs/de/README.md).
 
 ## Changelog
+### 1.2.1 [2020.06.20]
+* (schweigel) Corrected error: DPT_Switch in boolean mode didn't work correct
+
 ### 1.2.0 [2020.03.20]
 * (LHBL2003) Added for all variables "write" as Bool value
 * (bluefox) Admin3 compatibility
