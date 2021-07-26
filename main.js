@@ -34,7 +34,7 @@ function startAdapter(options) {
     });
 
     adapter.on('stateChange', (id, state) => {
-        if (state && !state.ack && id) {
+        if (state && !state.from.startsWith("system.adapter.wolf") && id) {
             const dp = parseInt(id.split('.').pop());
             if (datapoints[dp].rw === 'r') {
                 adapter.setState(id, ack_data[dp].value, true);
