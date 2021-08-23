@@ -467,21 +467,41 @@ function addDevice(dp, callback) {
                 }
                 ack_data[range.lsb] = {id: adapter.namespace + '.' + dev + '.' + range.lsb};
                 //console.log('add:' + dev + '.' + range.lsb  );
-                adapter.setObject(dev + '.' + range.lsb, {
-                    type: 'state',
-                    common: {
-                        name: data.name,
-                        role: data.type.replace('DPT_', ''),
-                        type: 'state',
-                        read: data.read,
-                        write: data.write,
-                        unit: data.einheit,
-                        enabled: false
-                    },
-                    native: {
-                        rw: data.rw
-                    }
-                });
+                if(data.commonType === 'number') {
+                	adapter.setObject(dev + '.' + range.lsb, {
+	                    type: 'state',
+	                    common: {
+	                        name: data.name,
+	                        role: data.type.replace('DPT_', ''),
+	                        type: data.commonType,
+	                        read: data.read,
+	                        write: data.write,
+	                        unit: data.einheit,
+	                        min: data.min,
+	                        max: data.max,
+	                        enabled: false
+	                    },
+	                    native: {
+	                        rw: data.rw
+	                    }
+	                });
+                } else {
+	                adapter.setObject(dev + '.' + range.lsb, {
+	                    type: 'state',
+	                    common: {
+	                        name: data.name,
+	                        role: data.type.replace('DPT_', ''),
+	                        type: data.commonType,
+	                        read: data.read,
+	                        write: data.write,
+	                        unit: data.einheit,
+	                        enabled: false
+	                    },
+	                    native: {
+	                        rw: data.rw
+	                    }
+	                });
+                }
             }
         }
 
@@ -496,21 +516,41 @@ function addDevice(dp, callback) {
                     }
                     ack_data[range.lsb2] = {id: adapter.namespace + '.' + dev + '.' + range.lsb2};
                     //console.log('add:' + dev + '.' + range.lsb2  );
-                    adapter.setObject(dev + '.' + range.lsb2, {
-                        type: 'state',
-                        common: {
-                            name: data.name,
-                            role: data.type.replace('DPT_', ''),
-                            type: 'state',
-                            read: data.read,
-                            write: data.write,
-                            unit: data.einheit,
-                            enabled: false,
-                        },
-                        native: {
-                            rw: data.rw
-                        }
-                    });
+                    if(data.commonType === 'number') {
+	                	adapter.setObject(dev + '.' + range.lsb2, {
+		                    type: 'state',
+		                    common: {
+		                        name: data.name,
+		                        role: data.type.replace('DPT_', ''),
+		                        type: data.commonType,
+		                        read: data.read,
+		                        write: data.write,
+		                        unit: data.einheit,
+		                        min: data.min,
+		                        max: data.max,
+		                        enabled: false
+		                    },
+		                    native: {
+		                        rw: data.rw
+		                    }
+		                });
+	                } else {
+	                    adapter.setObject(dev + '.' + range.lsb2, {
+	                        type: 'state',
+	                        common: {
+	                            name: data.name,
+	                            role: data.type.replace('DPT_', ''),
+	                            type: data.commonType,
+	                            read: data.read,
+	                            write: data.write,
+	                            unit: data.einheit,
+	                            enabled: false,
+	                        },
+	                        native: {
+	                            rw: data.rw
+	                        }
+	                    });
+	                }
                 }
             }
 

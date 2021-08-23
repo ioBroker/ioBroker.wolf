@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wolf",
-    "version": "1.2.1",
+    "version": "1.3.1",
     "title": "wolf",
     "titleLang": {
       "en": "WOLF Heating over ISM8i",
@@ -16,6 +16,18 @@
       "zh-cn": "ISM8i上的“狼”加热"
     },
     "news": {
+      "1.3.1": {
+        "en": "Changes for js-controller 3.3",
+	    "de": "Änderungen für js-Controller 3.3",
+	    "ru": "Изменения для js-controller 3.3",
+	    "pt": "Mudanças para js-controller 3.3",
+	    "nl": "Wijzigingen voor js-controller 3.3",
+	    "fr": "Changements pour js-controller 3.3",
+	    "it": "Modifiche per js-controller 3.3",
+	    "es": "Cambios para js-controller 3.3",
+	    "pl": "Zmiany dla kontrolera js 3.3",
+	    "zh-cn": "js-controller 3.3 的变化"
+      },
       "1.2.1": {
         "en": "Corrected error: DPT_Switch in boolean mode didn't work correct",
         "de": "Behobener Fehler: DPT_Switch im Booleschen Modus funktionierte nicht richtig",
