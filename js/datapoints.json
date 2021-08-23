@@ -259,7 +259,7 @@
     "einheit": "Pa",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 1000000
   },
   "27": {
     "name": "Störung",
@@ -390,7 +390,7 @@
     "einheit": "Pa",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 1000000
   },
   "40": {
     "name": "Störung",
@@ -521,7 +521,7 @@
     "einheit": "Pa",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 1000000
   },
   "53": {
     "name": "Störung",
@@ -1871,7 +1871,7 @@
     "einheit": "Pa",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 1000000
   },
   "191": {
     "name": "Leistungsaufnahme",
