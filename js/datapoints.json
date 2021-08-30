@@ -26,7 +26,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 100
+    "max": 1000
   },
   "4": {
     "name": "Kesseltemperatur",
@@ -157,7 +157,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 100
+    "max": 1000
   },
   "17": {
     "name": "Kesseltemperatur",
@@ -288,7 +288,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 100
+    "max": 1000
   },
   "30": {
     "name": "Kesseltemperatur",
@@ -419,7 +419,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 100
+    "max": 1000
   },
   "43": {
     "name": "Kesseltemperatur",
@@ -1604,7 +1604,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 100
+    "max": 1000
   },
   "164": {
     "name": "Ablufttemperatur",
@@ -1953,7 +1953,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 100
+    "max": 1000
   },
   "199": {
     "name": "Kesselsolltemperaturvorgabe",
@@ -1986,7 +1986,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 100
+    "max": 1000
   },
   "202": {
     "name": "Kesselsolltemperaturvorgabe",
@@ -2019,7 +2019,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 100
+    "max": 1000
   },
   "205": {
     "name": "Kesselsolltemperaturvorgabe",
@@ -2052,7 +2052,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 100
+    "max": 1000
   },
   "208": {
     "name": "Kesselsolltemperaturvorgabe",
@@ -2074,7 +2074,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 100
+    "max": 1000
   },
   "210": {
     "name": "Sammlersolltemperaturvorgabe",
