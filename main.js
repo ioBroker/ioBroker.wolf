@@ -43,7 +43,7 @@ function startAdapter(options) {
                 const enc = encode(state.val, dp);
                 const bufVal = enc[0];
                 if (bufVal !== 'error') {
-                    const _buff_set = Buffer.concat([new Buffer('0620F08000' + (20 + bufVal.length).toString(16) + '04000000F0C100' + dp.toString(16) + '000100' + dp.toString(16) + '000' + bufVal.length.toString(16) + '', 'hex'), bufVal], bufVal.length + 20);
+                    const _buff_set = Buffer.concat([Buffer.from('0620F08000' + (20 + bufVal.length).toString(16) + '04000000F0C100' + dp.toString(16) + '000100' + dp.toString(16) + '000' + bufVal.length.toString(16) + '', 'hex'), bufVal], bufVal.length + 20);
                     adapter.setState(id, enc[1], true); // TODO: here send to ism8
 
                     adapter._connections.forEach(sock => sock.write(_buff_set));
@@ -313,15 +313,15 @@ function encode(data, dp) {
     if (type === 'DPT_Switch') {
         if (['On', 'on', 'Enable', '1', 'true', 1, true].indexOf(data) > -1) {
             if (adapter.config.bool_status) {
-                return [new Buffer('01', 'hex'), 'true'];
+                return [Buffer.from('01', 'hex'), 'true'];
             } else {
-                return [new Buffer('01', 'hex'), 'On'];
+                return [Buffer.from('01', 'hex'), 'On'];
             }
         } else {
             if (adapter.config.bool_status) {
-                return [new Buffer('00', 'hex'), 'false'];
+                return [Buffer.from('00', 'hex'), 'false'];
             } else {
-                return [new Buffer('00', 'hex'), '0ff'];
+                return [Buffer.from('00', 'hex'), '0ff'];
             }
         }
     } else if (type === 'DPT_Scaling') {
@@ -353,23 +353,23 @@ function encode(data, dp) {
         return [enc.encodeDPT9(data), val];
     } else if (name === 'Programmwahl Warmwasser') {
         if (data == 0 || data === 'Standby') {
-            return [new Buffer('04', 'hex'), 'Standby'];
+            return [Buffer.from('04', 'hex'), 'Standby'];
         }
         else if (data == 2 || data === 'Dauerbetrieb') {
-            return [new Buffer('02', 'hex'), 'Dauerbetrieb'];
+            return [Buffer.from('02', 'hex'), 'Dauerbetrieb'];
         } else {
-            return [new Buffer('00', 'hex'), 'Automatikbetrieb'];
+            return [Buffer.from('00', 'hex'), 'Automatikbetrieb'];
         }
     } else if (name === 'Programmwahl Mischer' || name === 'Programmwahl Heizkreis') {
         if (data == 0 || data === 'Standby') {
-            return [new Buffer('02', 'hex'), 'Standby'];
+            return [Buffer.from('02', 'hex'), 'Standby'];
         }
         else if (data == 1 || data === 'Automatikbetrieb') {
-            return [new Buffer('00', 'hex'), 'Automatikbetrieb'];
+            return [Buffer.from('00', 'hex'), 'Automatikbetrieb'];
         } else if (data == 2 || data === 'Heizbetrieb') {
-            return [new Buffer('01', 'hex'), 'Heizbetrieb'];
+            return [Buffer.from('01', 'hex'), 'Heizbetrieb'];
         } else {
-            return [new Buffer('03', 'hex'), 'Sparbetrieb'];
+            return [Buffer.from('03', 'hex'), 'Sparbetrieb'];
         }
     }
     if (name === 'Warmwassersolltemperatur') {
@@ -412,11 +412,15 @@ function bufferIndexOf(buf, search, offset) {
                 s = i;
             }
             ++m;
-            if (m === search.length) break;
+            if (m === search.length) {
+                break;
+            }
         }
     }
 
-    if (s > -1 && buf.length - s < search.length) return -1;
+    if (s > -1 && buf.length - s < search.length) {
+        return -1;
+    }
     return s;
 }
 
@@ -467,18 +471,18 @@ function addDevice(dp, callback) {
                 }
                 ack_data[range.lsb] = {id: adapter.namespace + '.' + dev + '.' + range.lsb};
                 //console.log('add:' + dev + '.' + range.lsb  );
-                if(data.commonType === 'number') {
+                if (data.commonType === 'number') {
                 	adapter.setObject(dev + '.' + range.lsb, {
 	                    type: 'state',
 	                    common: {
-	                        name: data.name,
-	                        role: data.type.replace('DPT_', ''),
-	                        type: data.commonType,
-	                        read: data.read,
-	                        write: data.write,
-	                        unit: data.einheit,
-	                        min: data.min,
-	                        max: data.max,
+	                        name:    data.name,
+	                        role:    data.type.replace('DPT_', ''),
+	                        type:    data.commonType,
+	                        read:    data.read,
+	                        write:   data.write,
+	                        unit:    data.einheit,
+	                        min:     data.min,
+	                        max:     data.max,
 	                        enabled: false
 	                    },
 	                    native: {
@@ -489,12 +493,12 @@ function addDevice(dp, callback) {
 	                adapter.setObject(dev + '.' + range.lsb, {
 	                    type: 'state',
 	                    common: {
-	                        name: data.name,
-	                        role: data.type.replace('DPT_', ''),
-	                        type: data.commonType,
-	                        read: data.read,
-	                        write: data.write,
-	                        unit: data.einheit,
+	                        name:    data.name,
+	                        role:    data.type.replace('DPT_', ''),
+	                        type:    data.commonType,
+	                        read:    data.read,
+	                        write:   data.write,
+	                        unit:    data.einheit,
 	                        enabled: false
 	                    },
 	                    native: {
@@ -506,28 +510,26 @@ function addDevice(dp, callback) {
         }
 
         if (range.lsb2 != null && range.msb2 != null) {
-
             for (range.lsb2; range.lsb2 <= range.msb2; range.lsb2++) {
-
                 if (!ack_data[range.lsb2]) {
                     const data = datapoints[range.lsb2];
-                    if(data.einheit === 'Pa' && adapter.config.bool_bar){
+                    if (data.einheit === 'Pa' && adapter.config.bool_bar) {
                         data.einheit = 'bar'
                     }
                     ack_data[range.lsb2] = {id: adapter.namespace + '.' + dev + '.' + range.lsb2};
                     //console.log('add:' + dev + '.' + range.lsb2  );
-                    if(data.commonType === 'number') {
+                    if (data.commonType === 'number') {
 	                	adapter.setObject(dev + '.' + range.lsb2, {
 		                    type: 'state',
 		                    common: {
-		                        name: data.name,
-		                        role: data.type.replace('DPT_', ''),
-		                        type: data.commonType,
-		                        read: data.read,
-		                        write: data.write,
-		                        unit: data.einheit,
-		                        min: data.min,
-		                        max: data.max,
+		                        name:    data.name,
+		                        role:    data.type.replace('DPT_', ''),
+		                        type:    data.commonType,
+		                        read:    data.read,
+		                        write:   data.write,
+		                        unit:    data.einheit,
+		                        min:     data.min,
+		                        max:     data.max,
 		                        enabled: false
 		                    },
 		                    native: {
@@ -538,12 +540,12 @@ function addDevice(dp, callback) {
 	                    adapter.setObject(dev + '.' + range.lsb2, {
 	                        type: 'state',
 	                        common: {
-	                            name: data.name,
-	                            role: data.type.replace('DPT_', ''),
-	                            type: data.commonType,
-	                            read: data.read,
-	                            write: data.write,
-	                            unit: data.einheit,
+	                            name:    data.name,
+	                            role:    data.type.replace('DPT_', ''),
+	                            type:    data.commonType,
+	                            read:    data.read,
+	                            write:   data.write,
+	                            unit:    data.einheit,
 	                            enabled: false,
 	                        },
 	                        native: {
@@ -553,8 +555,8 @@ function addDevice(dp, callback) {
 	                }
                 }
             }
-
         }
+
         callback && callback();
     }
 }
@@ -596,29 +598,28 @@ function setState(adapter, dp, val, data, device) {
         ack_data[dp]['value'] = val;
     } catch (err) {
         val = '';
-        adapter.log.error('Can\'t parse DP : ' + dp + ' - data: ' + data.toString('hex') + ' - length: ' + data.length);
-        adapter.log.debug('incoming' +
-            '\n Device: ' + device +
-            '\n Datapoint: ' + dp +
-            '\n Datapoint_name: ' + datapoints[dp].name +
-            '\n Datapoint_type: ' + datapoints[dp].type +
-            '\n Data: ' + data.toString('hex') +
-            '\n Lengh: ' + data.length +
-            '\n Value: ' + val +
-            ''
+        adapter.log.error(`Can't parse DP : ${dp} - data: ${data.toString('hex')} - length: ${data.length}`);
+        adapter.log.debug(`incoming
+Device: ${device}
+Datapoint: ${dp}
+Datapoint_name: ${datapoints[dp].name}
+Datapoint_type: ${datapoints[dp].type}
+Data: ${data.toString('hex')}
+Length: ${data.length}
+Value: ${val}`
         );
     }
 }
 
 function createServer(adapter) {
-    const buffReq    = new Buffer('0620F080001104000000F086006E000000', 'hex');
-    const buffGetAll = new Buffer('0620F080001604000000F0D0', 'hex');
-    const splitter   = new Buffer('0620F080', 'hex');
+    const buffReq    = Buffer.from('0620F080001104000000F086006E000000', 'hex');
+    const buffGetAll = Buffer.from('0620F080001604000000F0D0', 'hex');
+    const splitter   = Buffer.from('0620F080', 'hex');
 
     adapter._server = net.createServer(sock => {
         !adapter._connections.includes(sock) && adapter._connections.push(sock);
 
-        //const buff_set = new Buffer('0620F080001404000000F0C10039000100390001', 'hex');
+        //const buff_set = Buffer.from('0620F080001404000000F0C10039000100390001', 'hex');
         //0620F080001504000000F006006E0001006E030101
         let val;
         let dp;
@@ -685,7 +686,7 @@ function createServer(adapter) {
 
 
 //function test(_data) {
-//    const _data = new Buffer('0620f080001504000000f00600020001000203010b', 'hex');
+//    const _data = Buffer.from('0620f080001504000000f00600020001000203010b', 'hex');
 //    const val;
 //    const dp = _data.readUInt16BE(12);
 //    const device = getDevice(dp);

@@ -82,7 +82,6 @@ Decoder.prototype.decodeDPT9 = function (buffer) {
  * decode eis 3 / dpt 10 values
  */
 Decoder.prototype.decodeDPT10 = function (buffer) {
-
     const value = new Date();
 
     const weekDay = (buffer[0] & 0xe0) >> 5;
@@ -166,7 +165,6 @@ Decoder.prototype.decodeDPT16 = function (buffer) {
  * decode value
  */
 Decoder.prototype.decode = function (len, data, callback) {
-
     let err = null;
     let type = 'DPT1';
     let value = null;

@@ -89,6 +89,8 @@
     "authors": [
       "smiling_Jack <smiling_Jack@iobroker.net>"
     ],
+    "connectionType": "local",
+    "dataSource": "push",
     "license": "MIT",
     "platform": "Javascript/Node.js",
     "mode": "daemon",
@@ -105,12 +107,7 @@
     "enabled": false,
     "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.wolf/master/admin/wolf.png",
     "readme": "https://github.com/ioBroker/ioBroker.wolf/blob/master/README.md",
-    "type": "climate-control",
-    "config": {
-      "minWidth": 650,
-      "minHeight": 800,
-      "width ": 800
-    }
+    "type": "climate-control"
   },
   "native": {
     "port": "12004",
