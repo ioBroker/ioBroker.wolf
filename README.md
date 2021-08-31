@@ -12,6 +12,10 @@ Read in [english](docs/en/README.md).
 Lese auf [deutsch](docs/de/README.md).
 
 ## Changelog
+### 1.3.1 [2021.08.23]
+* (eifel-tech) Corrected error: DP 149 with correct Type (Issue #30)
+* (eifel-tech) Changes for js-controller 3.3
+
 ### 1.2.1 [2020.06.20]
 * (schweigel) Corrected error: DPT_Switch in boolean mode didn't work correct
 
