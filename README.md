@@ -17,7 +17,7 @@ Lese auf [deutsch](docs/de/README.md).
 -->
 
 ## Changelog
-### __WORK IN PROGRESS__
+### 1.3.2 (2021-08-31)
 * (eifel-tech/tobias) Corrected error: DP 149 with correct Type (Issue #30)
 * (eifel-tech/tobias) Changes for js-controller 3.3
 
