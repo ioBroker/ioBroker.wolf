@@ -60,35 +60,35 @@ function startAdapter(options) {
 function getDevice(dp) {
     dp = parseInt(dp, 10);
     if ((dp >= 1 && dp <= 13) || (dp >= 197 && dp <= 199)) {
-        return 'hg1';
+        return 'hg1_t';
     } else if ((dp >= 14 && dp <= 26) || (dp >= 200 && dp <= 202)) {
-        return 'hg2';
+        return 'hg2_t';
     } else if ((dp >= 27 && dp <= 39) || (dp >= 203 && dp <= 205)) {
-        return 'hg3';
+        return 'hg3_t';
     } else if ((dp >= 40 && dp <= 52) || (dp >= 206 && dp <= 208)) {
-        return 'hg4';
+        return 'hg4_t';
     } else if (dp >= 53 && dp <= 66) {
-        return 'bm1';
+        return 'bm1_t';
     } else if (dp >= 67 && dp <= 79) {
-        return 'bm2';
+        return 'bm2_t';
     } else if (dp >= 80 && dp <= 92) {
-        return 'bm3';
+        return 'bm3_t';
     } else if (dp >= 93 && dp <= 105) {
         return 'bm4';
     } else if ((dp >= 106 && dp <= 113) || (dp >= 209 && dp <= 210)) {
-        return 'km1';
+        return 'km1_t';
     } else if (dp >= 114 && dp <= 120) {
-        return 'mm1';
+        return 'mm11_t';
     } else if (dp >= 121 && dp <= 127) {
-        return 'mm2';
+        return 'mm12_t';
     } else if (dp >= 128 && dp <= 134) {
-        return 'mm3';
+        return 'mm13_t';
     } else if ((dp >= 135 && dp <= 147) || (dp >= 195 && dp <= 196)) {
-        return 'sm1';
+        return 'sm1_t';
     } else if ((dp >= 148 && dp <= 175) || (dp >= 192 && dp <= 193)) {
-        return 'cwl';
+        return 'cwl_t';
     } else if (dp >= 176 && dp <= 191) {
-        return 'hg0';
+        return 'hg0_t';
     } else if (dp === 194) {
         return 'bm0';
     } else {
@@ -97,42 +97,41 @@ function getDevice(dp) {
 }
 
 function getDeviceRage(id) {
-    if (id === 'hg1') {
+    if (id === 'hg1_t') {
         return {'lsb': 1, 'msb': 13, 'lsb2': 197, 'msb2': 199};
-    } else if (id === 'hg2') {
+    } else if (id === 'hg2_t') {
         return {'lsb': 14, 'msb': 26, 'lsb2': 200, 'msb2': 202};
-    } else if (id === 'hg3') {
+    } else if (id === 'hg3_t') {
         return {'lsb': 27, 'msb': 39, 'lsb2': 203, 'msb2': 205};
-    } else if (id === 'hg4') {
+    } else if (id === 'hg4_t') {
         return {'lsb': 40, 'msb': 52, 'lsb2': 206, 'msb2': 208};
-    } else if (id === 'bm1') {
+    } else if (id === 'bm1_t') {
         return {'lsb': 53, 'msb': 66};
-    } else if (id === 'bm2') {
+    } else if (id === 'bm2_t') {
         return {'lsb': 67, 'msb': 79};
-    } else if (id === 'bm3') {
+    } else if (id === 'bm3_t') {
         return {'lsb': 80, 'msb': 92};
     } else if (id === 'bm4') {
         return {'lsb': 93, 'msb': 105};
-    } else if (id === 'km1') {
+    } else if (id === 'km1_t') {
         return {'lsb': 106, 'msb': 113, 'lsb2': 209, 'msb2': 210};
-    } else if (id === 'mm1') {
+    } else if (id === 'mm11_t') {
         return {'lsb': 114, 'msb': 120};
-    } else if (id === 'mm2') {
+    } else if (id === 'mm12_t') {
         return {'lsb': 121, 'msb': 127};
-    } else if (id === 'mm3') {
+    } else if (id === 'mm13_t') {
         return {'lsb': 128, 'msb': 134};
-    } else if (id === 'sm1') {
+    } else if (id === 'sm1_t') {
         return {'lsb': 135, 'msb': 147, 'lsb2': 195, 'msb2': 196};
-    } else if (id === 'cwl') {
+    } else if (id === 'cwl_t') {
         return {'lsb': 148, 'msb': 175, 'lsb2': 192, 'msb2': 193};
-    } else if (id === 'hg0') {
+    } else if (id === 'hg0_t') {
         return {'lsb': 176, 'msb': 191};
     } else if (id === 'bm0') {
         return {'lsb': 194, 'msb': 194};
     } else {
         return false;
     }
-
 }
 
 function decode(type, data, dp) {
