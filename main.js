@@ -223,16 +223,6 @@ function decode(type, data, dp) {
             } else {
                 throw '';
             }
-        } else if (datapoints[dp].name === 'Programmwahl CWL') {
-            if (_data === 0) {
-                return 'Automatikbetrieb';
-            } else if (_data === 1) {
-                return 'Nennlüftung';
-            } else if (_data === 3) {
-                return 'Reduzierte Lüftung';
-            } else {
-                throw '';
-            }
         } else {
             throw '';
         }
@@ -250,6 +240,16 @@ function decode(type, data, dp) {
                 return 'Heizbetrieb';
             } else if (_data === 3) {
                 return 'Sparbetrieb';
+            } else {
+                throw '';
+            }
+        }  else if (datapoints[dp].name === 'Programm') {
+            if (_data === 0) {
+                return 'Automatikbetrieb';
+            } else if (_data === 1) {
+                return 'Nennlüftung';
+            } else if (_data === 3) {
+                return 'Reduzierte Lüftung';
             } else {
                 throw '';
             }
