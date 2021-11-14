@@ -17,6 +17,9 @@ Lese auf [deutsch](docs/de/README.md).
 -->
 
 ## Changelog
+### 1.3.3 (2021-11-12)
+* (eifel-tech) Min value of outside temperature corrected
+
 ### 1.3.2 (2021-08-31)
 * (eifel-tech/tobias) Corrected error: DP 149 with correct Type (Issue #30)
 * (eifel-tech/tobias) Changes for js-controller 3.3
