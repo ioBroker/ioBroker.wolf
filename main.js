@@ -74,7 +74,7 @@ function getDevice(dp) {
     } else if (dp >= 80 && dp <= 92) {
         return 'bm3_t';
     } else if (dp >= 93 && dp <= 105) {
-        return 'bm4';
+        return 'bm4_t';
     } else if ((dp >= 106 && dp <= 113) || (dp >= 209 && dp <= 210)) {
         return 'km1_t';
     } else if (dp >= 114 && dp <= 120) {
