@@ -111,7 +111,7 @@ function getDeviceRage(id) {
         return {'lsb': 67, 'msb': 79};
     } else if (id === 'bm3_t') {
         return {'lsb': 80, 'msb': 92};
-    } else if (id === 'bm4') {
+    } else if (id === 'bm4_t') {
         return {'lsb': 93, 'msb': 105};
     } else if (id === 'km1_t') {
         return {'lsb': 106, 'msb': 113, 'lsb2': 209, 'msb2': 210};
