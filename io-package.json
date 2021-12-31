@@ -1,166 +1,185 @@
 {
-    "common": {
-        "name": "wolf",
-        "version": "1.3.2",
-        "title": "wolf",
-        "titleLang": {
-            "en": "WOLF Heating over ISM8i",
-            "de": "WOLF heizt über ISM8i",
-            "ru": "WOLF отопление через ISM8i",
-            "pt": "Aquecimento WOLF sobre o ISM8i",
-            "nl": "WOLF verwarming via ISM8i",
-            "fr": "WOLF chauffage sur ISM8i",
-            "it": "Riscaldamento WOLF su ISM8i",
-            "es": "Calentamiento WOLF sobre ISM8i",
-            "pl": "WOLF Ogrzewanie nad ISM8i",
-            "zh-cn": "ISM8i上的“狼”加热"
-        },
-        "news": {
-            "1.3.2": {
-                "en": "(eifel-tech/tobias) Corrected error: DP 149 with correct Type (Issue #30)\n(eifel-tech/tobias) Changes for js-controller 3.3",
-                "de": "(eifel-tech/tobias) Behobener Fehler: DP 149 mit korrektem Typ (Ausgabe #30)\n(eifel-tech/tobias) Änderungen für js-controller 3.3",
-                "ru": "(eifel-tech / tobias) Исправленная ошибка: DP 149 с правильным типом (Проблема № 30)\n(eifel-tech / tobias) Изменения для js-controller 3.3",
-                "pt": "(eifel-tech / tobias) Erro corrigido: DP 149 com tipo correto (Problema # 30)\n(eifel-tech / tobias) Alterações para js-controlador 3.3",
-                "nl": "(eifel-tech/tobias) Gecorrigeerde fout: DP 149 met het juiste type (probleem #30)\n(eifel-tech/tobias) Wijzigingen voor js-controller 3.3",
-                "fr": "(eifel-tech/tobias) Erreur corrigée : DP 149 avec le type correct (problème n° 30)\n(eifel-tech/tobias) Changements pour js-controller 3.3",
-                "it": "(eifel-tech/tobias) Errore corretto: DP 149 con tipo corretto (edizione #30)\n(eifel-tech/tobias) Modifiche per js-controller 3.3",
-                "es": "(eifel-tech / tobias) Error corregido: DP 149 con el tipo correcto (Problema # 30)\n(eifel-tech / tobias) Cambios para js-controller 3.3",
-                "pl": "(eifel-tech/tobias) Poprawiony błąd: DP 149 z poprawnym typem (problem #30)\n(eifel-tech/tobias) Zmiany dla kontrolera js 3.3",
-                "zh-cn": "(eifel-tech/tobias) 更正错误：DP 149 类型正确（问题 #30）\n(eifel-tech/tobias) js-controller 3.3 的变化"
-            },
-            "1.3.1": {
-                "en": "Changes for js-controller 3.3",
-                "de": "Änderungen für js-Controller 3.3",
-                "ru": "Изменения для js-controller 3.3",
-                "pt": "Mudanças para js-controller 3.3",
-                "nl": "Wijzigingen voor js-controller 3.3",
-                "fr": "Changements pour js-controller 3.3",
-                "it": "Modifiche per js-controller 3.3",
-                "es": "Cambios para js-controller 3.3",
-                "pl": "Zmiany dla kontrolera js 3.3",
-                "zh-cn": "js-controller 3.3 的变化"
-            },
-            "1.2.1": {
-                "en": "Corrected error: DPT_Switch in boolean mode didn't work correct",
-                "de": "Behobener Fehler: DPT_Switch im Booleschen Modus funktionierte nicht richtig",
-                "ru": "Исправленная ошибка: DPT_Switch в логическом режиме не работает правильно",
-                "pt": "Erro corrigido: DPT_Switch no modo booleano não funcionou corretamente",
-                "nl": "Gecorrigeerde fout: DPT_Switch in booleaanse modus werkte niet correct",
-                "fr": "Erreur corrigée: DPT_Switch en mode booléen ne fonctionnait pas correctement",
-                "it": "Errore corretto: DPT_Switch in modalità booleana non funzionava correttamente",
-                "es": "Error corregido: DPT_Switch en modo booleano no funcionó correctamente",
-                "pl": "Poprawiony błąd: DPT_Switch w trybie logicznym nie działał poprawnie",
-                "zh-cn": "已更正错误：布尔模式下的DPT_Switch无法正常工作"
-            },
-            "1.2.0": {
-                "en": "Added for all variables \"write\" as Bool value\nAdmin3 compatibility\n",
-                "de": "Für alle Variablen \"write\" als Bool-Wert hinzugefügt\nAdmin3-Kompatibilität\n",
-                "ru": "Добавлено для всех переменных «запись» как значение Bool\nAdmin3 совместимость\n",
-                "pt": "Adicionado para todas as variáveis \"write\" como valor Bool\nCompatibilidade com Admin3\n",
-                "nl": "Toegevoegd voor alle variabelen \"schrijven\" als Bool-waarde\nAdmin3-compatibiliteit\n",
-                "fr": "Ajouté pour toutes les variables \"écrire\" comme valeur booléenne\nCompatibilité Admin3\n",
-                "it": "Aggiunto per tutte le variabili \"write\" come valore Bool\nCompatibilità con Admin3\n",
-                "es": "Se agregó para todas las variables \"escribir\" como valor Bool\nCompatibilidad Admin3\n",
-                "pl": "Dodano dla wszystkich zmiennych „zapis” jako wartość Bool\nKompatybilność z Admin3\n",
-                "zh-cn": "为所有变量“写”添加为布尔值\nAdmin3兼容性\n"
-            },
-            "1.1.1": {
-                "en": "Fixed error: DPT_Date is wrong\nFixed error: CWL - DPT_TimeOfDay - error",
-                "de": "Behobener Fehler: DPT_Date ist falsch\nBehobener Fehler: CWL - DPT_TimeOfDay - Fehler",
-                "ru": "Исправлена ошибка: дата DPT неверна\nИсправлена ошибка: CWL - DPT_TimeOfDay - ошибка",
-                "pt": "Corrigido o erro: DPT_Date está errado\nCorrigido o erro: CWL - DPT_TimeOfDay - erro",
-                "nl": "Fout opgelost: DPT_Date is verkeerd\nFout opgelost: CWL - DPT_TimeOfDay - fout",
-                "fr": "Erreur fixe: DPT_Date est erroné\nErreur fixe: CWL - DPT_TimeOfDay - erreur",
-                "it": "Errore risolto: DPT_Date è errato\nErrore risolto: CWL - DPT_TimeOfDay - errore",
-                "es": "Error solucionado: DPT_Date está mal\nError solucionado: CWL - DPT_TimeOfDay - error",
-                "pl": "Naprawiono błąd: DPT_Date jest niepoprawna\nNaprawiono błąd: CWL - DPT_TimeOfDay - błąd",
-                "zh-cn": "修复错误：DPT_Date错误\n修复错误：CWL-DPT_TimeOfDay-错误"
-            },
-            "1.1.0": {
-                "en": "ISM8i Firmware v1.50",
-                "de": "ISM8i Firmware v1.50",
-                "ru": "ISM8i Firmware v1.50"
-            }
-        },
-        "docs": {
-            "en": "docs/en/README.md",
-            "de": "docs/de/README.md"
-        },
-        "desc": {
-            "en": "Wolf Heating over ISM8i",
-            "de": "Wolf Heizung über ISM8i",
-            "ru": "Отопление Wolf через ISM8i",
-            "pt": "Aquecimento Wolf sobre o ISM8i",
-            "nl": "Wolf verwarming via ISM8i",
-            "fr": "Wolf chauffage sur ISM8i",
-            "it": "Riscaldamento Wolf su ISM8i",
-            "es": "Calentamiento Wolf sobre ISM8i",
-            "pl": "„Wolf” Ogrzewanie nad ISM8i",
-            "zh-cn": "ISM8i上的“狼”加热"
-        },
-        "authors": [
-            "smiling_Jack <smiling_Jack@iobroker.net>"
-        ],
-        "connectionType": "local",
-        "dataSource": "push",
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "loglevel": "info",
-        "icon": "wolf.png",
-        "compact": true,
-        "materialize": true,
-        "messagebox": true,
-        "keywords": [
-            "Heating",
-            "Solar",
-            "Wolf"
-        ],
-        "enabled": false,
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.wolf/master/admin/wolf.png",
-        "readme": "https://github.com/ioBroker/ioBroker.wolf/blob/master/README.md",
-        "type": "climate-control"
+  "common": {
+    "name": "wolf",
+    "version": "1.3.4",
+    "title": "wolf",
+    "titleLang": {
+      "en": "WOLF Heating over ISM8i",
+      "de": "WOLF heizt über ISM8i",
+      "ru": "WOLF отопление через ISM8i",
+      "pt": "Aquecimento WOLF sobre o ISM8i",
+      "nl": "WOLF verwarming via ISM8i",
+      "fr": "WOLF chauffage sur ISM8i",
+      "it": "Riscaldamento WOLF su ISM8i",
+      "es": "Calentamiento WOLF sobre ISM8i",
+      "pl": "WOLF Ogrzewanie nad ISM8i",
+      "zh-cn": "ISM8i上的“狼”加热"
     },
-    "native": {
-        "port": "12004",
-        "bind": "0.0.0.0",
-        "bool_status": false,
-        "bool_bar": false,
-        "devices": {
-            "hg0": "Auto",
-            "hg1": "Auto",
-            "hg2": "Auto",
-            "hg3": "Auto",
-            "hg4": "Auto",
-            "bm0": "Auto",
-            "bm1": "Auto",
-            "bm2": "Auto",
-            "bm3": "Auto",
-            "bm4": "Auto",
-            "mm1": "Auto",
-            "mm2": "Auto",
-            "mm3": "Auto",
-            "km1": "Auto",
-            "sm1": "Auto",
-            "cwl": "Auto"
-        },
-        "names": {
-            "hg0_n": "",
-            "hg1_n": "",
-            "hg2_n": "",
-            "hg3_n": "",
-            "hg4_n": "",
-            "bm0_n": "",
-            "bm1_n": "",
-            "bm2_n": "",
-            "bm3_n": "",
-            "bm4_n": "",
-            "mm1_n": "",
-            "mm2_n": "",
-            "mm3_n": "",
-            "km1_n": "",
-            "sm1_n": "",
-            "cwl_n": ""
-        }
+    "news": {
+      "1.3.4": {
+        "en": "Min value of outside temperature corrected",
+        "de": "Min-Wert der Außentemperatur korrigiert",
+        "ru": "Скорректировано минимальное значение наружной температуры",
+        "pt": "Valor mínimo da temperatura externa corrigido",
+        "nl": "Min waarde gecorrigeerde buitentemperatuur",
+        "fr": "Valeur min de la température extérieure corrigée",
+        "it": "Valore minimo della temperatura esterna corretto",
+        "es": "Valor mínimo de temperatura exterior corregido",
+        "pl": "Skorygowana minimalna wartość temperatury zewnętrznej",
+        "zh-cn": "修正的室外温度最小值"
+      },
+      "1.3.3": {
+        "en": "Min value of outside temperature corrected",
+        "de": "Min-Wert der Außentemperatur korrigiert",
+        "ru": "Скорректировано минимальное значение наружной температуры",
+        "pt": "Valor mínimo da temperatura externa corrigido",
+        "nl": "Min waarde gecorrigeerde buitentemperatuur",
+        "fr": "Valeur min de la température extérieure corrigée",
+        "it": "Valore minimo della temperatura esterna corretto",
+        "es": "Valor mínimo de temperatura exterior corregido",
+        "pl": "Skorygowana minimalna wartość temperatury zewnętrznej",
+        "zh-cn": "修正的室外温度最小值"
+      },
+      "1.3.2": {
+        "en": "(eifel-tech/tobias) Corrected error: DP 149 with correct Type (Issue #30)\n(eifel-tech/tobias) Changes for js-controller 3.3",
+        "de": "(eifel-tech/tobias) Behobener Fehler: DP 149 mit korrektem Typ (Ausgabe #30)\n(eifel-tech/tobias) Änderungen für js-controller 3.3",
+        "ru": "(eifel-tech / tobias) Исправленная ошибка: DP 149 с правильным типом (Проблема № 30)\n(eifel-tech / tobias) Изменения для js-controller 3.3",
+        "pt": "(eifel-tech / tobias) Erro corrigido: DP 149 com tipo correto (Problema # 30)\n(eifel-tech / tobias) Alterações para js-controlador 3.3",
+        "nl": "(eifel-tech/tobias) Gecorrigeerde fout: DP 149 met het juiste type (probleem #30)\n(eifel-tech/tobias) Wijzigingen voor js-controller 3.3",
+        "fr": "(eifel-tech/tobias) Erreur corrigée : DP 149 avec le type correct (problème n° 30)\n(eifel-tech/tobias) Changements pour js-controller 3.3",
+        "it": "(eifel-tech/tobias) Errore corretto: DP 149 con tipo corretto (edizione #30)\n(eifel-tech/tobias) Modifiche per js-controller 3.3",
+        "es": "(eifel-tech / tobias) Error corregido: DP 149 con el tipo correcto (Problema # 30)\n(eifel-tech / tobias) Cambios para js-controller 3.3",
+        "pl": "(eifel-tech/tobias) Poprawiony błąd: DP 149 z poprawnym typem (problem #30)\n(eifel-tech/tobias) Zmiany dla kontrolera js 3.3",
+        "zh-cn": "(eifel-tech/tobias) 更正错误：DP 149 类型正确（问题 #30）\n(eifel-tech/tobias) js-controller 3.3 的变化"
+      },
+      "1.3.1": {
+        "en": "Changes for js-controller 3.3",
+        "de": "Änderungen für js-Controller 3.3",
+        "ru": "Изменения для js-controller 3.3",
+        "pt": "Mudanças para js-controller 3.3",
+        "nl": "Wijzigingen voor js-controller 3.3",
+        "fr": "Changements pour js-controller 3.3",
+        "it": "Modifiche per js-controller 3.3",
+        "es": "Cambios para js-controller 3.3",
+        "pl": "Zmiany dla kontrolera js 3.3",
+        "zh-cn": "js-controller 3.3 的变化"
+      },
+      "1.2.1": {
+        "en": "Corrected error: DPT_Switch in boolean mode didn't work correct",
+        "de": "Behobener Fehler: DPT_Switch im Booleschen Modus funktionierte nicht richtig",
+        "ru": "Исправленная ошибка: DPT_Switch в логическом режиме не работает правильно",
+        "pt": "Erro corrigido: DPT_Switch no modo booleano não funcionou corretamente",
+        "nl": "Gecorrigeerde fout: DPT_Switch in booleaanse modus werkte niet correct",
+        "fr": "Erreur corrigée: DPT_Switch en mode booléen ne fonctionnait pas correctement",
+        "it": "Errore corretto: DPT_Switch in modalità booleana non funzionava correttamente",
+        "es": "Error corregido: DPT_Switch en modo booleano no funcionó correctamente",
+        "pl": "Poprawiony błąd: DPT_Switch w trybie logicznym nie działał poprawnie",
+        "zh-cn": "已更正错误：布尔模式下的DPT_Switch无法正常工作"
+      },
+      "1.2.0": {
+        "en": "Added for all variables \"write\" as Bool value\nAdmin3 compatibility\n",
+        "de": "Für alle Variablen \"write\" als Bool-Wert hinzugefügt\nAdmin3-Kompatibilität\n",
+        "ru": "Добавлено для всех переменных «запись» как значение Bool\nAdmin3 совместимость\n",
+        "pt": "Adicionado para todas as variáveis \"write\" como valor Bool\nCompatibilidade com Admin3\n",
+        "nl": "Toegevoegd voor alle variabelen \"schrijven\" als Bool-waarde\nAdmin3-compatibiliteit\n",
+        "fr": "Ajouté pour toutes les variables \"écrire\" comme valeur booléenne\nCompatibilité Admin3\n",
+        "it": "Aggiunto per tutte le variabili \"write\" come valore Bool\nCompatibilità con Admin3\n",
+        "es": "Se agregó para todas las variables \"escribir\" como valor Bool\nCompatibilidad Admin3\n",
+        "pl": "Dodano dla wszystkich zmiennych „zapis” jako wartość Bool\nKompatybilność z Admin3\n",
+        "zh-cn": "为所有变量“写”添加为布尔值\nAdmin3兼容性\n"
+      },
+      "1.1.1": {
+        "en": "Fixed error: DPT_Date is wrong\nFixed error: CWL - DPT_TimeOfDay - error",
+        "de": "Behobener Fehler: DPT_Date ist falsch\nBehobener Fehler: CWL - DPT_TimeOfDay - Fehler",
+        "ru": "Исправлена ошибка: дата DPT неверна\nИсправлена ошибка: CWL - DPT_TimeOfDay - ошибка",
+        "pt": "Corrigido o erro: DPT_Date está errado\nCorrigido o erro: CWL - DPT_TimeOfDay - erro",
+        "nl": "Fout opgelost: DPT_Date is verkeerd\nFout opgelost: CWL - DPT_TimeOfDay - fout",
+        "fr": "Erreur fixe: DPT_Date est erroné\nErreur fixe: CWL - DPT_TimeOfDay - erreur",
+        "it": "Errore risolto: DPT_Date è errato\nErrore risolto: CWL - DPT_TimeOfDay - errore",
+        "es": "Error solucionado: DPT_Date está mal\nError solucionado: CWL - DPT_TimeOfDay - error",
+        "pl": "Naprawiono błąd: DPT_Date jest niepoprawna\nNaprawiono błąd: CWL - DPT_TimeOfDay - błąd",
+        "zh-cn": "修复错误：DPT_Date错误\n修复错误：CWL-DPT_TimeOfDay-错误"
+      }
+    },
+    "docs": {
+      "en": "docs/en/README.md",
+      "de": "docs/de/README.md"
+    },
+    "desc": {
+      "en": "Wolf Heating over ISM8i",
+      "de": "Wolf Heizung über ISM8i",
+      "ru": "Отопление Wolf через ISM8i",
+      "pt": "Aquecimento Wolf sobre o ISM8i",
+      "nl": "Wolf verwarming via ISM8i",
+      "fr": "Wolf chauffage sur ISM8i",
+      "it": "Riscaldamento Wolf su ISM8i",
+      "es": "Calentamiento Wolf sobre ISM8i",
+      "pl": "„Wolf” Ogrzewanie nad ISM8i",
+      "zh-cn": "ISM8i上的“狼”加热"
+    },
+    "authors": [
+      "smiling_Jack <smiling_Jack@iobroker.net>"
+    ],
+    "connectionType": "local",
+    "dataSource": "push",
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "loglevel": "info",
+    "icon": "wolf.png",
+    "compact": true,
+    "materialize": true,
+    "messagebox": true,
+    "keywords": [
+      "Heating",
+      "Solar",
+      "Wolf"
+    ],
+    "enabled": false,
+    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.wolf/master/admin/wolf.png",
+    "readme": "https://github.com/ioBroker/ioBroker.wolf/blob/master/README.md",
+    "type": "climate-control"
+  },
+  "native": {
+    "port": "12004",
+    "bind": "0.0.0.0",
+    "bool_status": false,
+    "bool_bar": false,
+    "devices": {
+      "hg0": "Auto",
+      "hg1": "Auto",
+      "hg2": "Auto",
+      "hg3": "Auto",
+      "hg4": "Auto",
+      "bm0": "Auto",
+      "bm1": "Auto",
+      "bm2": "Auto",
+      "bm3": "Auto",
+      "bm4": "Auto",
+      "mm1": "Auto",
+      "mm2": "Auto",
+      "mm3": "Auto",
+      "km1": "Auto",
+      "sm1": "Auto",
+      "cwl": "Auto"
+    },
+    "names": {
+      "hg0_n": "",
+      "hg1_n": "",
+      "hg2_n": "",
+      "hg3_n": "",
+      "hg4_n": "",
+      "bm0_n": "",
+      "bm1_n": "",
+      "bm2_n": "",
+      "bm3_n": "",
+      "bm4_n": "",
+      "mm1_n": "",
+      "mm2_n": "",
+      "mm3_n": "",
+      "km1_n": "",
+      "sm1_n": "",
+      "cwl_n": ""
     }
+  }
 }
