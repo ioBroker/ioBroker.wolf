@@ -80,7 +80,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": -50,
+    "min": 0,
     "max": 1000
   },
   "9": {
@@ -211,7 +211,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": -50,
+    "min": 0,
     "max": 1000
   },
   "22": {
@@ -342,7 +342,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": -50,
+    "min": 0,
     "max": 1000
   },
   "35": {
@@ -473,7 +473,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": -50,
+    "min": 0,
     "max": 1000
   },
   "48": {
@@ -540,7 +540,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": -50,
+    "min": 0,
     "max": 1000
   },
   "55": {
@@ -1357,7 +1357,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": -50,
+    "min": 0,
     "max": 1000
   },
   "138": {
@@ -1368,7 +1368,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": -50,
+    "min": 0,
     "max": 1000
   },
   "139": {
@@ -1470,7 +1470,7 @@
     "commonType": "string"
   },
   "149": {
-    "name": "Programm",
+    "name": "Programmwahl CWL",
     "type": "DPT_HVACMode",
     "rw": "rw",
     "read": true,
@@ -1814,7 +1814,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": -50,
+    "min": 0,
     "max": 1000
   },
   "185": {
