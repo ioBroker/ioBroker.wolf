@@ -1470,7 +1470,7 @@
     "commonType": "string"
   },
   "149": {
-    "name": "Programmwahl CWL",
+    "name": "Programmwahl",
     "type": "DPT_HVACMode",
     "rw": "rw",
     "read": true,
