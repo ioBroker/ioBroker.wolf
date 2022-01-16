@@ -132,6 +132,7 @@ function getDeviceRage(id) {
     } else {
         return false;
     }
+
 }
 
 function decode(type, data, dp) {
