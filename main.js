@@ -132,7 +132,6 @@ function getDeviceRage(id) {
     } else {
         return false;
     }
-
 }
 
 function decode(type, data, dp) {
@@ -370,6 +369,14 @@ function encode(data, dp) {
             return [Buffer.from('01', 'hex'), 'Heizbetrieb'];
         } else {
             return [Buffer.from('03', 'hex'), 'Sparbetrieb'];
+        }
+    } else if (type === 'DPT_HVACMode' && name === 'Programm') {
+        if (data == 0 || data === 'Automatikbetrieb') {
+            return [Buffer.from('00', 'hex'), 'Automatikbetrieb'];
+        } else if (data == 1 || data === 'Nennlüftung'){
+            return [Buffer.from('01', 'hex'), 'Nennlüftung'];
+        } else if(data == 3 || data === 'Reduzierte Lüftung'){
+            return [Buffer.from('03', 'hex'), 'Reduzierte Lüftung'];
         }
     }
     if (name === 'Warmwassersolltemperatur') {

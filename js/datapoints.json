@@ -1470,7 +1470,7 @@
     "commonType": "string"
   },
   "149": {
-    "name": "Programmwahl",
+    "name": "Programm",
     "type": "DPT_HVACMode",
     "rw": "rw",
     "read": true,
@@ -2086,5 +2086,5 @@
     "commonType": "number",
     "min": 0,
     "max": 1000
-  } 
+  }
 }
