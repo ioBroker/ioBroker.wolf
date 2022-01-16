@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wolf",
-    "version": "1.3.5",
+    "version": "1.3.4",
     "title": "wolf",
     "titleLang": {
       "en": "WOLF Heating over ISM8i",
