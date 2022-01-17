@@ -17,10 +17,6 @@ Lese auf [deutsch](docs/de/README.md).
 -->
 
 ## Changelog
-### 1.3.5 (2022-01-16)
-* (Dark-Tower-Coder) Fixed bug: Can't parse DP : 149 - length, 21 (Issue #58)
-* (Dark-Tower-Coder) Mode for CWL Excellent save/send (DP 149)
-
 ### 1.3.4 (2021-11-14)
 * (eifel-tech) Min value of outside temperature corrected
 
