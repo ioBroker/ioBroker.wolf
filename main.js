@@ -320,7 +320,7 @@ function encode(data, dp) {
             if (adapter.config.bool_status) {
                 return [Buffer.from('00', 'hex'), 'false'];
             } else {
-                return [Buffer.from('00', 'hex'), '0ff'];
+                return [Buffer.from('00', 'hex'), 'Off'];
             }
         }
     } else if (type === 'DPT_Scaling') {
