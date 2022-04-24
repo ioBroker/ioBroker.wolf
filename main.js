@@ -676,6 +676,7 @@ function createServer(adapter) {
             pos !== -1 && adapter._connections.splice(pos);
         });
 
+        adapter.log.debug(`Receive new connection from ${sock.remoteAddress}:${sock.remotePort}, requesting GetAll`);
         sock.write(buffGetAll);
     });
 
