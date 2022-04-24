@@ -631,6 +631,8 @@ function createServer(adapter) {
         sock.on('error', err => adapter.log.error('Socket error: ' + err.toString()));
 
         sock.on('data', _data => {
+            adapter.log.debug(`Data from ${sock.remoteAddress}:${sock.remotePort}: ${_data.toString('hex')}`);
+
             //console.log(_data)
             search = -1;
             lines = [];
@@ -674,6 +676,7 @@ function createServer(adapter) {
         sock.on('end', () => {
             const pos = adapter._connections.indexOf(sock);
             pos !== -1 && adapter._connections.splice(pos);
+            adapter.log.debug(`Connection from ${sock.remoteAddress}:${sock.remotePort} closed`);
         });
 
         adapter.log.debug(`Receive new connection from ${sock.remoteAddress}:${sock.remotePort}, requesting GetAll`);
