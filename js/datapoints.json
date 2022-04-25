@@ -1133,7 +1133,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -50,
     "max": 1000
   },
   "116": {
@@ -1173,7 +1173,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -1000,
     "max": 1000
   },
   "120": {
@@ -1184,7 +1184,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -1000,
     "max": 1000
   },
   "121": {
@@ -1368,7 +1368,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -100,
     "max": 1000
   },
   "139": {
@@ -1920,7 +1920,7 @@
     "einheit": "Wh",
     "commonType": "number",
     "min": 0,
-    "max": 10000
+    "max": 50000
   },
   "196": {
     "name": "Gesamtertrag",
@@ -2086,5 +2086,5 @@
     "commonType": "number",
     "min": 0,
     "max": 1000
-  } 
+  }
 }

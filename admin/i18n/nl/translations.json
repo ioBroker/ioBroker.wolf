@@ -1,5 +1,5 @@
 {
-    "Adapter IP:": "Adapter IP:",
+    "Adapter IP:": "Adapter Bind Interface",
     "Auto": "Auto",
     "Cascade modules": "Cascademodule",
     "Comfort domestic ventilation system": "Comfort huishoudelijk ventilatiesysteem",
@@ -7,6 +7,7 @@
     "Devices": "Apparaten",
     "Heaters": "Kachels",
     "Heating": "verwarmingstechnologie",
+    "IP Hint": "Zorg ervoor dat u een Bind-interface selecteert die externe verbindingen mogelijk maakt!",
     "Mixing modules": "Mengmodule",
     "Name": "Naam",
     "ON": "OP",

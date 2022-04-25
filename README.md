@@ -23,8 +23,11 @@ Lese auf [deutsch](docs/de/README.md).
 
 ## Changelog
 
-### 0.7.0 (2022-04-25)
+### __WORK IN PROGRESS__
 * IMPORTANT: Requires now at least js-controller 2.0
+* (Apollon77) Optimize Configuration UI to prevent people from selecting bind interfaces that do not allow external connections!
+* (Apollon77) Correctly create all objects when "Status as bool" is used
+* (Apollon77) Adjust some min/max values
 * (Apollon77) Add sentry for crash reporting
 
 ### 1.3.4 (2021-11-14)

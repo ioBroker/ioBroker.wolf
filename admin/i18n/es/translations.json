@@ -1,5 +1,5 @@
 {
-    "Adapter IP:": "IP del adaptador:",
+    "Adapter IP:": "Interfaz de enlace del adaptador",
     "Auto": "Auto",
     "Cascade modules": "Módulo en cascada",
     "Comfort domestic ventilation system": "Sistema de ventilación doméstica confort",
@@ -7,6 +7,7 @@
     "Devices": "Dispositivos",
     "Heaters": "Calentadores",
     "Heating": "tecnología de calefacción",
+    "IP Hint": "¡Asegúrese de seleccionar una interfaz Bind que permita conexiones externas!",
     "Mixing modules": "Módulo de mezcla",
     "Name": "Nombre",
     "ON": "EN",

@@ -444,7 +444,7 @@ function addGroup(dev) {
         groupName = adapter.config.names[dev + '_n'];
     }
 
-    adapter.setObject(dev, {
+    adapter.setObjectNotExists(dev, {
         type: 'channel',
         common: {
             name: groupName,
@@ -454,7 +454,7 @@ function addGroup(dev) {
     });
 }
 
-function addDevice(dp, callback) {
+async function addDevice(dp, callback) {
     const dev = getDevice(dp);
     if (dev) {
         //ack_data.new_devices.push(dev);
@@ -469,37 +469,38 @@ function addDevice(dp, callback) {
                 if (data.einheit === 'Pa' && adapter.config.bool_bar) {
                     data.einheit = 'bar';
                 }
+                if (adapter.config.bool_status && ['DPT_Switch', 'DPT_Enable', 'DPT_OpenClose'].includes(data.type)) {
+                    data.commonType = 'boolean';
+                }
                 ack_data[range.lsb] = {id: adapter.namespace + '.' + dev + '.' + range.lsb};
                 //console.log('add:' + dev + '.' + range.lsb  );
                 if (data.commonType === 'number') {
-                	adapter.setObject(dev + '.' + range.lsb, {
+                	await adapter.extendObject(dev + '.' + range.lsb, {
 	                    type: 'state',
 	                    common: {
 	                        name:    data.name,
-	                        role:    data.type.replace('DPT_', ''),
+	                        role:    data.type.replace('DPT_', '').toLowerCase(),
 	                        type:    data.commonType,
 	                        read:    data.read,
 	                        write:   data.write,
 	                        unit:    data.einheit,
 	                        min:     data.min,
-	                        max:     data.max,
-	                        enabled: false
+	                        max:     data.max
 	                    },
 	                    native: {
 	                        rw: data.rw
 	                    }
 	                });
                 } else {
-	                adapter.setObject(dev + '.' + range.lsb, {
+	                await adapter.extendObject(dev + '.' + range.lsb, {
 	                    type: 'state',
 	                    common: {
 	                        name:    data.name,
-	                        role:    data.type.replace('DPT_', ''),
+	                        role:    data.type.replace('DPT_', '').toLowerCase(),
 	                        type:    data.commonType,
 	                        read:    data.read,
 	                        write:   data.write,
-	                        unit:    data.einheit,
-	                        enabled: false
+	                        unit:    data.einheit
 	                    },
 	                    native: {
 	                        rw: data.rw
@@ -519,35 +520,33 @@ function addDevice(dp, callback) {
                     ack_data[range.lsb2] = {id: adapter.namespace + '.' + dev + '.' + range.lsb2};
                     //console.log('add:' + dev + '.' + range.lsb2  );
                     if (data.commonType === 'number') {
-	                	adapter.setObject(dev + '.' + range.lsb2, {
+	                	await adapter.extendObject(dev + '.' + range.lsb2, {
 		                    type: 'state',
 		                    common: {
 		                        name:    data.name,
-		                        role:    data.type.replace('DPT_', ''),
+		                        role:    data.type.replace('DPT_', '').toLowerCase(),
 		                        type:    data.commonType,
 		                        read:    data.read,
 		                        write:   data.write,
 		                        unit:    data.einheit,
 		                        min:     data.min,
-		                        max:     data.max,
-		                        enabled: false
+		                        max:     data.max
 		                    },
 		                    native: {
 		                        rw: data.rw
 		                    }
 		                });
 	                } else {
-	                    adapter.setObject(dev + '.' + range.lsb2, {
+	                    await adapter.extendObject(dev + '.' + range.lsb2, {
 	                        type: 'state',
 	                        common: {
 	                            name:    data.name,
-	                            role:    data.type.replace('DPT_', ''),
+	                            role:    data.type.replace('DPT_', '').toLowerCase(),
 	                            type:    data.commonType,
 	                            read:    data.read,
 	                            write:   data.write,
-	                            unit:    data.einheit,
-	                            enabled: false,
-	                        },
+	                            unit:    data.einheit
+                            },
 	                        native: {
 	                            rw: data.rw
 	                        }
@@ -599,14 +598,7 @@ function setState(adapter, dp, val, data, device) {
     } catch (err) {
         val = '';
         adapter.log.error(`Can't parse DP : ${dp} - data: ${data.toString('hex')} - length: ${data.length}`);
-        adapter.log.debug(`incoming
-Device: ${device}
-Datapoint: ${dp}
-Datapoint_name: ${datapoints[dp].name}
-Datapoint_type: ${datapoints[dp].type}
-Data: ${data.toString('hex')}
-Length: ${data.length}
-Value: ${val}`
+        adapter.log.debug(`incoming Device: ${device}, Datapoint: ${dp}, Datapoint_name: ${datapoints[dp].name}, Datapoint_type: ${datapoints[dp].type}, Data: ${data.toString('hex')}, Length: ${data.length}, Value: ${val}`
         );
     }
 }
