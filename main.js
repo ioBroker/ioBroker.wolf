@@ -223,16 +223,6 @@ function decode(type, data, dp) {
             } else {
                 throw '';
             }
-        } else if (datapoints[dp].name === 'Programmwahl CWL') {
-            if (_data === 0) {
-                return 'Automatikbetrieb';
-            } else if (_data === 1) {
-                return 'Nennlüftung';
-            } else if (_data === 3) {
-                return 'Reduzierte Lüftung';
-            } else {
-                throw '';
-            }
         } else {
             throw '';
         }
@@ -250,6 +240,16 @@ function decode(type, data, dp) {
                 return 'Heizbetrieb';
             } else if (_data === 3) {
                 return 'Sparbetrieb';
+            } else {
+                throw '';
+            }
+        } else if (datapoints[dp].name === 'Programmwahl CWL') {
+            if (_data === 0) {
+                return 'Automatikbetrieb';
+            } else if (_data === 1) {
+                return 'Nennlüftung';
+            } else if (_data === 3) {
+                return 'Reduzierte Lüftung';
             } else {
                 throw '';
             }
@@ -321,7 +321,7 @@ function encode(data, dp) {
             if (adapter.config.bool_status) {
                 return [Buffer.from('00', 'hex'), 'false'];
             } else {
-                return [Buffer.from('00', 'hex'), '0ff'];
+                return [Buffer.from('00', 'hex'), 'Off'];
             }
         }
     } else if (type === 'DPT_Scaling') {
@@ -370,6 +370,14 @@ function encode(data, dp) {
             return [Buffer.from('01', 'hex'), 'Heizbetrieb'];
         } else {
             return [Buffer.from('03', 'hex'), 'Sparbetrieb'];
+        }
+    } else if (type === 'DPT_HVACMode' && name === 'Programmwahl CWL') {
+        if (data == 0 || data === 'Automatikbetrieb') {
+            return [Buffer.from('00', 'hex'), 'Automatikbetrieb'];
+        } else if (data == 1 || data === 'Nennlüftung'){
+            return [Buffer.from('01', 'hex'), 'Nennlüftung'];
+        } else if(data == 3 || data === 'Reduzierte Lüftung'){
+            return [Buffer.from('03', 'hex'), 'Reduzierte Lüftung'];
         }
     }
     if (name === 'Warmwassersolltemperatur') {
