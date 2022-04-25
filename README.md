@@ -1,10 +1,15 @@
 ![Logo](admin/wolf.png)
 # ioBroker.wolf
 
-![Number of Installations](http://iobroker.live/badges/wolf-installed.svg) ![Number of Installations](http://iobroker.live/badges/wolf-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.wolf.svg)](https://www.npmjs.com/package/iobroker.wolf)
+![Number of Installations](http://iobroker.live/badges/wolf-installed.svg)
+![Number of Installations](http://iobroker.live/badges/wolf-stable.svg)
+[![NPM version](http://img.shields.io/npm/v/iobroker.wolf.svg)](https://www.npmjs.com/package/iobroker.wolf)
+
+![Test and Release](https://github.com/ioBroker/ioBroker.wolf/workflows/Test%20and%20Release/badge.svg)
+[![Translation status](https://weblate.iobroker.net/widgets/adapters/-/wolf/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.wolf.svg)](https://www.npmjs.com/package/iobroker.wolf)
 
-[![NPM](https://nodei.co/npm/iobroker.wolf.png?downloads=true)](https://nodei.co/npm/iobroker.wolf/)
+**This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
 
 Connect to WOLF devices.
 Read in [english](docs/en/README.md).
@@ -17,6 +22,11 @@ Lese auf [deutsch](docs/de/README.md).
 -->
 
 ## Changelog
+
+### 0.7.0 (2022-04-25)
+* IMPORTANT: Requires now at least js-controller 2.0
+* (Apollon77) Add sentry for crash reporting
+
 ### 1.3.4 (2021-11-14)
 * (eifel-tech) Min value of outside temperature corrected
 

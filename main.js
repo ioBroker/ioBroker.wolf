@@ -686,6 +686,8 @@ function createServer(adapter) {
     adapter._server.on('error', err => adapter.log.error('Cannot start server: ' + err.toString()));
 
     adapter._server.listen(adapter.config.port, adapter.config.bind);
+
+    adapter.log.debug(`Server listening on ${adapter.config.bind}:${adapter.config.port}`);
 }
 
 
