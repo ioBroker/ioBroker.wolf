@@ -16,6 +16,6 @@
     "Pressure in bar": "Presión en bar",
     "Solar cells": "Célula solar",
     "Split air/water heat pump": "Split bomba de calor aire / agua",
-    "Status as Bool": "Estado como bool",
+    "Status as Bool": "Estado como booleano",
     "off": "apagado"
 }

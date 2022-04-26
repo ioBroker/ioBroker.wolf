@@ -16,6 +16,6 @@
     "Pressure in bar": "Давление в барах",
     "Solar cells": "Солнечная батарея",
     "Split air/water heat pump": "Сплит воздушный/водяной тепловой насос",
-    "Status as Bool": "Статус как Bool",
+    "Status as Bool": "Статус как логический",
     "off": "от"
 }
