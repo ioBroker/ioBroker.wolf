@@ -38,17 +38,18 @@ function startAdapter(options) {
             const dp = parseInt(id.split('.').pop());
             if (datapoints[dp].rw === 'r') {
                 adapter.setState(id, ack_data[dp].value, true);
-                adapter.log.error('oid: ' + id + ' is only readable');
+                adapter.log.error(`${id} is only readable`);
             } else {
-                const enc = encode(state.val, dp);
-                const bufVal = enc[0];
-                if (bufVal !== 'error') {
-                    const _buff_set = Buffer.concat([Buffer.from('0620F08000' + (20 + bufVal.length).toString(16) + '04000000F0C100' + dp.toString(16) + '000100' + dp.toString(16) + '000' + bufVal.length.toString(16) + '', 'hex'), bufVal], bufVal.length + 20);
-                    adapter.setState(id, enc[1], true); // TODO: here send to ism8
+                try {
+                    const enc = encode(state.val, dp);
+                    const bufVal = enc[0];
+                    const _buff_set = Buffer.concat([Buffer.from(`0620F08000${(20 + bufVal.length).toString(16)}04000000F0C100${dp.toString(16)}000100${dp.toString(16)}000${bufVal.length.toString(16)}`, 'hex'), bufVal], bufVal.length + 20);
 
                     adapter._connections.forEach(sock => sock.write(_buff_set));
-                } else {
-                    adapter.log.error('Can\'t encode DP : ' + dp + ' - data: ' + enc[1] + ' - type: ' + datapoints[dp].type);
+
+                    adapter.setState(id, enc[1], true); // TODO: here send to ism8
+                } catch (e) {
+                    adapter.log.error(`Can't encode DP (${e.message}) : ${dp} - data: ${state.val} - type: ${datapoints[dp].type}`);
                 }
             }
         }
@@ -307,7 +308,6 @@ function encode(data, dp) {
     //"DPT_Switch",
     //"DPT_Tempd",
     //"DPT_TimeOfDay"
-    //"DPT_Date"
     //"DPT_Scaling"
 
     if (type === 'DPT_Switch') {
@@ -379,6 +379,14 @@ function encode(data, dp) {
         } else if(data == 3 || data === 'Reduzierte Lüftung'){
             return [Buffer.from('03', 'hex'), 'Reduzierte Lüftung'];
         }
+    } else if (type === 'DPT_Date'){
+        const dataDate = new Date(data);
+        if (!isNaN(dataDate.getFullYear())) {
+            const onlyDate = new Date(dataDate.getFullYear(), dataDate.getMonth(), dataDate.getDate());
+
+            return [enc.encodeDPT11(onlyDate), onlyDate];
+        }
+        throw new Error('Invalid date');
     }
     if (name === 'Warmwassersolltemperatur') {
         val = parseInt(data);
@@ -399,7 +407,7 @@ function encode(data, dp) {
         }
         return [enc.encodeDPT9(data), val];
     } else {
-        return 'error';
+        throw new Error('Encoding not supported');
     }
 }
 
@@ -434,13 +442,13 @@ function bufferIndexOf(buf, search, offset) {
 
 function addGroup(dev) {
     let groupName = '';
-    if (adapter.config.names[dev + '_n'] === '') {
+    if (adapter.config.names[`${dev}_n`] === '') {
         if (dev.match(/hg/)) {
-            groupName = 'Heizgeräte ' + dev.slice(-1);
+            groupName = `Heizgeräte ${dev.slice(-1)}`;
         } else if (dev.match(/bm/)) {
-            groupName = 'Bediengeräte ' + dev.slice(-1);
+            groupName = `Bediengeräte ${dev.slice(-1)}`;
         } else if (dev.match(/mm/)) {
-            groupName = 'Mischermodule ' + dev.slice(-1);
+            groupName = `Mischermodule ${dev.slice(-1)}`;
         } else if (dev.match(/km/)) {
             groupName = 'Kaskadenmodul';
         } else if (dev.match(/sm/)) {
@@ -449,7 +457,7 @@ function addGroup(dev) {
             groupName = 'Comfort-Wohnungs-Lüftung';
         }
     } else {
-        groupName = adapter.config.names[dev + '_n'];
+        groupName = adapter.config.names[`${dev}_n`];
     }
 
     adapter.setObjectNotExists(dev, {
@@ -480,10 +488,10 @@ async function addDevice(dp, callback) {
                 if (adapter.config.bool_status && ['DPT_Switch', 'DPT_Enable', 'DPT_OpenClose'].includes(data.type)) {
                     data.commonType = 'boolean';
                 }
-                ack_data[range.lsb] = {id: adapter.namespace + '.' + dev + '.' + range.lsb};
+                ack_data[range.lsb] = {id: `${adapter.namespace}.${dev}.${range.lsb}`};
                 //console.log('add:' + dev + '.' + range.lsb  );
                 if (data.commonType === 'number') {
-                	await adapter.extendObject(dev + '.' + range.lsb, {
+                	await adapter.extendObject(`${dev}.${range.lsb}`, {
 	                    type: 'state',
 	                    common: {
 	                        name:    data.name,
@@ -500,7 +508,7 @@ async function addDevice(dp, callback) {
 	                    }
 	                });
                 } else {
-	                await adapter.extendObject(dev + '.' + range.lsb, {
+	                await adapter.extendObject(`${dev}.${range.lsb}`, {
 	                    type: 'state',
 	                    common: {
 	                        name:    data.name,
@@ -525,10 +533,10 @@ async function addDevice(dp, callback) {
                     if (data.einheit === 'Pa' && adapter.config.bool_bar) {
                         data.einheit = 'bar'
                     }
-                    ack_data[range.lsb2] = {id: adapter.namespace + '.' + dev + '.' + range.lsb2};
+                    ack_data[range.lsb2] = {id: `${adapter.namespace}.${dev}.${range.lsb2}`};
                     //console.log('add:' + dev + '.' + range.lsb2  );
                     if (data.commonType === 'number') {
-	                	await adapter.extendObject(dev + '.' + range.lsb2, {
+	                	await adapter.extendObject(`${dev}.${range.lsb2}`, {
 		                    type: 'state',
 		                    common: {
 		                        name:    data.name,
@@ -545,7 +553,7 @@ async function addDevice(dp, callback) {
 		                    }
 		                });
 	                } else {
-	                    await adapter.extendObject(dev + '.' + range.lsb2, {
+	                    await adapter.extendObject(`${dev}.${range.lsb2}`, {
 	                        type: 'state',
 	                        common: {
 	                            name:    data.name,
@@ -570,7 +578,7 @@ async function addDevice(dp, callback) {
 
 function main() {
     adapter.config.bool_bar = adapter.config.bool_bar === true || adapter.config.bool_bar === 'true';
-    adapter.getForeignObjects(adapter.namespace + '.*', (err, list) => {
+    adapter.getForeignObjects(`${adapter.namespace}.*`, (err, list) => {
         for (const idd in list) {
             if (list.hasOwnProperty(idd)) {
                 ack_data[idd.split('.').pop()] = {id: idd};
@@ -601,12 +609,12 @@ function setState(adapter, dp, val, data, device) {
     try {
         val = decode(datapoints[dp].type, data.slice(20), dp);
 
-        adapter.setState(device + '.' + dp, val, true);
+        adapter.setState(`${device}.${dp}`, val, true);
         ack_data[dp]['value'] = val;
     } catch (err) {
         val = '';
         adapter.log.error(`Can't parse DP : ${dp} - data: ${data.toString('hex')} - length: ${data.length}`);
-        adapter.log.debug(`incoming Device: ${device}, Datapoint: ${dp}, Datapoint_name: ${datapoints[dp].name}, Datapoint_type: ${datapoints[dp].type}, Data: ${data.toString('hex')}, Length: ${data.length}, Value: ${val}`
+        adapter.log.debug(`Incoming Device: ${device}, Datapoint: ${dp}, Datapoint_name: ${datapoints[dp].name}, Datapoint_type: ${datapoints[dp].type}, Data: ${data.toString('hex')}, Length: ${data.length}, Value: ${val}`
         );
     }
 }
@@ -628,7 +636,7 @@ function createServer(adapter) {
         let lines;
         let data;
 
-        sock.on('error', err => adapter.log.error('Socket error: ' + err.toString()));
+        sock.on('error', err => adapter.log.error(`Socket error: ${err.toString()}`));
 
         sock.on('data', _data => {
             adapter.log.debug(`Data from ${sock.remoteAddress}:${sock.remotePort}: ${_data.toString('hex')}`);
@@ -683,7 +691,7 @@ function createServer(adapter) {
         sock.write(buffGetAll);
     });
 
-    adapter._server.on('error', err => adapter.log.error('Cannot start server: ' + err.toString()));
+    adapter._server.on('error', err => adapter.log.error(`Cannot start server: ${err.toString()}`));
 
     adapter._server.listen(adapter.config.port, adapter.config.bind);
 

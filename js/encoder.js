@@ -43,7 +43,7 @@ Encoder.prototype.encodeDPT5 = function (value) {
 };
 
 /**
- * encode 9 values
+ * encode dpt 9 values
  */
 Encoder.prototype.encodeDPT9 = function (value, exp) {
     const data = [0, 0];
@@ -73,6 +73,27 @@ Encoder.prototype.encodeDPT9 = function (value, exp) {
     return buffer;
 };
 
+/**
+ * encode dpt 11 values
+ */
+Encoder.prototype.encodeDPT11 = function (value) {
+
+    const date = new Date(value)
+    const buffer = Buffer.alloc(3);
+
+    const day = date.getDay()
+    const mon = date.getMonth()
+    let year = date.getFullYear()
+
+    year -= 2000;
+
+    buffer.writeUInt8(day & 0x1f, 0);
+    buffer.writeUInt8(mon+1 & 0xf, 1);
+    buffer.writeUInt8(year & 0x7f, 2);
+
+    return buffer;
+};
+
 Encoder.prototype.encode = function (DPTType, value) {
     if (DPTType.indexOf('DPT1') === 0) {
         return this.encodeDPT1(value);
@@ -84,6 +105,8 @@ Encoder.prototype.encode = function (DPTType, value) {
         return this.encodeDPT5(value);
     } else if (DPTType.indexOf('DPT9') === 0) {
         return this.encodeDPT9(value);
+    } else if (DPTType.indexOf('DPT11') === 0) {
+        return this.encodeDPT11(value);
     }
     return undefined;
 };

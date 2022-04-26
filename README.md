@@ -29,6 +29,8 @@ Lese auf [deutsch](docs/de/README.md).
 * (Apollon77) Correctly create all objects when "Status as bool" is used
 * (Apollon77) Adjust some min/max values
 * (Apollon77/Dark-Tower-Coder) Fix parsing of DP 149
+* (Apollon77/Dark-Tower-Coder) Add encoding of DPT_Date type
+* (Dark-Tower-Coder) return value for DPT_Switch corrected from '0ff' to 'Off'
 * (Apollon77) Add sentry for crash reporting
 
 ### 1.3.4 (2021-11-14)
