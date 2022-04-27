@@ -34,6 +34,7 @@ function startAdapter(options) {
     });
 
     adapter.on('stateChange', (id, state) => {
+        adapter.log.debug(`stateChange: ${id} ${JSON.stringify(state)}`);
         if (state && !state.ack && id) {
             const dp = parseInt(id.split('.').pop());
             if (datapoints[dp].rw === 'r') {
@@ -470,7 +471,7 @@ function addGroup(dev) {
     });
 }
 
-async function addDevice(dp, callback) {
+async function addDevice(dp) {
     const dev = getDevice(dp);
     if (dev) {
         //ack_data.new_devices.push(dev);
@@ -481,6 +482,7 @@ async function addDevice(dp, callback) {
         for (range.lsb; range.lsb <= range.msb; range.lsb++) {
 
             if (!ack_data[range.lsb]) {
+                adapter.log.debug(`Add objects for ${dev}.${range.lsb}`);
                 const data = datapoints[range.lsb];
                 if (data.einheit === 'Pa' && adapter.config.bool_bar) {
                     data.einheit = 'bar';
@@ -529,6 +531,7 @@ async function addDevice(dp, callback) {
         if (range.lsb2 != null && range.msb2 != null) {
             for (range.lsb2; range.lsb2 <= range.msb2; range.lsb2++) {
                 if (!ack_data[range.lsb2]) {
+                    adapter.log.debug(`Add objects for ${dev}.${range.lsb2}`);
                     const data = datapoints[range.lsb2];
                     if (data.einheit === 'Pa' && adapter.config.bool_bar) {
                         data.einheit = 'bar'
@@ -571,9 +574,9 @@ async function addDevice(dp, callback) {
                 }
             }
         }
-
-        callback && callback();
+        return true;
     }
+    return false;
 }
 
 function main() {
@@ -638,7 +641,7 @@ function createServer(adapter) {
 
         sock.on('error', err => adapter.log.error(`Socket error: ${err.toString()}`));
 
-        sock.on('data', _data => {
+        sock.on('data', async _data => {
             adapter.log.debug(`Data from ${sock.remoteAddress}:${sock.remotePort}: ${_data.toString('hex')}`);
 
             //console.log(_data)
@@ -669,14 +672,20 @@ function createServer(adapter) {
                         if (datapoints[dp].name === 'Störung') {
                             if (data.slice(20).readInt8(0) === 1) {
                                 ignore[device] = true;
+                                adapter.log.debug(`Ignore ${device} data because Störung`);
                             } else {
                                 ignore[device] = undefined;
                             }
                         }
 
-                        !ignore[device] && addDevice(dp, () =>
-                            setState(adapter, dp, val, data, device));
+                        if (!ignore[device]) {
+                            if (await addDevice(dp)) {
+                                setState(adapter, dp, val, data, device);
+                            }
+                        }
                     }
+                } else {
+                    adapter.log.debug(`Ignore data for device type ${device} because configured ${adapter.config.devices[device]}`);
                 }
             }
         });
