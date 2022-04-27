@@ -34,7 +34,7 @@ function startAdapter(options) {
     });
 
     adapter.on('stateChange', (id, state) => {
-        adapter.log.debug(`stateChange: ${id} ${JSON.stringify(state)}`);
+        //adapter.log.debug(`stateChange: ${id} ${JSON.stringify(state)}`);
         if (state && !state.ack && id) {
             const dp = parseInt(id.split('.').pop());
             if (datapoints[dp].rw === 'r') {
