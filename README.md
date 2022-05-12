@@ -22,6 +22,10 @@ Lese auf [deutsch](docs/de/README.md).
 -->
 
 ## Changelog
+
+### __WORK IN PROGRESS__
+* (Apollon77) Fix crash cases reported by Sentry
+
 ### 1.4.0 (2022-04-26)
 * IMPORTANT: Requires now at least js-controller 2.0
 * (Apollon77) Optimize Configuration UI to prevent people from selecting bind interfaces that do not allow external connections!

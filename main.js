@@ -617,7 +617,7 @@ function setState(adapter, dp, val, data, device) {
     } catch (err) {
         val = '';
         adapter.log.error(`Can't parse DP : ${dp} - data: ${data.toString('hex')} - length: ${data.length}`);
-        adapter.log.debug(`Incoming Device: ${device}, Datapoint: ${dp}, Datapoint_name: ${datapoints[dp].name}, Datapoint_type: ${datapoints[dp].type}, Data: ${data.toString('hex')}, Length: ${data.length}, Value: ${val}`
+        datapoints[dp] && adapter.log.debug(`Incoming Device: ${device}, Datapoint: ${dp}, Datapoint_name: ${datapoints[dp].name}, Datapoint_type: ${datapoints[dp].type}, Data: ${data.toString('hex')}, Length: ${data.length}, Value: ${val}`
         );
     }
 }
