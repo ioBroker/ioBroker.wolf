@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wolf",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "title": "wolf",
     "titleLang": {
       "en": "WOLF Heating over ISM8i",
@@ -16,6 +16,18 @@
       "zh-cn": "ISM8i上的“狼”加热"
     },
     "news": {
+      "1.5.0": {
+        "en": "make sure datapoints are created correctly and resolve name-mixup since 1.2.0 (all states now be names with _t!)\nDrop support for Admin <3.0.0\nFix crash cases reported by Sentry",
+        "de": "Stellen Sie sicher, dass Datenpunkte korrekt erstellt werden, und beheben Sie die Namensverwechslung seit 1.2.0 (alle Zustände sind jetzt Namen mit _t!)\nDrop-Unterstützung für Admin <3.0.0\nVon Sentry gemeldete Absturzfälle beheben",
+        "ru": "убедитесь, что точки данных созданы правильно, и устраните смешение имен с версии 1.2.0 (все состояния теперь являются именами с _t!)\nПрекратить поддержку администратора <3.0.0\nИсправить случаи сбоев, о которых сообщил Sentry",
+        "pt": "certifique-se de que os pontos de dados sejam criados corretamente e resolva a mistura de nomes desde 1.2.0 (todos os estados agora são nomes com _t!)\nSolte o suporte para Admin <3.0.0\nCorrigir casos de travamento relatados pelo Sentinela",
+        "nl": "zorg ervoor dat datapunten correct worden aangemaakt en los naamverwisselingen op sinds 1.2.0 (alle staten zijn nu namen met _t!)\nStop ondersteuning voor Admin <3.0.0\nHerstel crashgevallen gemeld door Sentry",
+        "fr": "assurez-vous que les points de données sont créés correctement et résolvez le mélange de noms depuis la version 1.2.0 (tous les états sont désormais des noms avec _t !)\nSuppression de la prise en charge de l'administrateur <3.0.0\nCorrection des cas de plantage signalés par Sentry",
+        "it": "assicurati che i datapoint siano creati correttamente e risolvi la confusione di nomi dalla versione 1.2.0 (tutti gli stati ora sono nomi con _t!)\nElimina il supporto per l'amministratore <3.0.0\nRisolvi i casi di crash segnalati da Sentry",
+        "es": "asegúrese de que los puntos de datos se creen correctamente y resuelva la confusión de nombres desde 1.2.0 (¡todos los estados ahora tienen nombres con _t!)\nEliminar soporte para Admin <3.0.0\nSolucionar casos de fallas informados por Sentry",
+        "pl": "upewnij się, że punkty danych są tworzone poprawnie i rozwiąż mieszanie nazw od wersji 1.2.0 (wszystkie stany są teraz nazwami z _t!)\nOdrzuć wsparcie dla administratora <3.0.0\nNapraw przypadki awarii zgłoszone przez Sentry",
+        "zh-cn": "确保正确创建数据点并解决自 1.2.0 以来的名称混合问题（所有状态现在都是带有 _t 的名称！）\n放弃对 Admin <3.0.0 的支持\n修复 Sentry 报告的崩溃案例"
+      },
       "1.4.0": {
         "en": "IMPORTANT: Requires now at least js-controller 2.0\nOptimize Configuration UI to prevent people from selecting bind interfaces that do not allow external connections!\nCorrectly create all objects when \"Status as bool\" is used\nAdjust some min/max values\nFix parsing of DP 149\nAdd encoding of DPT_Date type\nreturn value for DPT_Switch corrected from '0ff' to 'Off'\nAdd sentry for crash reporting",
         "de": "WICHTIG: Benötigt jetzt mindestens js-controller 2.0\nOptimieren Sie die Konfigurations-UI, um zu verhindern, dass Benutzer Bindungsschnittstellen auswählen, die keine externen Verbindungen zulassen!\nAlle Objekte korrekt anlegen, wenn \"Status as bool\" verwendet wird\nPassen Sie einige Min/Max-Werte an\nParsing von DP 149 korrigiert\nCodierung des Typs DPT_Date hinzufügen\nRückgabewert für DPT_Switch von '0ff' auf 'Off' korrigiert\nSentry für Absturzberichte hinzufügen",
@@ -87,18 +99,6 @@
         "es": "Error corregido: DPT_Switch en modo booleano no funcionó correctamente",
         "pl": "Poprawiony błąd: DPT_Switch w trybie logicznym nie działał poprawnie",
         "zh-cn": "已更正错误：布尔模式下的DPT_Switch无法正常工作"
-      },
-      "1.2.0": {
-        "en": "Added for all variables \"write\" as Bool value\nAdmin3 compatibility\n",
-        "de": "Für alle Variablen \"write\" als Bool-Wert hinzugefügt\nAdmin3-Kompatibilität\n",
-        "ru": "Добавлено для всех переменных «запись» как значение Bool\nAdmin3 совместимость\n",
-        "pt": "Adicionado para todas as variáveis \"write\" como valor Bool\nCompatibilidade com Admin3\n",
-        "nl": "Toegevoegd voor alle variabelen \"schrijven\" als Bool-waarde\nAdmin3-compatibiliteit\n",
-        "fr": "Ajouté pour toutes les variables \"écrire\" comme valeur booléenne\nCompatibilité Admin3\n",
-        "it": "Aggiunto per tutte le variabili \"write\" come valore Bool\nCompatibilità con Admin3\n",
-        "es": "Se agregó para todas las variables \"escribir\" como valor Bool\nCompatibilidad Admin3\n",
-        "pl": "Dodano dla wszystkich zmiennych „zapis” jako wartość Bool\nKompatybilność z Admin3\n",
-        "zh-cn": "为所有变量“写”添加为布尔值\nAdmin3兼容性\n"
       }
     },
     "docs": {
