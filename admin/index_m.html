@@ -32,117 +32,6 @@
         }
     </style>
 <script type="text/javascript">
-    var wires = [];
-
-    var possibleProperties = [
-        'humidity',
-        'pressure',
-        'inHg',
-        'vib_level',
-        'vib_peak',
-        'vib_min',
-        'vib_max',
-        'current.0',
-        'current.1',
-        'current.2',
-        'current.ALL',
-        'counter.ALL',
-        'counter.A',
-        'counter.B',
-        'min_current.0',
-        'min_current.1',
-        'min_current.2',
-        'min_current.ALL',
-        'max_current.0',
-        'max_current.1',
-        'max_current.2',
-        'max_current.ALL',
-        'volts.0',
-        'volts.1',
-        'volts.2',
-        'volts.ALL',
-        'min_volts.0',
-        'min_volts.1',
-        'min_volts.2',
-        'min_volts.ALL',
-        'max_volts.0',
-        'max_volts.1',
-        'max_volts.2',
-        'max_volts.ALL',
-        'gain',
-        'offset',
-        'current',
-        'illuminance',
-        'relay/state',
-        'relay/control',
-        'LED/state',
-        'LED/control',
-        'resistance',
-        'dew_point',
-        'heat_index',
-        'humidex',
-        'light',
-        'temperature',
-        'fasttemp',
-        'set_alarm',
-        'date',
-        'PIO',
-        'PIO.A',
-        'PIO.B',
-        'PIO.0',
-        'PIO.1',
-        'PIO.2',
-        'PIO.3',
-        'PIO.4',
-        'PIO.5',
-        'PIO.6',
-        'PIO.7',
-        'PIO.ALL',
-        'PIO.BYTE',
-        'latch.0',
-        'latch.1',
-        'latch.2',
-        'latch.3',
-        'latch.4',
-        'latch.5',
-        'latch.6',
-        'latch.7',
-        'latch.ALL',
-        'latch.BYTE',
-        'sensed.BYTE'
-    ];
-
-    function getUniqueIndex(_wires, prefix) {
-        var i = 1;
-        var found;
-        do {
-            found = false;
-            for (var w = 0; w < _wires.length; w++) {
-                if (_wires[w].name.substring(0, (prefix + i).length) === prefix + i) {
-                    found = true;
-                    i++;
-                    break;
-                }
-            }
-        } while (found);
-
-        return prefix + i;
-    }
-
-    function setValue(id, value, onChange) {
-        var $value = $('#' + id + '.value');
-        if ($value.attr('type') === 'checkbox') {
-            $value.prop('checked', value).on('change', function() {
-                onChange();
-            });
-        } else {
-            $value.val(value).on('change', function() {
-                onChange();
-            }).on('keyup', function() {
-                onChange();
-            });
-        }
-    }
 
     // the function loadSettings has to exist ...
     function load(settings, onChange) {
@@ -205,10 +94,10 @@
             obj.names[$this.attr('id')] = $this.val();
         });
 
-        if (obj.devices.bm1 === 'Auto' || obj.devices.bm2 === 'Auto' || obj.devices.bm3 === 'Auto' || obj.devices.bm4 === 'Auto') {
-            obj.devices['bm0'] = 'Auto';
+        if (obj.devices.bm1_t === 'Auto' || obj.devices.bm2_t === 'Auto' || obj.devices.bm3_t === 'Auto' || obj.devices.bm4_t === 'Auto') {
+            obj.devices['bm0_t'] = 'Auto';
         } else {
-            obj.devices['bm0'] = 'off';
+            obj.devices['bm0_t'] = 'off';
         }
 
         callback(obj);

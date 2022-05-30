@@ -8,7 +8,6 @@ const dec         = new (require('./js/decoder.js'))();
 const enc         = new (require('./js/encoder.js'))();
 const datapoints  = require('./js/datapoints.json');
 
-let names      = '';
 const ack_data = {
     old_devices: {},
     new_devices: []
@@ -62,74 +61,74 @@ function startAdapter(options) {
 function getDevice(dp) {
     dp = parseInt(dp, 10);
     if ((dp >= 1 && dp <= 13) || (dp >= 197 && dp <= 199)) {
-        return 'hg1';
+        return 'hg1_t';
     } else if ((dp >= 14 && dp <= 26) || (dp >= 200 && dp <= 202)) {
-        return 'hg2';
+        return 'hg2_t';
     } else if ((dp >= 27 && dp <= 39) || (dp >= 203 && dp <= 205)) {
-        return 'hg3';
+        return 'hg3_t';
     } else if ((dp >= 40 && dp <= 52) || (dp >= 206 && dp <= 208)) {
-        return 'hg4';
+        return 'hg4_t';
     } else if (dp >= 53 && dp <= 66) {
-        return 'bm1';
+        return 'bm1_t';
     } else if (dp >= 67 && dp <= 79) {
-        return 'bm2';
+        return 'bm2_t';
     } else if (dp >= 80 && dp <= 92) {
-        return 'bm3';
+        return 'bm3_t';
     } else if (dp >= 93 && dp <= 105) {
-        return 'bm4';
+        return 'bm4_t';
     } else if ((dp >= 106 && dp <= 113) || (dp >= 209 && dp <= 210)) {
-        return 'km1';
+        return 'km1_t';
     } else if (dp >= 114 && dp <= 120) {
-        return 'mm1';
+        return 'mm1_t';
     } else if (dp >= 121 && dp <= 127) {
-        return 'mm2';
+        return 'mm2_t';
     } else if (dp >= 128 && dp <= 134) {
-        return 'mm3';
+        return 'mm3_t';
     } else if ((dp >= 135 && dp <= 147) || (dp >= 195 && dp <= 196)) {
-        return 'sm1';
+        return 'sm1_t';
     } else if ((dp >= 148 && dp <= 175) || (dp >= 192 && dp <= 193)) {
-        return 'cwl';
+        return 'cwl_t';
     } else if (dp >= 176 && dp <= 191) {
-        return 'hg0';
+        return 'hg0_t';
     } else if (dp === 194) {
-        return 'bm0';
+        return 'bm0_t';
     } else {
         return null;
     }
 }
 
 function getDeviceRage(id) {
-    if (id === 'hg1') {
+    if (id === 'hg1_t') {
         return {'lsb': 1, 'msb': 13, 'lsb2': 197, 'msb2': 199};
-    } else if (id === 'hg2') {
+    } else if (id === 'hg2_t') {
         return {'lsb': 14, 'msb': 26, 'lsb2': 200, 'msb2': 202};
-    } else if (id === 'hg3') {
+    } else if (id === 'hg3_t') {
         return {'lsb': 27, 'msb': 39, 'lsb2': 203, 'msb2': 205};
-    } else if (id === 'hg4') {
+    } else if (id === 'hg4_t') {
         return {'lsb': 40, 'msb': 52, 'lsb2': 206, 'msb2': 208};
-    } else if (id === 'bm1') {
+    } else if (id === 'bm1_t') {
         return {'lsb': 53, 'msb': 66};
-    } else if (id === 'bm2') {
+    } else if (id === 'bm2_t') {
         return {'lsb': 67, 'msb': 79};
-    } else if (id === 'bm3') {
+    } else if (id === 'bm3_t') {
         return {'lsb': 80, 'msb': 92};
-    } else if (id === 'bm4') {
+    } else if (id === 'bm4_t') {
         return {'lsb': 93, 'msb': 105};
-    } else if (id === 'km1') {
+    } else if (id === 'km1_t') {
         return {'lsb': 106, 'msb': 113, 'lsb2': 209, 'msb2': 210};
-    } else if (id === 'mm1') {
+    } else if (id === 'mm1_t') {
         return {'lsb': 114, 'msb': 120};
-    } else if (id === 'mm2') {
+    } else if (id === 'mm2_t') {
         return {'lsb': 121, 'msb': 127};
-    } else if (id === 'mm3') {
+    } else if (id === 'mm3_t') {
         return {'lsb': 128, 'msb': 134};
-    } else if (id === 'sm1') {
+    } else if (id === 'sm1_t') {
         return {'lsb': 135, 'msb': 147, 'lsb2': 195, 'msb2': 196};
-    } else if (id === 'cwl') {
+    } else if (id === 'cwl_t') {
         return {'lsb': 148, 'msb': 175, 'lsb2': 192, 'msb2': 193};
-    } else if (id === 'hg0') {
+    } else if (id === 'hg0_t') {
         return {'lsb': 176, 'msb': 191};
-    } else if (id === 'bm0') {
+    } else if (id === 'bm0_t') {
         return {'lsb': 194, 'msb': 194};
     } else {
         return false;
@@ -444,17 +443,17 @@ function bufferIndexOf(buf, search, offset) {
 function addGroup(dev) {
     let groupName = '';
     if (adapter.config.names[`${dev}_n`] === '') {
-        if (dev.match(/hg/)) {
+        if (dev.match(/^hg/)) {
             groupName = `Heizgeräte ${dev.slice(-1)}`;
-        } else if (dev.match(/bm/)) {
+        } else if (dev.match(/^bm/)) {
             groupName = `Bediengeräte ${dev.slice(-1)}`;
-        } else if (dev.match(/mm/)) {
+        } else if (dev.match(/^mm/)) {
             groupName = `Mischermodule ${dev.slice(-1)}`;
-        } else if (dev.match(/km/)) {
+        } else if (dev.match(/^km/)) {
             groupName = 'Kaskadenmodul';
-        } else if (dev.match(/sm/)) {
+        } else if (dev.match(/^sm/)) {
             groupName = 'Solarmodul';
-        } else if (dev.match(/cwl/)) {
+        } else if (dev.match(/^cwl/)) {
             groupName = 'Comfort-Wohnungs-Lüftung';
         }
     } else {
@@ -589,9 +588,28 @@ function main() {
             }
         }
 
-        const devices = adapter.config.devices;
-        names = adapter.config.names;
+        // Remap devices from earlier names (without _t/_n postfix)
+        for (const devName in Object.keys(adapter.config.devices)) {
+            if (!devName.endsWith('_t') && adapter.config.devices[devName + '_t'] === undefined) {
+                adapter.config.devices[devName + '_t'] = adapter.config.devices[devName];
+                delete adapter.config.devices[devName];
+            }
+        }
+        for (const devName in Object.keys(adapter.config.names)) {
+            if (!devName.endsWith('_n') && adapter.config.names[devName + '_n'] === undefined) {
+                adapter.config.names[devName + '_n'] = adapter.config.names[devName];
+                delete adapter.config.names[devName];
+            }
+        }
 
+        // Fixup config
+        if (adapter.config.devices.bm1_t === 'Auto' || adapter.config.devices.bm2_t === 'Auto' || adapter.config.devices.bm3_t === 'Auto' || adapter.config.devices.bm4_t === 'Auto') {
+            adapter.config.devices['bm0_t'] = 'Auto';
+        } else {
+            adapter.config.devices['bm0_t'] = 'off';
+        }
+
+        const devices = adapter.config.devices;
         for (const dev in devices) {
             if (devices.hasOwnProperty(dev) && ack_data.old_devices[dev]) {
                 if (devices[dev] === 'off') {
@@ -602,9 +620,9 @@ function main() {
             }
         }
 
-        adapter.subscribeStates('*');
-
         createServer(adapter);
+
+        adapter.subscribeStates('*');
     });
 }
 

@@ -24,6 +24,8 @@ Lese auf [deutsch](docs/de/README.md).
 ## Changelog
 
 ### __WORK IN PROGRESS__
+* (Apollon77) make sure datapoints are created correctly and resolve name-mixup since 1.2.0 (all states now be names with _t!)
+* (Apollon77) Drop support for Admin <3.0.0
 * (Apollon77) Fix crash cases reported by Sentry
 
 ### 1.4.0 (2022-04-26)

@@ -145,6 +145,11 @@
         "js-controller": ">=2.0.0"
       }
     ],
+    "globalDependencies": [
+      {
+        "admin": ">=3.0.0"
+      }
+    ],
     "plugins": {
       "sentry": {
         "dsn": "https://849a2f2baedc4282920ef2b00dbfda02@sentry.iobroker.net/194"
@@ -157,22 +162,22 @@
     "bool_status": false,
     "bool_bar": false,
     "devices": {
-      "hg0": "Auto",
-      "hg1": "Auto",
-      "hg2": "Auto",
-      "hg3": "Auto",
-      "hg4": "Auto",
-      "bm0": "Auto",
-      "bm1": "Auto",
-      "bm2": "Auto",
-      "bm3": "Auto",
-      "bm4": "Auto",
-      "mm1": "Auto",
-      "mm2": "Auto",
-      "mm3": "Auto",
-      "km1": "Auto",
-      "sm1": "Auto",
-      "cwl": "Auto"
+      "hg0_t": "Auto",
+      "hg1_t": "Auto",
+      "hg2_t": "Auto",
+      "hg3_t": "Auto",
+      "hg4_t": "Auto",
+      "bm0_t": "Auto",
+      "bm1_t": "Auto",
+      "bm2_t": "Auto",
+      "bm3_t": "Auto",
+      "bm4_t": "Auto",
+      "mm1_t": "Auto",
+      "mm2_t": "Auto",
+      "mm3_t": "Auto",
+      "km1_t": "Auto",
+      "sm1_t": "Auto",
+      "cwl_t": "Auto"
     },
     "names": {
       "hg0_n": "",
