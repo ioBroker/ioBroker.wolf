@@ -161,6 +161,7 @@
     "bind": "0.0.0.0",
     "bool_status": false,
     "bool_bar": false,
+    "polling_interval": 0,
     "devices": {
       "hg0_t": "Auto",
       "hg1_t": "Auto",

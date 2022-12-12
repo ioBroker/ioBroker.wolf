@@ -31,13 +31,12 @@
     "@iobroker/adapter-core": "^2.6.7"
   },
   "devDependencies": {
-    "gulp": "^4.0.2",
-    "mocha": "^10.1.0",
-    "chai": "^4.3.7",
-    "axios": "^1.2.0",
     "@alcalzone/release-script": "^3.5.9",
     "@alcalzone/release-script-plugin-iobroker": "^3.5.9",
-    "@alcalzone/release-script-plugin-license": "^3.5.9"
+    "@alcalzone/release-script-plugin-license": "^3.5.9",
+    "@iobroker/adapter-dev": "^1.2.0",
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7"
   },
   "main": "main.js",
   "files": [
@@ -57,6 +56,7 @@
     "release": "release-script",
     "release-patch": "release-script patch --yes",
     "release-minor": "release-script minor --yes",
-    "release-major": "release-script major --yes"
+    "release-major": "release-script major --yes",
+    "translate": "translate-adapter"
   }
 }

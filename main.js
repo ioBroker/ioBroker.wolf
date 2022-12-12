@@ -13,7 +13,26 @@ const ack_data = {
     new_devices: []
 };
 const ignore   = {};
+let pollingInterval = null;
+
+const buffReq    = Buffer.from('0620F080001104000000F086006E000000', 'hex');
+const buffGetAll = Buffer.from('0620F080001604000000F0D0', 'hex');
+const splitter   = Buffer.from('0620F080', 'hex');
+
 let adapter;
+
+function initPolling() {
+    if (pollingInterval) {
+        clearInterval(pollingInterval);
+        pollingInterval = null;
+    }
+    if (adapter.config.polling_interval === 0) return;
+
+    pollingInterval = setInterval(() => {
+        const sock = adapter._connections[adapter._connections.length - 1];
+        sock.write(buffGetAll);
+    }, adapter.config.polling_interval * 1000);
+}
 
 function startAdapter(options) {
     options = options || {};
@@ -25,8 +44,19 @@ function startAdapter(options) {
 
     adapter.on('ready', () => main());
     adapter.on('unload', cb => {
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+        }
         if (adapter._server) {
-            adapter._server.close(cb);
+            try {
+                adapter._server.close(cb);
+                for (let i = 0; i < adapter._connections.length; i++) {
+                    adapter._connections[i].destroy();
+                }
+            } catch (e) {
+                cb && cb();
+            }
         } else {
             cb && cb();
         }
@@ -36,6 +66,8 @@ function startAdapter(options) {
         //adapter.log.debug(`stateChange: ${id} ${JSON.stringify(state)}`);
         if (state && !state.ack && id) {
             const dp = parseInt(id.split('.').pop());
+            if (!datapoints[dp]) return;
+
             if (datapoints[dp].rw === 'r') {
                 adapter.setState(id, ack_data[dp].value, true);
                 adapter.log.error(`${id} is only readable`);
@@ -579,6 +611,37 @@ async function addDevice(dp) {
 }
 
 function main() {
+    // Fix wrong config from before 12.12.2022
+    if (adapter.config.devices.mm11_t) {
+        adapter.config.devices.mm1_t = adapter.config.devices.mm11_t;
+        delete adapter.config.devices.mm11_t;
+    }
+    if (adapter.config.names.mm11_n) {
+        adapter.config.names.mm1_n = adapter.config.names.mm11_n;
+        delete adapter.config.names.mm11_n;
+    }
+    if (adapter.config.devices.mm12_t) {
+        adapter.config.devices.mm2_t = adapter.config.devices.mm12_t;
+        delete adapter.config.devices.mm12_t;
+    }
+    if (adapter.config.names.mm12_n) {
+        adapter.config.names.mm2_n = adapter.config.names.mm12_n;
+        delete adapter.config.names.mm12_n;
+    }
+    if (adapter.config.devices.mm13_t) {
+        adapter.config.devices.mm3_t = adapter.config.devices.mm13_t;
+        delete adapter.config.devices.mm13_t;
+    }
+    if (adapter.config.names.mm13_n) {
+        adapter.config.names.mm3_n = adapter.config.names.mm13_n;
+        delete adapter.config.names.mm13_n;
+    }
+
+    adapter.config.polling_interval = parseInt(adapter.config.polling_interval, 10);
+    if (isNaN(adapter.config.polling_interval) || adapter.config.polling_interval < 0 || adapter.config.polling_interval > 2147482) {
+        adapter.log.info('Invalid polling interval. Disable polling.');
+        adapter.config.polling_interval = 0;
+    }
     adapter.config.bool_bar = adapter.config.bool_bar === true || adapter.config.bool_bar === 'true';
     adapter.getForeignObjects(`${adapter.namespace}.*`, (err, list) => {
         for (const idd in list) {
@@ -641,10 +704,6 @@ function setState(adapter, dp, val, data, device) {
 }
 
 function createServer(adapter) {
-    const buffReq    = Buffer.from('0620F080001104000000F086006E000000', 'hex');
-    const buffGetAll = Buffer.from('0620F080001604000000F0D0', 'hex');
-    const splitter   = Buffer.from('0620F080', 'hex');
-
     adapter._server = net.createServer(sock => {
         !adapter._connections.includes(sock) && adapter._connections.push(sock);
 
@@ -716,6 +775,8 @@ function createServer(adapter) {
 
         adapter.log.debug(`Receive new connection from ${sock.remoteAddress}:${sock.remotePort}, requesting GetAll`);
         sock.write(buffGetAll);
+
+        initPolling();
     });
 
     adapter._server.on('error', err => adapter.log.error(`Cannot start server: ${err.toString()}`));

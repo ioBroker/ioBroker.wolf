@@ -551,7 +551,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -50,
     "max": 1000
   },
   "56": {
@@ -676,7 +676,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -50,
     "max": 1000
   },
   "69": {
@@ -801,7 +801,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -50,
     "max": 1000
   },
   "82": {
@@ -926,7 +926,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -50,
     "max": 1000
   },
   "95": {
@@ -1133,7 +1133,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": -50,
+    "min": 0,
     "max": 1000
   },
   "116": {
@@ -1614,7 +1614,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -50,
     "max": 1000
   },
   "165": {
@@ -1625,7 +1625,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -50,
     "max": 1000
   },
   "166": {

@@ -17,5 +17,6 @@
     "Solar cells": "Solar cells",
     "Split air/water heat pump": "Split air/water heat pump",
     "Status as Bool": "Status as Boolean",
-    "off": "off"
+    "off": "off",
+    "Polling Interval": "Polling Interval (seconds, 0 = no polling)"
 }

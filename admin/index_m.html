@@ -37,6 +37,32 @@
     function load(settings, onChange) {
         if (!settings) return;
 
+        // Fix wrong config from before 12.12.2022
+        if (settings.devices.mm11_t) {
+            settings.devices.mm1_t = settings.devices.mm11_t;
+            delete settings.devices.mm11_t;
+        }
+        if (settings.names.mm11_n) {
+            settings.names.mm1_n = settings.names.mm11_n;
+            delete settings.names.mm11_n;
+        }
+        if (settings.devices.mm12_t) {
+            settings.devices.mm2_t = settings.devices.mm12_t;
+            delete settings.devices.mm12_t;
+        }
+        if (settings.names.mm12_n) {
+            settings.names.mm2_n = settings.names.mm12_n;
+            delete settings.names.mm12_n;
+        }
+        if (settings.devices.mm13_t) {
+            settings.devices.mm3_t = settings.devices.mm13_t;
+            delete settings.devices.mm13_t;
+        }
+        if (settings.names.mm13_n) {
+            settings.names.mm3_n = settings.names.mm13_n;
+            delete settings.names.mm13_n;
+        }
+
         getIPs(function(ips) {
             for (var i = 0; i < ips.length; i++) {
                 $('#bind').append('<option value="' + ips[i].address + '">' + ips[i].name + '</option>');
@@ -144,6 +170,12 @@
                     <span class="translate" for="bool_bar">Pressure in bar</span>
                 </div>
             </div>
+            <div class="row">
+                <div class="input-field col s12 m4">
+                    <input class="value" id="polling_interval" type="number" min="0" max="65565" value="0"/>
+                    <span class="translate" for="polling_interval">Polling Interval</span>
+                </div>
+            </div>
         </div>
         <div id="tab-devices" class="col s12 page">
 
@@ -182,7 +214,7 @@
                                 </div>
                                 <div class="input-field col s4">
                                     <input class="name" id="hg2_n" type="text"/>
-                                    <label class="translate" for="hg1_n">Name</label>
+                                    <label class="translate" for="hg2_n">Name</label>
                                 </div>
                             </div>
                         </div>
@@ -251,7 +283,7 @@
                                 </div>
                                 <div class="input-field col s4">
                                     <input class="name" id="bm2_n" type="text"/>
-                                    <label class="translate" for="bm1_n">Name</label>
+                                    <label class="translate" for="bm2_n">Name</label>
                                 </div>
                             </div>
                         </div>
@@ -301,12 +333,12 @@
                             <div class="col s12">
                                 <div class="col s1 number">1.</div>
                                 <div class="input-field col s1 m2 checkbox">
-                                    <input class="auto" id="mm11_t" type="checkbox"/>
-                                    <span class="translate" for="mm11_t">Auto</span>
+                                    <input class="auto" id="mm1_t" type="checkbox"/>
+                                    <span class="translate" for="mm1_t">Auto</span>
                                 </div>
                                 <div class="input-field col s4">
-                                    <input class="name" id="mm11_n" type="text"/>
-                                    <label class="translate" for="mm11_n">Name</label>
+                                    <input class="name" id="mm1_n" type="text"/>
+                                    <label class="translate" for="mm1_n">Name</label>
                                 </div>
                             </div>
                         </div>
@@ -314,12 +346,12 @@
                             <div class="col s12">
                                 <div class="col s1 number">2.</div>
                                 <div class="input-field col s1 m2 checkbox">
-                                    <input class="auto" id="mm12_t" type="checkbox"/>
-                                    <span class="translate" for="mm12_t">Auto</span>
+                                    <input class="auto" id="mm2_t" type="checkbox"/>
+                                    <span class="translate" for="mm2_t">Auto</span>
                                 </div>
                                 <div class="input-field col s4">
-                                    <input class="name" id="mm12_n" type="text"/>
-                                    <label class="translate" for="mm11_n">Name</label>
+                                    <input class="name" id="mm2_n" type="text"/>
+                                    <label class="translate" for="mm2_n">Name</label>
                                 </div>
                             </div>
                         </div>
@@ -327,12 +359,12 @@
                             <div class="col s12">
                                 <div class="col s1 number">3.</div>
                                 <div class="input-field col s1 m2 checkbox">
-                                    <input class="auto" id="mm13_t" type="checkbox"/>
-                                    <span class="translate" for="mm13_t">Auto</span>
+                                    <input class="auto" id="mm3_t" type="checkbox"/>
+                                    <span class="translate" for="mm3_t">Auto</span>
                                 </div>
                                 <div class="input-field col s4">
-                                    <input class="name" id="mm13_n" type="text"/>
-                                    <label class="translate" for="mm13_n">Name</label>
+                                    <input class="name" id="mm3_n" type="text"/>
+                                    <label class="translate" for="mm3_n">Name</label>
                                 </div>
                             </div>
                         </div>
