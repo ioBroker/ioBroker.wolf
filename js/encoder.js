@@ -74,6 +74,27 @@ Encoder.prototype.encodeDPT9 = function (value, exp) {
 };
 
 /**
+ * encode dpt 10 values
+ */
+Encoder.prototype.encodeDPT10 = function (date, weekday) {
+    const data = [0, 0, 0];
+
+    data[0] = date.getHours();
+    data[1] = date.getMinutes();
+    data[2] = date.getSeconds();
+
+    if (weekday && typeof weekday === 'number' && weekday !== 0) {
+        data[0] += weekday << 5;
+    }
+
+    const buffer = Buffer.alloc(3);
+    buffer.writeUInt8(data[0], 0);
+    buffer.writeUInt8(data[1], 1);
+    buffer.writeUInt8(data[2], 2);
+    return buffer;
+};
+
+/**
  * encode dpt 11 values
  */
 Encoder.prototype.encodeDPT11 = function (value) {

@@ -411,7 +411,7 @@ function encode(data, dp) {
         } else if(data == 3 || data === 'Reduzierte Lüftung'){
             return [Buffer.from('03', 'hex'), 'Reduzierte Lüftung'];
         }
-    } else if (type === 'DPT_Date'){
+    } else if (type === 'DPT_Date') {
         const dataDate = new Date(data);
         if (!isNaN(dataDate.getFullYear())) {
             const onlyDate = new Date(dataDate.getFullYear(), dataDate.getMonth(), dataDate.getDate());
@@ -419,6 +419,10 @@ function encode(data, dp) {
             return [enc.encodeDPT11(onlyDate), onlyDate];
         }
         throw new Error('Invalid date');
+    } else if (type === 'DPT_TimeOfDay') {
+        const dataDate = new Date(data);
+        // We ignore the weekday for now!
+        return [enc.encodeDPT10(dataDate), dataDate];
     }
     if (name === 'Warmwassersolltemperatur') {
         val = parseInt(data);
