@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wolf",
-    "version": "1.5.0",
+    "version": "1.6.0",
     "title": "wolf",
     "titleLang": {
       "en": "WOLF Heating over ISM8i",
@@ -16,6 +16,19 @@
       "zh-cn": "ISM8i上的“狼”加热"
     },
     "news": {
+      "1.6.0": {
+        "en": "Add DPT10 Encoding (TimeofDay) - but ignores weekday!\nAdjust some temperature states to allow to go negative\nAdd additional polling of all values to ensure that all values are updated\nFix configuration issue with Mixing modules",
+        "de": "Fügen Sie DPT10 Encoding (TimeofDay) hinzu - aber ignoriert den Wochentag!\nEinige Temperaturzustände anpassen, um negativ zu gehen\nFügen Sie zusätzliche Abfrage aller Werte hinzu, um sicherzustellen, dass alle Werte aktualisiert werden\nProblem der Konfiguration mit Mischmodulen behoben",
+        "ru": "Добавьте кодирование DPT10 (TimeofDay) - но игнорирует будний день!\nОтрегулируйте некоторые состояния температуры, чтобы позволить пойти отрицательно\nДобавьте дополнительный опрос всех ценностей, чтобы убедиться, что все значения обновляются\nИсправлена проблема конфигурации с модулями смешивания",
+        "pt": "Adicionar DPT10 Encoding (TimeofDay) - mas ignora o dia da semana!\nAjuste alguns estados de temperatura para permitir ir negativo\nAdicionar sondagem adicional de todos os valores para garantir que todos os valores sejam atualizados\nCorrigir problema de configuração com módulos de mistura",
+        "nl": "Maar negeert de week!\nVerander wat temperatuurstaat om negatief te kunnen worden\nVervulling van alle waarden toevoegen om te zorgen dat alle waarden worden geüpload\nVervullingsproblemen met Mixing Modules",
+        "fr": "Ajouter DPT10 Encoding (TimeofDay) - mais ignore la semaine!\nAjuster certains états de température pour permettre d'aller négatif\nAjouter le vote supplémentaire de toutes les valeurs pour s'assurer que toutes les valeurs sont mises à jour\nProblème de configuration fixe avec les modules de mixage",
+        "it": "Aggiungi DPT10 Encoding (TimeofDay) - ma ignora il giorno della settimana!\nRegolare alcuni stati di temperatura per consentire di andare negativo\nAggiungi ulteriore inquinamento di tutti i valori per garantire che tutti i valori siano aggiornati\nRisolvere il problema della configurazione con i moduli Mixing",
+        "es": "Añadir DPT10 Codificación (TimeofDay) - pero ignora el día de semana!\nAjuste algunos estados de temperatura para permitir ir negativo\nAñadir una encuesta adicional de todos los valores para asegurar que todos los valores sean actualizados\nCorrección de la configuración con módulos de mezcla",
+        "pl": "Addd DPT10 Encoding (TimeofDay) (ang.)!\nAdjust niektóre stany temperatury pozwalają na uzyskanie negatywnej wartości\nDostarczanie dodatkowych zanieczyszczeń wszystkich wartości w celu zapewnienia, że wszystkie wartości są aktualizowane\nKwestia konfiguracyjna z modułami miksującymi",
+        "uk": "Додати DPT10 Encoding (TimeofDay) - але ігнорує тиждень!\nРегулювання деяких температурних станів, щоб отримати негативний\nДодати додаткові опитування всіх значень, щоб забезпечити оновлення всіх значень\nВиписка конфігурації з модулями Mixing",
+        "zh-cn": "DPT10 Encoding(Day)-但无视周日!\n调整某些温度国家,允许出现消极气体\n增加所有价值的污染,以确保所有价值观得到更新\n固定单元的配置问题"
+      },
       "1.5.0": {
         "en": "make sure datapoints are created correctly and resolve name-mixup since 1.2.0 (all states now be names with _t!)\nDrop support for Admin <3.0.0\nFix crash cases reported by Sentry",
         "de": "Stellen Sie sicher, dass Datenpunkte korrekt erstellt werden, und beheben Sie die Namensverwechslung seit 1.2.0 (alle Zustände sind jetzt Namen mit _t!)\nDrop-Unterstützung für Admin <3.0.0\nVon Sentry gemeldete Absturzfälle beheben",
@@ -87,18 +100,6 @@
         "es": "Cambios para js-controller 3.3",
         "pl": "Zmiany dla kontrolera js 3.3",
         "zh-cn": "js-controller 3.3 的变化"
-      },
-      "1.2.1": {
-        "en": "Corrected error: DPT_Switch in boolean mode didn't work correct",
-        "de": "Behobener Fehler: DPT_Switch im Booleschen Modus funktionierte nicht richtig",
-        "ru": "Исправленная ошибка: DPT_Switch в логическом режиме не работает правильно",
-        "pt": "Erro corrigido: DPT_Switch no modo booleano não funcionou corretamente",
-        "nl": "Gecorrigeerde fout: DPT_Switch in booleaanse modus werkte niet correct",
-        "fr": "Erreur corrigée: DPT_Switch en mode booléen ne fonctionnait pas correctement",
-        "it": "Errore corretto: DPT_Switch in modalità booleana non funzionava correttamente",
-        "es": "Error corregido: DPT_Switch en modo booleano no funcionó correctamente",
-        "pl": "Poprawiony błąd: DPT_Switch w trybie logicznym nie działał poprawnie",
-        "zh-cn": "已更正错误：布尔模式下的DPT_Switch无法正常工作"
       }
     },
     "docs": {
