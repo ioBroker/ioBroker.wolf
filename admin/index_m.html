@@ -72,7 +72,7 @@
 
         $('#port').val(settings.port).on('change', () => onChange()).on('keyup', () => onChange());
 
-		$('#polling_interval').val(settings.polling_interval).on('change', () => onChange()).on('keyup', () => onChange());
+        $('#polling_interval').val(settings.polling_interval).on('change', () => onChange()).on('keyup', () => onChange());
 
         // bool_status
         $('#bool_status').prop('checked', settings.bool_status).on('change', () => onChange());
@@ -111,7 +111,7 @@
             bool_bar: $('#bool_bar').prop('checked'),
             port: $('#port').val(),
             bind: $('#bind').val(),
-			polling_interval: $('#polling_interval').val()
+            polling_interval: $('#polling_interval').val()
         };
 
         $('.auto').each(function () {

@@ -84,7 +84,7 @@ function startAdapter(options) {
                     const _buff_set = Buffer.concat([Buffer.from(`0620F08000${toHex(20 + bufVal.length)}04000000F0C100${toHex(dp)}000100${toHex(dp)}00${toHex(bufVal)}`, 'hex'), bufVal], bufVal.length + 20);
 
                     adapter._connections.forEach(sock => sock.write(_buff_set));
-					adapter.log.debug(`send ${_buff_set.toString('hex')}`);
+                    adapter.log.debug(`send ${_buff_set.toString('hex')}`);
                     adapter.setState(id, enc[1], true);
                 } catch (e) {
                     adapter.log.error(`Can't encode DP (${e.message}) : ${dp} - data: ${state.val} - type: ${datapoints[dp].type}`);
@@ -243,9 +243,9 @@ function decode(type, data, dp) {
     } else if (type === 'DPT_TimeOfDay') {
         return dec.decodeDPT10(data);
     } else if (type === 'DPT_Value_1_Ucount') {
-		if (dp === 357 || dp === 359 || dp === 360 || dp === 361){
-			_data = dec.decodeDPT5(data);
-			switch (_data){
+        if (dp === 357 || dp === 359 || dp === 360 || dp === 361){
+            _data = dec.decodeDPT5(data);
+            switch (_data){
                 case 0:
                     return 'kein Heizgerät';
                 case 1:
@@ -278,10 +278,10 @@ function decode(type, data, dp) {
                     return 'FHA';
                 default:
                     return '';
-			}
-		} else if (dp === 358){
-			_data = dec.decodeDPT5(data);
-			switch (_data){
+            }
+        } else if (dp === 358){
+            _data = dec.decodeDPT5(data);
+            switch (_data){
                 case 1:
                     return 'Dir. Warmwasser';
                 case 2:
@@ -300,10 +300,10 @@ function decode(type, data, dp) {
                     return 'Warmwasser 7';
                 default:
                     return '';
-			}
-		} else if (dp === 251){
-			_data = dec.decodeDPT5(data);
-			switch (_data){
+            }
+        } else if (dp === 251){
+            _data = dec.decodeDPT5(data);
+            switch (_data){
                 case 1:
                     return 'Dir. Heizkreis';
                 case 2:
@@ -322,17 +322,17 @@ function decode(type, data, dp) {
                     return 'Mischerkreis 7';
                 default:
                     return '';
-			}
-		}
+            }
+        }
     } else if (type === 'DPT_Value_2_Ucount') {
-		_data = dec.decodeDPT7(data);
-		let wert = "";
-		if (dp === 355){
-			// 16 max length in bit - only 14 are currentyl needed
-			let y = 16 -_data.length;
-			for (let i = 0; i < 14; i++){
-				if (_data.slice(i, i + 1) == 1) {
-					switch (i+y){
+        _data = dec.decodeDPT7(data);
+        let wert = "";
+        if (dp === 355){
+            // 16 max length in bit - only 14 are currentyl needed
+            let y = 16 -_data.length;
+            for (let i = 0; i < 14; i++){
+                if (_data.slice(i, i + 1) == 1) {
+                    switch (i+y){
                         case 2:
                             wert += ' Solarmodul, ';
                             break;
@@ -372,18 +372,18 @@ function decode(type, data, dp) {
                         case 14:
                             wert += ' Mischermodul 1, ';
                             break;
-					}
-				}
-			}
-		}
-		if (dp === 356){
-			_data = dec.decodeDPT7(data);
-			let wert = "";
-			// 16 max length in bit - only 11 are currently needed
-			let y = 16 -_data.length;
-			for (let i = 0; i < 12; i++){
-				if (_data.slice(i, i + 1) == 1) {
-					switch (i+y){
+                    }
+                }
+            }
+        }
+        if (dp === 356){
+            _data = dec.decodeDPT7(data);
+            let wert = "";
+            // 16 max length in bit - only 11 are currently needed
+            let y = 16 -_data.length;
+            for (let i = 0; i < 12; i++){
+                if (_data.slice(i, i + 1) == 1) {
+                    switch (i+y){
                         case 9:
                             wert += ' CWL Excellent, ';
                             break;
@@ -402,11 +402,11 @@ function decode(type, data, dp) {
                         case 4:
                             wert += ' BM-2(0)/System, ';
                             break;
-					}
-				}
-			}
-		}
-		return wert;
+                    }
+                }
+            }
+        }
+        return wert;
     } else if (type === 'DPT_Date') {
         return dec.decodeDPT11(data);
     } else if (type === 'DPT_FlowRate_m3/h') {
@@ -516,8 +516,8 @@ function encode(data, dp) {
     //"DPT_Tempd",
     //"DPT_TimeOfDay"
     //"DPT_Scaling"
-	//"DPT_Value_1_Ucount"
-	//"DPT_Value_2_Ucount"
+    //"DPT_Value_1_Ucount"
+    //"DPT_Value_2_Ucount"
 
     if (type === 'DPT_Switch') {
         if (['On', 'on', 'Enable', '1', 'true', 1, true].indexOf(data) > -1) {
@@ -542,9 +542,9 @@ function encode(data, dp) {
             val = 0
         }
         return [enc.encodeDPT5(data), val];
-	} else if (type === 'DPT_Value_1_Ucount') {
+    } else if (type === 'DPT_Value_1_Ucount') {
         return [enc.encodeDPT5(data), val];
-	} else if (type === 'DPT_Value_2_Ucount') {
+    } else if (type === 'DPT_Value_2_Ucount') {
         return [enc.encodeDPT7(data), val];
     } else if (type === 'DPT_Tempd' && name === 'Sollwertkorrektur') {
         val = Math.round(data * 2) / 2;
@@ -661,7 +661,7 @@ function bufferIndexOf(buf, search, offset) {
 
 function addGroup(dev) {
     let groupName = '';
-	dev = dev.replace('_t','_n');
+    dev = dev.replace('_t','_n');
     if (adapter.config.names[`${dev}`] === '') {
         if (dev.match(/^hg/)) {
             groupName = `Heizgerät ${dev.slice(-3,-2)}`;
@@ -679,8 +679,8 @@ function addGroup(dev) {
     } else {
         groupName = adapter.config.names[`${dev}`];
     }
-	if (dev !== "unknown") dev = dev.replace('n','t');
-	adapter.log.debug(`Add Channel ${dev} : ${groupName}`);
+    if (dev !== "unknown") dev = dev.replace('n','t');
+    adapter.log.debug(`Add Channel ${dev} : ${groupName}`);
     adapter.extendObject(dev, {
         type: 'channel',
         common: {
@@ -841,7 +841,7 @@ function main() {
 function setState(adapter, dp, val, data, device) {
     try {
         val = decode(datapoints[dp].type, data.slice(20), dp);
-		adapter.log.debug(`Set Value for ${device}.${dp}.${datapoints[dp].name}: ${val}`);
+        adapter.log.debug(`Set Value for ${device}.${dp}.${datapoints[dp].name}: ${val}`);
         adapter.setState(`${device}.${dp}`, val, true);
         ack_data[dp]['value'] = val;
     } catch (err) {
@@ -885,12 +885,12 @@ function createServer(adapter) {
 
                 buffReq[12] = data[12];
                 buffReq[13] = data[13];
-				adapter.log.debug(`Acknowledge ${buffReq.toString('hex')}`);
+                adapter.log.debug(`Acknowledge ${buffReq.toString('hex')}`);
                 sock.write(buffReq);
 
                 dp = data.readUInt16BE(12);
                 device = getDevice(dp);
-				adapter.log.debug(`Data for ${device} : ${dp}`);
+                adapter.log.debug(`Data for ${device} : ${dp}`);
                 if (adapter.config.devices[device] === 'Auto') {
                     if (ack_data[dp]) {
                         setState(adapter, dp, val, data, device);
@@ -898,7 +898,7 @@ function createServer(adapter) {
                         if (datapoints[dp].name === 'Störung') {
                             if (data.slice(20).readInt8(0) === 1) {
                                 ignore[device] = true;
-								adapter.log.info(`heating ${device} do not exist`);
+                                adapter.log.info(`heating ${device} do not exist`);
                             } else {
                                 ignore[device] = undefined;
                             }
@@ -906,35 +906,35 @@ function createServer(adapter) {
 
                         if (!ignore[device]) {
                             if (await addDevice(dp)) {
-								adapter.log.debug(`create object: ${dp}`);
+                                adapter.log.debug(`create object: ${dp}`);
                                 setState(adapter, dp, val, data, device);
                             }
                         }
                     }
                 } else {
-					if ((dp >= 212 && dp <= 250) || (dp >= 252 && dp <= 354)){
-						if (ack_data[dp]) {
-							setState(adapter, dp, val, data, device);
-						} else {
-							if (datapoints[dp].name === 'Störung') {
-								if (data.slice(20).readInt8(0) === 1) {
-									ignore[device] = true;
-									adapter.log.info(`heating ${device} do not exist`);
-								} else {
-									ignore[device] = undefined;
-								}
-							}
+                    if ((dp >= 212 && dp <= 250) || (dp >= 252 && dp <= 354)){
+                        if (ack_data[dp]) {
+                            setState(adapter, dp, val, data, device);
+                        } else {
+                            if (datapoints[dp].name === 'Störung') {
+                                if (data.slice(20).readInt8(0) === 1) {
+                                    ignore[device] = true;
+                                    adapter.log.info(`heating ${device} do not exist`);
+                                } else {
+                                    ignore[device] = undefined;
+                                }
+                            }
 
-							if (!ignore[device]) {
-								if (await addDevice(dp)) {
-									adapter.log.debug(`create objects: ${dp}`);
-									setState(adapter, dp, val, data, device);
-								}
-							}
-						}
-					}else{
-						adapter.log.info(`For datapoint ${dp} no device defined.`);
-					}
+                            if (!ignore[device]) {
+                                if (await addDevice(dp)) {
+                                    adapter.log.debug(`create objects: ${dp}`);
+                                    setState(adapter, dp, val, data, device);
+                                }
+                            }
+                        }
+                    }else{
+                        adapter.log.info(`For datapoint ${dp} no device defined.`);
+                    }
                 }
             }
         });

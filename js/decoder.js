@@ -52,8 +52,8 @@ Decoder.prototype.decodeDPT6 = function (buffer) {
  */
 Decoder.prototype.decodeDPT7 = function (buffer) {
     let value = buffer.readUInt16BE(0);
-	let valstring = value.toString(2);
-	return valstring;
+    let valstring = value.toString(2);
+    return valstring;
 };
 
 /**
