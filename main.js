@@ -519,7 +519,11 @@ async function addDevice(dp) {
             if (!ack_data[range.lsb]) {
                 adapter.log.debug(`Add objects for ${dev}.${range.lsb}`);
                 const data = datapoints[range.lsb];
-                if (data.einheit === 'Pa' && adapter.config.bool_bar) {
+                if (!data) {
+                    adapter.log.warn(`No data for ${dev}.${range.lsb}`);
+                    continue;
+                }
+                if (adapter.config.bool_bar && data.einheit === 'Pa') {
                     data.einheit = 'bar';
                 }
                 if (adapter.config.bool_status && ['DPT_Switch', 'DPT_Enable', 'DPT_OpenClose'].includes(data.type)) {
@@ -568,7 +572,11 @@ async function addDevice(dp) {
                 if (!ack_data[range.lsb2]) {
                     adapter.log.debug(`Add objects for ${dev}.${range.lsb2}`);
                     const data = datapoints[range.lsb2];
-                    if (data.einheit === 'Pa' && adapter.config.bool_bar) {
+                    if (!data) {
+                        adapter.log.warn(`No data for ${dev}.${range.lsb2}`);
+                        continue;
+                    }
+                    if (adapter.config.bool_bar && data.einheit === 'Pa') {
                         data.einheit = 'bar'
                     }
                     ack_data[range.lsb2] = {id: `${adapter.namespace}.${dev}.${range.lsb2}`};
