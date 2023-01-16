@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wolf",
-    "version": "1.6.0",
+    "version": "1.6.1",
     "title": "wolf",
     "titleLang": {
       "en": "WOLF Heating over ISM8i",
@@ -16,6 +16,19 @@
       "zh-cn": "ISM8i上的“狼”加热"
     },
     "news": {
+      "1.6.1": {
+        "en": "Fixed some crash cases with unknown datapoints",
+        "de": "Einige Crashfälle mit unbekannten Datenpunkten behoben",
+        "ru": "Исправлены некоторые случаи сбоя с неизвестными датами",
+        "pt": "Corrigido alguns casos de acidente com datapoints desconhecidos",
+        "nl": "Vertaling:",
+        "fr": "Correction de certains cas de crash avec des points de données inconnus",
+        "it": "Risolto alcuni casi di crash con datapoint sconosciuti",
+        "es": "Arreglado algunos casos de choque con puntos de datos desconocidos",
+        "pl": "Szczegółowe przypadki katastrofy z nieznanym punktem danych",
+        "uk": "Виправлено випадки аварії з невідомими точками даних",
+        "zh-cn": "装有不明数据点的一些事故"
+      },
       "1.6.0": {
         "en": "Add DPT10 Encoding (TimeofDay) - but ignores weekday!\nAdjust some temperature states to allow to go negative\nAdd additional polling of all values to ensure that all values are updated\nFix configuration issue with Mixing modules",
         "de": "Fügen Sie DPT10 Encoding (TimeofDay) hinzu - aber ignoriert den Wochentag!\nEinige Temperaturzustände anpassen, um negativ zu gehen\nFügen Sie zusätzliche Abfrage aller Werte hinzu, um sicherzustellen, dass alle Werte aktualisiert werden\nProblem der Konfiguration mit Mischmodulen behoben",
@@ -88,18 +101,6 @@
         "es": "(eifel-tech / tobias) Error corregido: DP 149 con el tipo correcto (Problema # 30)\n(eifel-tech / tobias) Cambios para js-controller 3.3",
         "pl": "(eifel-tech/tobias) Poprawiony błąd: DP 149 z poprawnym typem (problem #30)\n(eifel-tech/tobias) Zmiany dla kontrolera js 3.3",
         "zh-cn": "(eifel-tech/tobias) 更正错误：DP 149 类型正确（问题 #30）\n(eifel-tech/tobias) js-controller 3.3 的变化"
-      },
-      "1.3.1": {
-        "en": "Changes for js-controller 3.3",
-        "de": "Änderungen für js-Controller 3.3",
-        "ru": "Изменения для js-controller 3.3",
-        "pt": "Mudanças para js-controller 3.3",
-        "nl": "Wijzigingen voor js-controller 3.3",
-        "fr": "Changements pour js-controller 3.3",
-        "it": "Modifiche per js-controller 3.3",
-        "es": "Cambios para js-controller 3.3",
-        "pl": "Zmiany dla kontrolera js 3.3",
-        "zh-cn": "js-controller 3.3 的变化"
       }
     },
     "docs": {

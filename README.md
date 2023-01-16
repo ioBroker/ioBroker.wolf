@@ -22,8 +22,7 @@ Lese auf [deutsch](docs/de/README.md).
 -->
 
 ## Changelog
-
-### __WORK IN PROGRESS__
+### 1.6.1 (2023-01-16)
 * (Apollon77) Fixed some crash cases with unknown datapoints
 
 ### 1.6.0 (2022-12-30)
