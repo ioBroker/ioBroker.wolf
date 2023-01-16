@@ -248,108 +248,80 @@ function decode(type, data, dp) {
 			switch (_data){
                 case 0:
                     return 'kein Heizgerät';
-                    break;
                 case 1:
                     return 'CGB-2';
-                    break;
                 case 2:
                     return 'MGK-2';
-                    break;
                 case 3:
                     return 'TOB';
-                    break;
                 case 4:
                     return 'BWL-1S';
-                    break;
                 case 5:
                     return 'FGB';
-                    break;
                 case 6:
                     return 'CHA';
-                    break;
                 case 7:
                     return 'COB-2';
-                    break;
                 case 8:
                     return 'CGB-2 38/55';
-                    break;
                 case 9:
                     return 'CGB-2 38/55';
-                    break;
                 case 10:
                     return 'TGB-2';
-                    break;
                 case 11:
                     return 'TGB-2';
-                    break;
                 case 12:
                     return 'CGB-2 75/100';
-                    break;
                 case 13:
                     return 'CGB-2 75/100';
-                    break;
                 case 14:
                     return 'FHA';
-                    break;
-                default: return '';
+                default:
+                    return '';
 			}
 		} else if (dp === 358){
 			_data = dec.decodeDPT5(data);
 			switch (_data){
                 case 1:
                     return 'Dir. Warmwasser';
-                    break;
                 case 2:
                     return 'Warmwasser 1';
-                    break;
                 case 4:
                     return 'Warmwasser 2';
-                    break;
                 case 8:
                     return 'Warmwasser 3';
-                    break;
                 case 16:
                     return 'Warmwasser 4';
-                    break;
                 case 32:
                     return 'Warmwasser 5';
-                    break;
                 case 64:
                     return 'Warmwasser 6';
-                    break;
                 case 128:
                     return 'Warmwasser 7';
-                    break;
-                default: return '';
+                default:
+                    return '';
 			}
 		} else if (dp === 251){
 			_data = dec.decodeDPT5(data);
 			switch (_data){
                 case 1:
                     return 'Dir. Heizkreis';
-                    break;
                 case 2:
                     return 'Mischerkreis 1';
-                    break;
                 case 4:
                     return 'Mischerkreis 2';
-                    break;
                 case 8:
                     return 'Mischerkreis 3';
-                    break;
                 case 16:
                     return 'Mischerkreis 4';
-                    break;
                 case 32:
                     return 'Mischerkreis 5';
-                    break;
                 case 64:
                     return 'Mischerkreis 6';
-                    break;
                 case 128:
                     return 'Mischerkreis 7';
-                    break;
-                default: return '';
+                default:
+                    return '';
 			}
 		}
     } else if (type === 'DPT_Value_2_Ucount') {
