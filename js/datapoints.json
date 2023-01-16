@@ -2086,5 +2086,339 @@
     "commonType": "number",
     "min": 0,
     "max": 1000
+  },
+  "211": {
+    "name": "Betriebsart Heizen/Kühlen",
+    "type": "DPT_Switch",
+    "rw": "rw",
+    "read": true,
+    "write": true,
+    "commonType": "string"
+  },
+  "251": {
+    "name": "Erkennung verfügbare Heiz-/Mischerkreise",
+    "type": "DPT_Value_1_Ucount",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+  "336": {
+    "name": "336",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "337": {
+    "name": "337",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "338": {
+    "name": "338",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "339": {
+    "name": "339",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "340": {
+    "name": "340",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "341": {
+    "name": "341",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "342": {
+    "name": "342",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "343": {
+    "name": "343",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "344": {
+    "name": "344",
+    "type": "DPT_Unknown2",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "345": {
+    "name": "345",
+    "type": "DPT_Unknown2",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "346": {
+    "name": "346",
+    "type": "DPT_Unknown2",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "347": {
+    "name": "347",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "348": {
+    "name": "348",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "349": {
+    "name": "349",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "350": {
+    "name": "350",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "",
+    "commonType": "string"
+  },
+  "351": {
+    "name": "351",
+    "type": "DPT_Unknown2",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+  "352": {
+    "name": "352",
+    "type": "DPT_Unknown2",
+    "rw": "r",
+    "read": true,
+    "commonType": "string"
+  },
+  "353": {
+    "name": "353",
+    "type": "DPT_Unknown2",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+   "354": {
+    "name": "354",
+    "type": "DPT_Unknown1",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+  "355": {
+    "name": "Erkennung verfügbarer Geräte 1",
+    "type": "DPT_Value_2_Ucount",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+  "356": {
+    "name": "Erkennung verfügbarer Geräte 2",
+    "type": "DPT_Value_2_Ucount",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+  "357": {
+    "name": "Unterscheidung Heizgerätetyp (HG1)",
+    "type": "DPT_Value_1_Ucount",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+  "358": {
+    "name": "Erkennung vorhandener Warmwasserkreise",
+    "type": "DPT_Value_1_Ucount",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+  "359": {
+    "name": "Unterscheidung Heizgerätetyp (HG2)",
+    "type": "DPT_Value_1_Ucount",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+  "360": {
+    "name": "Unterscheidung Heizgerätetyp (HG3)",
+    "type": "DPT_Value_1_Ucount",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+  "361": {
+    "name": "Unterscheidung Heizgerätetyp (HG4)",
+    "type": "DPT_Value_1_Ucount",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "string"
+  },
+  "364": {
+    "name": "Kesselsolltemperatur HG1 – lesen",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "°C",
+    "commonType": "number",
+    "min": 0,
+    "max": 1000
+  },
+  "365": {
+    "name": "Kesselsolltemperatur HG2 – lesen",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "°C",
+    "commonType": "number",
+    "min": 0,
+    "max": 1000
+  },
+  "366": {
+    "name": "Kesselsolltemperatur HG3 – lesen",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "°C",
+    "commonType": "number",
+    "min": 0,
+    "max": 1000
+  },
+  "367": {
+    "name": "Kesselsolltemperatur HG4 – lesen",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "°C",
+    "commonType": "number",
+    "min": 0,
+    "max": 1000
+  },
+  "368": {
+    "name": "Vorlaufsolltemperatur dir. HK – lesen",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "°C",
+    "commonType": "number",
+    "min": 0,
+    "max": 1000
+  },
+  "369": {
+    "name": "Mischersolltemperatur MK1 – lesen",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "°C",
+    "commonType": "number",
+    "min": 0,
+    "max": 1000
+  },
+  "370": {
+    "name": "Mischersolltemperatur MK2 – lesen",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "°C",
+    "commonType": "number",
+    "min": 0,
+    "max": 1000
+  },
+  "371": {
+    "name": "Mischersolltemperatur MK3 – lesen",
+    "type": "DPT_Value_Temp",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "einheit": "°C",
+    "commonType": "number",
+    "min": 0,
+    "max": 1000
+  },
+  "372": {
+    "name": "Zuletzt aktiver Störcode",
+    "type": "DPT_Value_1_Ucount",
+    "rw": "r",
+    "read": true,
+    "write": false,
+    "commonType": "number"
   }
 }

@@ -51,7 +51,9 @@ Decoder.prototype.decodeDPT6 = function (buffer) {
  * decode EIS 10 / dpt 7 values
  */
 Decoder.prototype.decodeDPT7 = function (buffer) {
-    return buffer.readUInt16BE(0);
+    let value = buffer.readUInt16BE(0);
+	let valstring = value.toString(2);
+	return valstring;
 };
 
 /**

@@ -21,6 +21,12 @@ const splitter   = Buffer.from('0620F080', 'hex');
 
 let adapter;
 
+function toHex(num) {
+    let val = num.toString(16);
+    if (val.length < 2) val = `0${val}`;
+    return val;
+}
+
 function initPolling() {
     if (pollingInterval) {
         clearInterval(pollingInterval);
@@ -75,11 +81,11 @@ function startAdapter(options) {
                 try {
                     const enc = encode(state.val, dp);
                     const bufVal = enc[0];
-                    const _buff_set = Buffer.concat([Buffer.from(`0620F08000${(20 + bufVal.length).toString(16)}04000000F0C100${dp.toString(16)}000100${dp.toString(16)}000${bufVal.length.toString(16)}`, 'hex'), bufVal], bufVal.length + 20);
+                    const _buff_set = Buffer.concat([Buffer.from(`0620F08000${toHex(20 + bufVal.length)}04000000F0C100${toHex(dp)}000100${toHex(dp)}00${toHex(bufVal)}`, 'hex'), bufVal], bufVal.length + 20);
 
                     adapter._connections.forEach(sock => sock.write(_buff_set));
-
-                    adapter.setState(id, enc[1], true); // TODO: here send to ism8
+					adapter.log.debug(`send ${_buff_set.toString('hex')}`);
+                    adapter.setState(id, enc[1], true);
                 } catch (e) {
                     adapter.log.error(`Can't encode DP (${e.message}) : ${dp} - data: ${state.val} - type: ${datapoints[dp].type}`);
                 }
@@ -92,21 +98,21 @@ function startAdapter(options) {
 
 function getDevice(dp) {
     dp = parseInt(dp, 10);
-    if ((dp >= 1 && dp <= 13) || (dp >= 197 && dp <= 199)) {
+    if ((dp >= 1 && dp <= 13) || (dp >= 197 && dp <= 199) || (dp === 364)) {
         return 'hg1_t';
-    } else if ((dp >= 14 && dp <= 26) || (dp >= 200 && dp <= 202)) {
+    } else if ((dp >= 14 && dp <= 26) || (dp >= 200 && dp <= 202) || (dp === 365)) {
         return 'hg2_t';
-    } else if ((dp >= 27 && dp <= 39) || (dp >= 203 && dp <= 205)) {
+    } else if ((dp >= 27 && dp <= 39) || (dp >= 203 && dp <= 205) || (dp === 366)) {
         return 'hg3_t';
-    } else if ((dp >= 40 && dp <= 52) || (dp >= 206 && dp <= 208)) {
+    } else if ((dp >= 40 && dp <= 52) || (dp >= 206 && dp <= 208) || (dp === 367)) {
         return 'hg4_t';
-    } else if (dp >= 53 && dp <= 66) {
+    } else if ((dp >= 53 && dp <= 66) || (dp === 194) || (dp === 368) || (dp >= 355 && dp <= 361) || (dp === 251)) {
         return 'bm1_t';
-    } else if (dp >= 67 && dp <= 79) {
+    } else if ((dp >= 67 && dp <= 79) || (dp === 369)) {
         return 'bm2_t';
-    } else if (dp >= 80 && dp <= 92) {
+    } else if ((dp >= 80 && dp <= 92) || (dp === 370)) {
         return 'bm3_t';
-    } else if (dp >= 93 && dp <= 105) {
+    } else if ((dp >= 93 && dp <= 105)|| (dp === 371)) {
         return 'bm4_t';
     } else if ((dp >= 106 && dp <= 113) || (dp >= 209 && dp <= 210)) {
         return 'km1_t';
@@ -122,46 +128,46 @@ function getDevice(dp) {
         return 'cwl_t';
     } else if (dp >= 176 && dp <= 191) {
         return 'hg0_t';
-    } else if (dp === 194) {
-        return 'bm0_t';
+    } else if (dp >= 336 && dp <= 354){
+        return 'unknown';
     } else {
         return null;
     }
 }
 
-function getDeviceRage(id) {
+function getDeviceRages(id) {
     if (id === 'hg1_t') {
-        return {'lsb': 1, 'msb': 13, 'lsb2': 197, 'msb2': 199};
+        return [{ 'lsb': 1, 'msb': 13 }, { 'lsb': 197, 'msb': 199 }, { 'lsb': 364, 'msb': 364 }];
     } else if (id === 'hg2_t') {
-        return {'lsb': 14, 'msb': 26, 'lsb2': 200, 'msb2': 202};
+        return [{ 'lsb': 14, 'msb': 26 }, { 'lsb': 200, 'msb': 202 }, { 'lsb3': 365, 'msb3': 365 }];
     } else if (id === 'hg3_t') {
-        return {'lsb': 27, 'msb': 39, 'lsb2': 203, 'msb2': 205};
+        return [{ 'lsb': 27, 'msb': 39}, { 'lsb': 203, 'msb': 205 }, { 'lsb': 366, 'msb': 366 }];
     } else if (id === 'hg4_t') {
-        return {'lsb': 40, 'msb': 52, 'lsb2': 206, 'msb2': 208};
+        return [{ 'lsb': 40, 'msb': 52 }, { 'lsb': 206, 'msb': 208 }, { 'lsb': 367, 'msb': 367 }];
     } else if (id === 'bm1_t') {
-        return {'lsb': 53, 'msb': 66};
+        return [{ 'lsb': 53, 'msb': 66 }, { 'lsb': 194, 'msb': 194 }, { 'lsb': 251, 'msb': 251 }, { 'lsb': 355, 'msb': 361 }, { 'lsb': 368, 'msb': 368 }, { 'lsb': 372, 'msb': 372 }];
     } else if (id === 'bm2_t') {
-        return {'lsb': 67, 'msb': 79};
+        return [{ 'lsb': 67, 'msb': 79 }, { 'lsb': 369, 'msb': 369 }];
     } else if (id === 'bm3_t') {
-        return {'lsb': 80, 'msb': 92};
+        return [{ 'lsb': 80, 'msb': 92 }, { 'lsb': 370, 'msb': 370 }];
     } else if (id === 'bm4_t') {
-        return {'lsb': 93, 'msb': 105};
+        return [{ 'lsb': 93, 'msb': 105 }, { 'lsb': 371, 'msb': 371 }];
     } else if (id === 'km1_t') {
-        return {'lsb': 106, 'msb': 113, 'lsb2': 209, 'msb2': 210};
+        return [{ 'lsb': 106, 'msb': 113 }, { 'lsb': 209, 'msb': 210 }];
     } else if (id === 'mm1_t') {
-        return {'lsb': 114, 'msb': 120};
+        return [{ 'lsb': 114, 'msb': 120 }];
     } else if (id === 'mm2_t') {
-        return {'lsb': 121, 'msb': 127};
+        return [{ 'lsb': 121, 'msb': 127 }];
     } else if (id === 'mm3_t') {
-        return {'lsb': 128, 'msb': 134};
+        return [{ 'lsb': 128, 'msb': 134 }];
     } else if (id === 'sm1_t') {
-        return {'lsb': 135, 'msb': 147, 'lsb2': 195, 'msb2': 196};
+        return [{ 'lsb': 135, 'msb': 147 }, { 'lsb': 195, 'msb': 196 }];
     } else if (id === 'cwl_t') {
-        return {'lsb': 148, 'msb': 175, 'lsb2': 192, 'msb2': 193};
+        return [{ 'lsb': 148, 'msb': 175 }, { 'lsb': 192, 'msb': 193 }];
     } else if (id === 'hg0_t') {
-        return {'lsb': 176, 'msb': 191};
-    } else if (id === 'bm0_t') {
-        return {'lsb': 194, 'msb': 194};
+        return [{ 'lsb': 176, 'msb': 191 }];
+    } else if (id === 'unknown') {
+        return [{ 'lsb': 336, 'msb': 354 }];
     } else {
         return false;
     }
@@ -236,6 +242,199 @@ function decode(type, data, dp) {
 
     } else if (type === 'DPT_TimeOfDay') {
         return dec.decodeDPT10(data);
+    } else if (type === 'DPT_Value_1_Ucount') {
+		if (dp === 357 || dp === 359 || dp === 360 || dp === 361){
+			_data = dec.decodeDPT5(data);
+			switch (_data){
+                case 0:
+                    return 'kein Heizgerät';
+                    break;
+                case 1:
+                    return 'CGB-2';
+                    break;
+                case 2:
+                    return 'MGK-2';
+                    break;
+                case 3:
+                    return 'TOB';
+                    break;
+                case 4:
+                    return 'BWL-1S';
+                    break;
+                case 5:
+                    return 'FGB';
+                    break;
+                case 6:
+                    return 'CHA';
+                    break;
+                case 7:
+                    return 'COB-2';
+                    break;
+                case 8:
+                    return 'CGB-2 38/55';
+                    break;
+                case 9:
+                    return 'CGB-2 38/55';
+                    break;
+                case 10:
+                    return 'TGB-2';
+                    break;
+                case 11:
+                    return 'TGB-2';
+                    break;
+                case 12:
+                    return 'CGB-2 75/100';
+                    break;
+                case 13:
+                    return 'CGB-2 75/100';
+                    break;
+                case 14:
+                    return 'FHA';
+                    break;
+                default: return '';
+			}
+		} else if (dp === 358){
+			_data = dec.decodeDPT5(data);
+			switch (_data){
+                case 1:
+                    return 'Dir. Warmwasser';
+                    break;
+                case 2:
+                    return 'Warmwasser 1';
+                    break;
+                case 4:
+                    return 'Warmwasser 2';
+                    break;
+                case 8:
+                    return 'Warmwasser 3';
+                    break;
+                case 16:
+                    return 'Warmwasser 4';
+                    break;
+                case 32:
+                    return 'Warmwasser 5';
+                    break;
+                case 64:
+                    return 'Warmwasser 6';
+                    break;
+                case 128:
+                    return 'Warmwasser 7';
+                    break;
+                default: return '';
+			}
+		} else if (dp === 251){
+			_data = dec.decodeDPT5(data);
+			switch (_data){
+                case 1:
+                    return 'Dir. Heizkreis';
+                    break;
+                case 2:
+                    return 'Mischerkreis 1';
+                    break;
+                case 4:
+                    return 'Mischerkreis 2';
+                    break;
+                case 8:
+                    return 'Mischerkreis 3';
+                    break;
+                case 16:
+                    return 'Mischerkreis 4';
+                    break;
+                case 32:
+                    return 'Mischerkreis 5';
+                    break;
+                case 64:
+                    return 'Mischerkreis 6';
+                    break;
+                case 128:
+                    return 'Mischerkreis 7';
+                    break;
+                default: return '';
+			}
+		}
+    } else if (type === 'DPT_Value_2_Ucount') {
+		_data = dec.decodeDPT7(data);
+		let wert = "";
+		if (dp === 355){
+			// 16 max length in bit - only 14 are currentyl needed
+			let y = 16 -_data.length;
+			for (let i = 0; i < 14; i++){
+				if (_data.slice(i, i + 1) == 1) {
+					switch (i+y){
+                        case 2:
+                            wert += ' Solarmodul, ';
+                            break;
+                        case 3:
+                            wert += ' Heizgerät 4, ';
+                            break;
+                        case 4:
+                            wert += ' Heizgerät 4, ';
+                            break;
+                        case 5:
+                            wert += ' Heizgerät 3, ';
+                            break;
+                        case 6:
+                            wert += ' Heizgerät 2, ';
+                            break;
+                        case 7:
+                            wert += ' Heizgerät 1, ';
+                            break;
+                        case 8:
+                            wert += ' Mischermodul, ';
+                            break;
+                        case 9:
+                            wert += ' Mischermodul, ';
+                            break;
+                        case 10:
+                            wert += ' Mischermodul, ';
+                            break;
+                        case 11:
+                            wert += ' Mischermodul, ';
+                            break;
+                        case 12:
+                            wert += ' Mischermodul 3, ';
+                            break;
+                        case 13:
+                            wert += ' Mischermodul 2, ';
+                            break;
+                        case 14:
+                            wert += ' Mischermodul 1, ';
+                            break;
+					}
+				}
+			}
+		}
+		if (dp === 356){
+			_data = dec.decodeDPT7(data);
+			let wert = "";
+			// 16 max length in bit - only 11 are currently needed
+			let y = 16 -_data.length;
+			for (let i = 0; i < 12; i++){
+				if (_data.slice(i, i + 1) == 1) {
+					switch (i+y){
+                        case 9:
+                            wert += ' CWL Excellent, ';
+                            break;
+                        case 8:
+                            wert += '';
+                            break;
+                        case 7:
+                            wert += '' ;
+                            break;
+                        case 6:
+                            wert += ' Solarmodul 1, ';
+                            break;
+                        case 5:
+                            wert += ' Solarmodul 2, ';
+                            break;
+                        case 4:
+                            wert += ' BM-2(0)/System, ';
+                            break;
+					}
+				}
+			}
+		}
+		return wert;
     } else if (type === 'DPT_Date') {
         return dec.decodeDPT11(data);
     } else if (type === 'DPT_FlowRate_m3/h') {
@@ -274,7 +473,7 @@ function decode(type, data, dp) {
             } else if (_data === 3) {
                 return 'Sparbetrieb';
             } else {
-                throw '';
+                return _data;
             }
         } else if (datapoints[dp].name === 'Programmwahl CWL') {
             if (_data === 0) {
@@ -284,10 +483,10 @@ function decode(type, data, dp) {
             } else if (_data === 3) {
                 return 'Reduzierte Lüftung';
             } else {
-                throw '';
+                return _data;
             }
         } else {
-            throw '';
+            return 'not defined';
         }
     } else if (type === 'DPT_HVACContrMode') {
         _data = data.readInt8(0);
@@ -324,6 +523,10 @@ function decode(type, data, dp) {
                 throw '';
             }
         }
+    } else if (type === 'DPT_Unknown1') {
+        return data.readUInt8(0).toString();
+    } else if (type === 'DPT_Unknown2') {
+        return data.readUInt16BE(0).toString();
     } else {
         throw '';
     }
@@ -341,6 +544,8 @@ function encode(data, dp) {
     //"DPT_Tempd",
     //"DPT_TimeOfDay"
     //"DPT_Scaling"
+	//"DPT_Value_1_Ucount"
+	//"DPT_Value_2_Ucount"
 
     if (type === 'DPT_Switch') {
         if (['On', 'on', 'Enable', '1', 'true', 1, true].indexOf(data) > -1) {
@@ -365,6 +570,10 @@ function encode(data, dp) {
             val = 0
         }
         return [enc.encodeDPT5(data), val];
+	} else if (type === 'DPT_Value_1_Ucount') {
+        return [enc.encodeDPT5(data), val];
+	} else if (type === 'DPT_Value_2_Ucount') {
+        return [enc.encodeDPT7(data), val];
     } else if (type === 'DPT_Tempd' && name === 'Sollwertkorrektur') {
         val = Math.round(data * 2) / 2;
         if (val > 4) {
@@ -406,10 +615,12 @@ function encode(data, dp) {
     } else if (type === 'DPT_HVACMode' && name === 'Programmwahl CWL') {
         if (data == 0 || data === 'Automatikbetrieb') {
             return [Buffer.from('00', 'hex'), 'Automatikbetrieb'];
-        } else if (data == 1 || data === 'Nennlüftung'){
+        } else if (data == 1 || data === 'Nennlüftung') {
             return [Buffer.from('01', 'hex'), 'Nennlüftung'];
-        } else if(data == 3 || data === 'Reduzierte Lüftung'){
+        } else if(data == 3 || data === 'Reduzierte Lüftung') {
             return [Buffer.from('03', 'hex'), 'Reduzierte Lüftung'];
+        } else if(data == 4 || data === 'Feuchteschutz') {
+            return [Buffer.from('04', 'hex'), 'Feuchteschutz'];
         }
     } else if (type === 'DPT_Date') {
         const dataDate = new Date(data);
@@ -478,13 +689,14 @@ function bufferIndexOf(buf, search, offset) {
 
 function addGroup(dev) {
     let groupName = '';
-    if (adapter.config.names[`${dev}_n`] === '') {
+	dev = dev.replace('_t','_n');
+    if (adapter.config.names[`${dev}`] === '') {
         if (dev.match(/^hg/)) {
-            groupName = `Heizgeräte ${dev.slice(-1)}`;
+            groupName = `Heizgerät ${dev.slice(-3,-2)}`;
         } else if (dev.match(/^bm/)) {
-            groupName = `Bediengeräte ${dev.slice(-1)}`;
+            groupName = `Bediengerät ${dev.slice(-3,-2)}`;
         } else if (dev.match(/^mm/)) {
-            groupName = `Mischermodule ${dev.slice(-1)}`;
+            groupName = `Mischermodul ${dev.slice(-3,-2)}`;
         } else if (dev.match(/^km/)) {
             groupName = 'Kaskadenmodul';
         } else if (dev.match(/^sm/)) {
@@ -493,14 +705,14 @@ function addGroup(dev) {
             groupName = 'Comfort-Wohnungs-Lüftung';
         }
     } else {
-        groupName = adapter.config.names[`${dev}_n`];
+        groupName = adapter.config.names[`${dev}`];
     }
-
-    adapter.setObjectNotExists(dev, {
+	if (dev !== "unknown") dev = dev.replace('n','t');
+	adapter.log.debug(`Add Channel ${dev} : ${groupName}`);
+    adapter.extendObject(dev, {
         type: 'channel',
         common: {
-            name: groupName,
-            type: 'channel'
+            name: groupName
         },
         native: {}
     });
@@ -510,113 +722,66 @@ async function addDevice(dp) {
     const dev = getDevice(dp);
     if (dev) {
         //ack_data.new_devices.push(dev);
-        const range = getDeviceRage(dev);
+        const ranges = getDeviceRages(dev);
 
         addGroup(dev);
 
-        for (range.lsb; range.lsb <= range.msb; range.lsb++) {
+        for (const range of ranges) {
 
-            if (!ack_data[range.lsb]) {
-                adapter.log.debug(`Add objects for ${dev}.${range.lsb}`);
-                const data = datapoints[range.lsb];
-                if (!data) {
-                    adapter.log.warn(`No data for ${dev}.${range.lsb}`);
-                    continue;
-                }
-                if (adapter.config.bool_bar && data.einheit === 'Pa') {
-                    data.einheit = 'bar';
-                }
-                if (adapter.config.bool_status && ['DPT_Switch', 'DPT_Enable', 'DPT_OpenClose'].includes(data.type)) {
-                    data.commonType = 'boolean';
-                }
-                ack_data[range.lsb] = {id: `${adapter.namespace}.${dev}.${range.lsb}`};
-                //console.log('add:' + dev + '.' + range.lsb  );
-                if (data.commonType === 'number') {
-                	await adapter.extendObject(`${dev}.${range.lsb}`, {
-	                    type: 'state',
-	                    common: {
-	                        name:    data.name,
-	                        role:    data.type.replace('DPT_', '').toLowerCase(),
-	                        type:    data.commonType,
-	                        read:    data.read,
-	                        write:   data.write,
-	                        unit:    data.einheit,
-	                        min:     data.min,
-	                        max:     data.max
-	                    },
-	                    native: {
-	                        rw: data.rw
-	                    }
-	                });
-                } else {
-	                await adapter.extendObject(`${dev}.${range.lsb}`, {
-	                    type: 'state',
-	                    common: {
-	                        name:    data.name,
-	                        role:    data.type.replace('DPT_', '').toLowerCase(),
-	                        type:    data.commonType,
-	                        read:    data.read,
-	                        write:   data.write,
-	                        unit:    data.einheit
-	                    },
-	                    native: {
-	                        rw: data.rw
-	                    }
-	                });
-                }
-            }
-        }
+            for (let idx = range.lsb; idx <= range.msb; idx++) {
 
-        if (range.lsb2 != null && range.msb2 != null) {
-            for (range.lsb2; range.lsb2 <= range.msb2; range.lsb2++) {
-                if (!ack_data[range.lsb2]) {
-                    adapter.log.debug(`Add objects for ${dev}.${range.lsb2}`);
-                    const data = datapoints[range.lsb2];
+                if (!ack_data[idx]) {
+                    adapter.log.debug(`Add objects for ${dev}.${idx}`);
+                    const data = datapoints[idx];
                     if (!data) {
-                        adapter.log.warn(`No data for ${dev}.${range.lsb2}`);
+                        adapter.log.warn(`No data for ${dev}.${idx}`);
                         continue;
                     }
                     if (adapter.config.bool_bar && data.einheit === 'Pa') {
-                        data.einheit = 'bar'
+                        data.einheit = 'bar';
                     }
-                    ack_data[range.lsb2] = {id: `${adapter.namespace}.${dev}.${range.lsb2}`};
-                    //console.log('add:' + dev + '.' + range.lsb2  );
+                    if (adapter.config.bool_status && ['DPT_Switch', 'DPT_Enable', 'DPT_OpenClose'].includes(data.type)) {
+                        data.commonType = 'boolean';
+                    }
+                    ack_data[idx] = { id: `${adapter.namespace}.${dev}.${idx}` };
+                    //console.log('add:' + dev + '.' + idx  );
                     if (data.commonType === 'number') {
-	                	await adapter.extendObject(`${dev}.${range.lsb2}`, {
-		                    type: 'state',
-		                    common: {
-		                        name:    data.name,
-		                        role:    data.type.replace('DPT_', '').toLowerCase(),
-		                        type:    data.commonType,
-		                        read:    data.read,
-		                        write:   data.write,
-		                        unit:    data.einheit,
-		                        min:     data.min,
-		                        max:     data.max
-		                    },
-		                    native: {
-		                        rw: data.rw
-		                    }
-		                });
-	                } else {
-	                    await adapter.extendObject(`${dev}.${range.lsb2}`, {
-	                        type: 'state',
-	                        common: {
-	                            name:    data.name,
-	                            role:    data.type.replace('DPT_', '').toLowerCase(),
-	                            type:    data.commonType,
-	                            read:    data.read,
-	                            write:   data.write,
-	                            unit:    data.einheit
+                        await adapter.extendObject(`${dev}.${idx}`, {
+                            type: 'state',
+                            common: {
+                                name:    data.name,
+                                role:    data.type.replace('DPT_', '').toLowerCase(),
+                                type:    data.commonType,
+                                read:    data.read,
+                                write:   data.write,
+                                unit:    data.einheit,
+                                min:     data.min,
+                                max:     data.max
                             },
-	                        native: {
-	                            rw: data.rw
-	                        }
-	                    });
-	                }
+                            native: {
+                                rw: data.rw
+                            }
+                        });
+                    } else {
+                        await adapter.extendObject(`${dev}.${idx}`, {
+                            type: 'state',
+                            common: {
+                                name:    data.name,
+                                role:    data.type.replace('DPT_', '').toLowerCase(),
+                                type:    data.commonType,
+                                read:    data.read,
+                                write:   data.write,
+                                unit:    data.einheit
+                            },
+                            native: {
+                                rw: data.rw
+                            }
+                        });
+                    }
                 }
             }
         }
+
         return true;
     }
     return false;
@@ -704,7 +869,7 @@ function main() {
 function setState(adapter, dp, val, data, device) {
     try {
         val = decode(datapoints[dp].type, data.slice(20), dp);
-
+		adapter.log.debug(`Set Value for ${device}.${dp}.${datapoints[dp].name}: ${val}`);
         adapter.setState(`${device}.${dp}`, val, true);
         ack_data[dp]['value'] = val;
     } catch (err) {
@@ -731,8 +896,7 @@ function createServer(adapter) {
         sock.on('error', err => adapter.log.error(`Socket error: ${err.toString()}`));
 
         sock.on('data', async _data => {
-            adapter.log.debug(`Data from ${sock.remoteAddress}:${sock.remotePort}: ${_data.toString('hex')}`);
-
+            adapter.log.debug(`Received Data from ${sock.remoteAddress}:${sock.remotePort}: ${_data.toString('hex')}`);
             //console.log(_data)
             search = -1;
             lines = [];
@@ -749,11 +913,12 @@ function createServer(adapter) {
 
                 buffReq[12] = data[12];
                 buffReq[13] = data[13];
+				adapter.log.debug(`Acknowledge ${buffReq.toString('hex')}`);
                 sock.write(buffReq);
 
                 dp = data.readUInt16BE(12);
                 device = getDevice(dp);
-
+				adapter.log.debug(`Data for ${device} : ${dp}`);
                 if (adapter.config.devices[device] === 'Auto') {
                     if (ack_data[dp]) {
                         setState(adapter, dp, val, data, device);
@@ -761,7 +926,7 @@ function createServer(adapter) {
                         if (datapoints[dp].name === 'Störung') {
                             if (data.slice(20).readInt8(0) === 1) {
                                 ignore[device] = true;
-                                adapter.log.debug(`Ignore ${device} data because Störung`);
+								adapter.log.info(`heating ${device} do not exist`);
                             } else {
                                 ignore[device] = undefined;
                             }
@@ -769,12 +934,35 @@ function createServer(adapter) {
 
                         if (!ignore[device]) {
                             if (await addDevice(dp)) {
+								adapter.log.debug(`create object: ${dp}`);
                                 setState(adapter, dp, val, data, device);
                             }
                         }
                     }
                 } else {
-                    adapter.log.debug(`Ignore data for device type ${device} because configured ${adapter.config.devices[device]}`);
+					if ((dp >= 212 && dp <= 250) || (dp >= 252 && dp <= 354)){
+						if (ack_data[dp]) {
+							setState(adapter, dp, val, data, device);
+						} else {
+							if (datapoints[dp].name === 'Störung') {
+								if (data.slice(20).readInt8(0) === 1) {
+									ignore[device] = true;
+									adapter.log.info(`heating ${device} do not exist`);
+								} else {
+									ignore[device] = undefined;
+								}
+							}
+
+							if (!ignore[device]) {
+								if (await addDevice(dp)) {
+									adapter.log.debug(`create objects: ${dp}`);
+									setState(adapter, dp, val, data, device);
+								}
+							}
+						}
+					}else{
+						adapter.log.info(`For datapoint ${dp} no device defined.`);
+					}
                 }
             }
         });

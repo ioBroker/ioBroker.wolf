@@ -22,6 +22,12 @@ Lese auf [deutsch](docs/de/README.md).
 -->
 
 ## Changelog
+
+### __WORK IN PROGRESS__
+* (fred0815) added missing ISM8i states
+* (fred0815) optimized channel object naming
+* (fred0815) fixed configuration of polling interval
+
 ### 1.6.1 (2023-01-16)
 * (Apollon77) Fixed some crash cases with unknown datapoints
 
