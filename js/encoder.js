@@ -43,6 +43,15 @@ Encoder.prototype.encodeDPT5 = function (value) {
 };
 
 /**
+ * encode dpt 7 values
+ */
+Encoder.prototype.encodeDPT7 = function (value) {
+    const buffer = Buffer.alloc(1);
+    buffer.writeUInt16BE(value & 0xFF, 0);
+    return buffer;
+};
+
+/**
  * encode dpt 9 values
  */
 Encoder.prototype.encodeDPT9 = function (value, exp) {

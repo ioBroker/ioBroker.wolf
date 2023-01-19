@@ -237,7 +237,11 @@ function decode(type, data, dp) {
         if (adapter.config.bool_bar && type === 'DPT_Value_Pres') {
             return Math.round((dec.decodeDPT9(data) / 100000) * 100) / 100;
         } else {
-            return Math.round(dec.decodeDPT9(data) * 100) / 100;
+            val = Math.round(dec.decodeDPT9(data) * 100) / 100;
+            if (type === 'DPT_Power' && val > 999){
+                return val / 1000 ;
+            }
+            return val ;
         }
 
     } else if (type === 'DPT_TimeOfDay') {
