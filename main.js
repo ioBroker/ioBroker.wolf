@@ -81,7 +81,8 @@ function startAdapter(options) {
                 try {
                     const enc = encode(state.val, dp);
                     const bufVal = enc[0];
-                    const _buff_set = Buffer.concat([Buffer.from(`0620F08000${toHex(20 + bufVal.length)}04000000F0C100${toHex(dp)}000100${toHex(dp)}00${toHex(bufVal)}`, 'hex'), bufVal], bufVal.length + 20);
+                    //const _buff_set = Buffer.concat([Buffer.from(`0620F08000${toHex(20 + bufVal.length)}04000000F0C100${toHex(dp)}000100${toHex(dp)}00${toHex(bufVal)}`, 'hex'), bufVal], bufVal.length + 20);
+                    const _buff_set = Buffer.concat([Buffer.from(`0620F08000${(20 + bufVal.length).toString(16)}04000000F0C100${dp.toString(16)}000100${dp.toString(16)}000${bufVal.length.toString(16)}`, 'hex'), bufVal], bufVal.length + 20);
 
                     adapter._connections.forEach(sock => sock.write(_buff_set));
                     adapter.log.debug(`send ${_buff_set.toString('hex')}`);
