@@ -22,8 +22,7 @@ Lese auf [deutsch](docs/de/README.md).
 -->
 
 ## Changelog
-
-### __WORK IN PROGRESS__
+### 1.7.0 (2023-01-26)
 * (fred0815) added missing ISM8i states
 * (fred0815) optimized channel object naming
 * (fred0815) fixed configuration of polling interval
