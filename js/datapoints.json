@@ -1357,7 +1357,7 @@
     "write": false,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
+    "min": -100,
     "max": 1000
   },
   "138": {

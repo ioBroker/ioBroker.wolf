@@ -27,6 +27,7 @@ Lese auf [deutsch](docs/de/README.md).
 * (fred0815) added missing ISM8i states
 * (fred0815) optimized channel object naming
 * (fred0815) fixed configuration of polling interval
+* (Apollon77) Adjust some temperature states to allow to go negative
 
 ### 1.6.1 (2023-01-16)
 * (Apollon77) Fixed some crash cases with unknown datapoints
