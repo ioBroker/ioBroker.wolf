@@ -1,6 +1,6 @@
 'use strict';
 
-const net         = require('net');
+const net         = require('node:net');
 const utils       = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 
