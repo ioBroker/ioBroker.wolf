@@ -25,6 +25,7 @@ Lese auf [deutsch](docs/de/README.md).
 
 ### **WORK IN PROGRESS**
 - (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+* (GermanBluefox) Migrated deploy workflow to npm Trusted Publishing (#139)
 
 ### 1.7.0 (2023-01-26)
 * (fred0815) added missing ISM8i states
