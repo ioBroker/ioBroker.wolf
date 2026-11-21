@@ -739,7 +739,8 @@ async function addDevice(dp) {
                     const commonType = getCommonType(idx);
                     ack_data[idx] = { id: `${adapter.namespace}.${dev}.${idx}` };
                     //console.log('add:' + dev + '.' + idx  );
-                    if (commonType === 'number') {
+                    // min/max only for writable states, the values sent by the device are not limited
+                    if (commonType === 'number' && data.rw.includes('w')) {
                         await adapter.extendObject(`${dev}.${idx}`, {
                             type: 'state',
                             common: {
@@ -820,15 +821,33 @@ function main() {
                 ack_data[idd.split('.').pop()] = {id: idd};
                 ack_data.old_devices[idd.split('.')[2]] = idd.split('.')[2];
 
-                // Fix type of existing objects if "status as boolean" was changed
+                // Fix existing objects created by older versions or with other settings
                 const obj = list[idd];
                 const dp = idd.split('.').pop();
-                if (obj && obj.type === 'state' && obj.common && datapoints[dp] && BOOLEAN_TYPES.includes(datapoints[dp].type)) {
-                    const commonType = getCommonType(dp);
-                    if (obj.common.type !== commonType) {
-                        adapter.log.debug(`Update type of ${idd} from ${obj.common.type} to ${commonType}`);
-                        adapter.extendObject(idd, {common: {type: commonType}});
+                const data = datapoints[dp];
+                if (obj && obj.type === 'state' && obj.common && data) {
+                    let changed = false;
+
+                    // Fix type if "status as boolean" was changed
+                    if (BOOLEAN_TYPES.includes(data.type)) {
+                        const commonType = getCommonType(dp);
+                        if (obj.common.type !== commonType) {
+                            adapter.log.debug(`Update type of ${idd} from ${obj.common.type} to ${commonType}`);
+                            obj.common.type = commonType;
+                            changed = true;
+                        }
                     }
+
+                    if (!data.rw.includes('w')) {
+                        // Remove min/max from read-only states
+                        if (obj.common.min !== undefined || obj.common.max !== undefined) {
+                            delete obj.common.min;
+                            delete obj.common.max;
+                            changed = true;
+                        }
+                    }
+
+                    changed && adapter.setForeignObject(idd, obj);
                 }
             }
         }
