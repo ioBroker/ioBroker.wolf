@@ -25,6 +25,7 @@ Lese auf [deutsch](docs/de/README.md).
 
 ### **WORK IN PROGRESS**
 - (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+* (GermanBluefox) Unknown mode values of ISM8i are written as raw numbers instead of logging parse errors (#92)
 
 ### 1.7.0 (2023-01-26)
 * (fred0815) added missing ISM8i states
