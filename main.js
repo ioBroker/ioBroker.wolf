@@ -421,7 +421,7 @@ function decode(type, data, dp) {
     } else if (type === 'DPT_ActiveEnergy_kWh') {
         return dec.decodeDPT13(data);
     } else if (type === 'DPT_DHWMode') {
-        _data = data.readInt8(0);
+        _data = data.readUInt8(0);
         if (datapoints[dp].name === 'Programmwahl Warmwasser') {
             if (_data === 0) {
                 return 'Automatikbetrieb';
@@ -429,16 +429,14 @@ function decode(type, data, dp) {
                 return 'Dauerbetrieb';
             } else if (_data === 4) {
                 return 'Standby';
-            } else {
-                throw '';
             }
-        } else {
-            throw '';
         }
+        adapter.log.debug(`Unknown DHWMode value ${_data} for DP ${dp}`);
+        return _data;
 
     }
     else if (type === 'DPT_HVACMode') {
-        _data = data.readInt8(0);
+        _data = data.readUInt8(0);
 
         if (datapoints[dp].name === 'Programmwahl Heizkreis' || datapoints[dp].name === 'Programmwahl Mischer') {
             if (_data === 2) {
@@ -450,6 +448,7 @@ function decode(type, data, dp) {
             } else if (_data === 3) {
                 return 'Sparbetrieb';
             } else {
+                adapter.log.debug(`Unknown HVACMode value ${_data} for DP ${dp}`);
                 return _data;
             }
         } else if (datapoints[dp].name === 'Programmwahl CWL') {
@@ -459,7 +458,10 @@ function decode(type, data, dp) {
                 return 'Nennlüftung';
             } else if (_data === 3) {
                 return 'Reduzierte Lüftung';
+            } else if (_data === 4) {
+                return 'Feuchteschutz';
             } else {
+                adapter.log.debug(`Unknown HVACMode value ${_data} for DP ${dp}`);
                 return _data;
             }
         } else {
@@ -844,6 +846,10 @@ function main() {
 }
 
 function setState(adapter, dp, val, data, device) {
+    if (data.length <= 20) {
+        adapter.log.debug(`Skip DP ${dp} without value - data: ${data.toString('hex')} - length: ${data.length}`);
+        return;
+    }
     try {
         val = decode(datapoints[dp].type, data.slice(20), dp);
         adapter.log.debug(`Set Value for ${device}.${dp}.${datapoints[dp].name}: ${val}`);
