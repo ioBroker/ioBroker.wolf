@@ -722,7 +722,7 @@ async function addDevice(dp) {
                     }
                     ack_data[idx] = { id: `${adapter.namespace}.${dev}.${idx}` };
                     //console.log('add:' + dev + '.' + idx  );
-                    if (data.commonType === 'number') {
+                    if (data.commonType === 'number' && data.rw.includes('w')) {
                         await adapter.extendObject(`${dev}.${idx}`, {
                             type: 'state',
                             common: {
@@ -802,6 +802,16 @@ function main() {
             if (list.hasOwnProperty(idd)) {
                 ack_data[idd.split('.').pop()] = {id: idd};
                 ack_data.old_devices[idd.split('.')[2]] = idd.split('.')[2];
+
+                // Remove min/max from read-only states (created by older versions)
+                const obj = list[idd];
+                const data = datapoints[idd.split('.').pop()];
+                if (obj && obj.type === 'state' && obj.common && data && !data.rw.includes('w') &&
+                    (obj.common.min !== undefined || obj.common.max !== undefined)) {
+                    delete obj.common.min;
+                    delete obj.common.max;
+                    adapter.setForeignObject(idd, obj);
+                }
             }
         }
 
