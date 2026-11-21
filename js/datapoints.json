@@ -563,7 +563,7 @@
     "einheit": "°C",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 65
   },
   "57": {
     "name": "Programmwahl Heizkreis",
@@ -645,8 +645,8 @@
     "write": true,
     "einheit": "K",
     "commonType": "number",
-    "min": 0,
-    "max": 1000
+    "min": -4,
+    "max": 4
   },
   "66": {
     "name": "Sparfaktor",
@@ -657,7 +657,7 @@
     "einheit": "K",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 10
   },
   "67": {
     "name": "Störung",
@@ -688,7 +688,7 @@
     "einheit": "°C",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 65
   },
   "70": {
     "name": "Programmwahl Mischer",
@@ -770,8 +770,8 @@
     "write": true,
     "einheit": "K",
     "commonType": "number",
-    "min": 0,
-    "max": 1000
+    "min": -4,
+    "max": 4
   },
   "79": {
     "name": "Sparfaktor",
@@ -782,7 +782,7 @@
     "einheit": "K",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 10
   },
   "80": {
     "name": "Störung",
@@ -813,7 +813,7 @@
     "einheit": "°C",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 65
   },
   "83": {
     "name": "Programmwahl Mischer",
@@ -895,8 +895,8 @@
     "write": true,
     "einheit": "K",
     "commonType": "number",
-    "min": 0,
-    "max": 1000
+    "min": -4,
+    "max": 4
   },
   "92": {
     "name": "Sparfaktor",
@@ -907,7 +907,7 @@
     "einheit": "K",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 10
   },
   "93": {
     "name": "Störung",
@@ -938,7 +938,7 @@
     "einheit": "°C",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 65
   },
   "96": {
     "name": "Programmwahl Mischer",
@@ -1020,8 +1020,8 @@
     "write": true,
     "einheit": "K",
     "commonType": "number",
-    "min": 0,
-    "max": 1000
+    "min": -4,
+    "max": 4
   },
   "105": {
     "name": "Sparfaktor",
@@ -1032,7 +1032,7 @@
     "einheit": "K",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 10
   },
   "106": {
     "name": "Störung",
@@ -1964,7 +1964,7 @@
     "einheit": "°C",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 90
   },
   "200": {
     "name": "Abgastemperatur",
@@ -1997,7 +1997,7 @@
     "einheit": "°C",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 90
   },
   "203": {
     "name": "Abgastemperatur",
@@ -2030,7 +2030,7 @@
     "einheit": "°C",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 90
   },
   "206": {
     "name": "Abgastemperatur",
@@ -2063,7 +2063,7 @@
     "einheit": "°C",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 90
   },
   "209": {
     "name": "Gesamtmodulationsgradvorgabe",
