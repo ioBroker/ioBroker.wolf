@@ -21,6 +21,15 @@ const splitter   = Buffer.from('0620F080', 'hex');
 
 let adapter;
 
+const BOOLEAN_TYPES = ['DPT_Switch', 'DPT_Enable', 'DPT_OpenClose', 'DPT_Bool'];
+
+function getCommonType(dp) {
+    if (adapter.config.bool_status && BOOLEAN_TYPES.includes(datapoints[dp].type)) {
+        return 'boolean';
+    }
+    return datapoints[dp].commonType;
+}
+
 function toHex(num) {
     let val = num.toString(16);
     if (val.length < 2) val = `0${val}`;
@@ -198,9 +207,17 @@ function decode(type, data, dp) {
     } else if (type === 'DPT_Bool') {
         val = data.readInt8(0);
         if (val === 0) {
-            return 'false';
+            if (adapter.config.bool_status) {
+                return false;
+            } else {
+                return 'false';
+            }
         } else {
-            return 'true';
+            if (adapter.config.bool_status) {
+                return true;
+            } else {
+                return 'true';
+            }
         }
     } else if (type === 'DPT_Enable') {
         val = data.readInt8(0);
@@ -527,13 +544,13 @@ function encode(data, dp) {
     if (type === 'DPT_Switch') {
         if (['On', 'on', 'Enable', '1', 'true', 1, true].indexOf(data) > -1) {
             if (adapter.config.bool_status) {
-                return [Buffer.from('01', 'hex'), 'true'];
+                return [Buffer.from('01', 'hex'), true];
             } else {
                 return [Buffer.from('01', 'hex'), 'On'];
             }
         } else {
             if (adapter.config.bool_status) {
-                return [Buffer.from('00', 'hex'), 'false'];
+                return [Buffer.from('00', 'hex'), false];
             } else {
                 return [Buffer.from('00', 'hex'), 'Off'];
             }
@@ -717,18 +734,16 @@ async function addDevice(dp) {
                     if (adapter.config.bool_bar && data.einheit === 'Pa') {
                         data.einheit = 'bar';
                     }
-                    if (adapter.config.bool_status && ['DPT_Switch', 'DPT_Enable', 'DPT_OpenClose'].includes(data.type)) {
-                        data.commonType = 'boolean';
-                    }
+                    const commonType = getCommonType(idx);
                     ack_data[idx] = { id: `${adapter.namespace}.${dev}.${idx}` };
                     //console.log('add:' + dev + '.' + idx  );
-                    if (data.commonType === 'number') {
+                    if (commonType === 'number') {
                         await adapter.extendObject(`${dev}.${idx}`, {
                             type: 'state',
                             common: {
                                 name:    data.name,
                                 role:    data.type.replace('DPT_', '').toLowerCase(),
-                                type:    data.commonType,
+                                type:    commonType,
                                 read:    data.read,
                                 write:   data.write,
                                 unit:    data.einheit,
@@ -745,7 +760,7 @@ async function addDevice(dp) {
                             common: {
                                 name:    data.name,
                                 role:    data.type.replace('DPT_', '').toLowerCase(),
-                                type:    data.commonType,
+                                type:    commonType,
                                 read:    data.read,
                                 write:   data.write,
                                 unit:    data.einheit
@@ -802,6 +817,17 @@ function main() {
             if (list.hasOwnProperty(idd)) {
                 ack_data[idd.split('.').pop()] = {id: idd};
                 ack_data.old_devices[idd.split('.')[2]] = idd.split('.')[2];
+
+                // Fix type of existing objects if "status as boolean" was changed
+                const obj = list[idd];
+                const dp = idd.split('.').pop();
+                if (obj && obj.type === 'state' && obj.common && datapoints[dp] && BOOLEAN_TYPES.includes(datapoints[dp].type)) {
+                    const commonType = getCommonType(dp);
+                    if (obj.common.type !== commonType) {
+                        adapter.log.debug(`Update type of ${idd} from ${obj.common.type} to ${commonType}`);
+                        adapter.extendObject(idd, {common: {type: commonType}});
+                    }
+                }
             }
         }
 
