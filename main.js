@@ -44,9 +44,27 @@ function initPolling() {
     if (adapter.config.polling_interval === 0) return;
 
     pollingInterval = setInterval(() => {
-        const sock = adapter._connections[adapter._connections.length - 1];
-        sock.write(buffGetAll);
+        const sockets = getConnections();
+        if (!sockets.length) {
+            adapter.log.debug('Polling skipped: ISM8i is not connected');
+            return;
+        }
+        sockets.forEach(sock => sock.write(buffGetAll));
     }, adapter.config.polling_interval * 1000);
+}
+
+/** Returns the open connections to the ISM8i */
+function getConnections() {
+    return adapter._connections.filter(sock => !sock.destroyed);
+}
+
+function updateConnectionState() {
+    const connected = getConnections().length > 0;
+    if (adapter._connected !== connected) {
+        adapter._connected = connected;
+        adapter.setState('info.connection', connected, true)
+            .catch(e => adapter.log.error(`Cannot set info.connection: ${e.message}`));
+    }
 }
 
 function startAdapter(options) {
@@ -56,6 +74,7 @@ function startAdapter(options) {
     adapter = new utils.Adapter(options);
 
     adapter._connections = [];
+    adapter._connected = null;
 
     adapter.on('ready', () => main());
     adapter.on('unload', cb => {
@@ -63,6 +82,7 @@ function startAdapter(options) {
             clearInterval(pollingInterval);
             pollingInterval = null;
         }
+        adapter._connected && adapter.setState('info.connection', false, true).catch(() => {});
         if (adapter._server) {
             try {
                 adapter._server.close(cb);
@@ -93,7 +113,12 @@ function startAdapter(options) {
                     //const _buff_set = Buffer.concat([Buffer.from(`0620F08000${toHex(20 + bufVal.length)}04000000F0C100${toHex(dp)}000100${toHex(dp)}00${toHex(bufVal)}`, 'hex'), bufVal], bufVal.length + 20);
                     const _buff_set = Buffer.concat([Buffer.from(`0620F08000${(20 + bufVal.length).toString(16)}04000000F0C100${dp.toString(16)}000100${dp.toString(16)}000${bufVal.length.toString(16)}`, 'hex'), bufVal], bufVal.length + 20);
 
-                    adapter._connections.forEach(sock => sock.write(_buff_set));
+                    const sockets = getConnections();
+                    if (!sockets.length) {
+                        adapter.log.warn(`Cannot write ${id}: ISM8i is not connected`);
+                        return;
+                    }
+                    sockets.forEach(sock => sock.write(_buff_set));
                     adapter.log.debug(`send ${_buff_set.toString('hex')}`);
                     adapter.setState(id, enc[1], true);
                 } catch (e) {
@@ -861,6 +886,7 @@ function main() {
             }
         }
 
+        updateConnectionState();
         createServer(adapter);
 
         adapter.subscribeStates('*');
@@ -1023,11 +1049,31 @@ let processing = Promise.resolve();
 
 function createServer(adapter) {
     adapter._server = net.createServer(sock => {
-        !adapter._connections.includes(sock) && adapter._connections.push(sock);
+        const address = `${sock.remoteAddress}:${sock.remotePort}`;
+
+        // The ISM8i opens a new connection if the old one is broken. The old connection is often
+        // not closed properly (half-open), so it is closed here. Otherwise, writes go to a dead connection.
+        for (const old of adapter._connections.filter(s => s.remoteAddress === sock.remoteAddress)) {
+            adapter.log.info(`New connection from ${address}, close old connection from ${old.remoteAddress}:${old.remotePort}`);
+            adapter._connections.splice(adapter._connections.indexOf(old), 1);
+            old.destroy();
+        }
+        adapter._connections.push(sock);
+        adapter.log.info(`ISM8i connected from ${address}`);
+        updateConnectionState();
+
+        // detect dead connections, e.g. if the ISM8i lost power or the network was interrupted
+        sock.setKeepAlive(true, 60000);
 
         let received = Buffer.alloc(0);
 
-        sock.on('error', err => adapter.log.error(`Socket error: ${err.toString()}`));
+        sock.on('error', err => {
+            if (['ECONNRESET', 'ETIMEDOUT', 'EPIPE'].includes(err.code)) {
+                adapter.log.info(`Connection from ${address} lost: ${err.code}`);
+            } else {
+                adapter.log.warn(`Socket error from ${address}: ${err.message}`);
+            }
+        });
 
         sock.on('data', chunk => {
             adapter.log.debug(`Received Data from ${sock.remoteAddress}:${sock.remotePort}: ${chunk.toString('hex')}`);
@@ -1040,13 +1086,15 @@ function createServer(adapter) {
             }
         });
 
-        sock.on('end', () => {
+        // 'close' is emitted after 'end' and after 'error', so every closed connection is removed
+        sock.on('close', () => {
             const pos = adapter._connections.indexOf(sock);
-            pos !== -1 && adapter._connections.splice(pos);
-            adapter.log.debug(`Connection from ${sock.remoteAddress}:${sock.remotePort} closed`);
+            pos !== -1 && adapter._connections.splice(pos, 1);
+            adapter.log.info(`Connection from ${address} closed`);
+            updateConnectionState();
         });
 
-        adapter.log.debug(`Receive new connection from ${sock.remoteAddress}:${sock.remotePort}, requesting GetAll`);
+        adapter.log.debug(`Requesting all values from ${address} (GetAll)`);
         sock.write(buffGetAll);
 
         initPolling();

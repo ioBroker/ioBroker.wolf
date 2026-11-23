@@ -206,5 +206,52 @@
       "sm1_n": "",
       "cwl_n": ""
     }
-  }
+  },
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": {
+          "en": "Information",
+          "de": "Informationen",
+          "ru": "Информация",
+          "pt": "Informações",
+          "nl": "Informatie",
+          "fr": "Information",
+          "it": "Informazioni",
+          "es": "Información",
+          "pl": "Informacje",
+          "uk": "Інформація",
+          "zh-cn": "信息"
+        }
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": {
+          "en": "ISM8i connected",
+          "de": "ISM8i verbunden",
+          "ru": "ISM8i подключен",
+          "pt": "ISM8i conectado",
+          "nl": "ISM8i verbonden",
+          "fr": "ISM8i connecté",
+          "it": "ISM8i connesso",
+          "es": "ISM8i conectado",
+          "pl": "ISM8i połączony",
+          "uk": "ISM8i підключено",
+          "zh-cn": "ISM8i 已连接"
+        },
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
