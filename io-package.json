@@ -2,7 +2,6 @@
   "common": {
     "name": "wolf",
     "version": "1.7.0",
-    "title": "wolf",
     "titleLang": {
       "en": "WOLF Heating over ISM8i",
       "de": "WOLF heizt über ISM8i",
@@ -134,6 +133,7 @@
     "loglevel": "info",
     "icon": "wolf.png",
     "compact": true,
+    "nogit": true,
     "messagebox": true,
     "keywords": [
       "Heating",
@@ -152,7 +152,7 @@
     ],
     "globalDependencies": [
       {
-        "admin": ">=3.0.0"
+        "admin": ">=7.0.0"
       }
     ],
     "plugins": {
@@ -161,11 +161,11 @@
       }
     },
     "adminUI": {
-      "config": "materialize"
+      "config": "json"
     }
   },
   "native": {
-    "port": "12004",
+    "port": 12004,
     "bind": "0.0.0.0",
     "bool_status": false,
     "bool_bar": false,
