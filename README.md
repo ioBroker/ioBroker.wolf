@@ -35,6 +35,11 @@ Lese auf [deutsch](docs/de/README.md).
 * (GermanBluefox) Added state `info.connection`
 * (GermanBluefox) An object of a datapoint at a path of an older version does not block creating the object at the current path anymore (#96)
 * (GermanBluefox) Added missing datapoints: 211 (Betriebsart Heizen/Kühlen, Kaskadenmodul), 365 (Kesselsolltemperatur HG2) and 372 (Zuletzt aktiver Störcode)
+* (GermanBluefox) Fixed writing: temperatures above 81.9 °C (e.g. Kesselsolltemperaturvorgabe 90 °C) were sent wrong, Leistungsvorgabe/Gesamtmodulationsgradvorgabe sent 40 % of the value, values were sent without limits, Sollwertkorrektur below -4 became +4, dates were sent with the weekday as day, writing a date or time terminated the adapter (#125)
+* (GermanBluefox) Sammlersolltemperaturvorgabe (DP 210) can be written now
+* (GermanBluefox) Invalid values for Programmwahl are not sent anymore (before: Automatikbetrieb or Sparbetrieb was sent). The numbers are unchanged (numbering of the Wolf control unit), see documentation
+* (GermanBluefox) Warmwassersolltemperatur can be set from 20 to 80 °C as described in the ISM8i manual (before: 0 to 65 °C)
+* (GermanBluefox) Percent values (DPT_Scaling) are calculated with 100/255 as described in the ISM8i manual, so 100 % is shown as 100 % (before: 102 %)
 
 ### 1.7.0 (2023-01-26)
 * (fred0815) added missing ISM8i states

@@ -30,12 +30,6 @@ function getCommonType(dp) {
     return datapoints[dp].commonType;
 }
 
-function toHex(num) {
-    let val = num.toString(16);
-    if (val.length < 2) val = `0${val}`;
-    return val;
-}
-
 function initPolling() {
     if (pollingInterval) {
         clearInterval(pollingInterval);
@@ -112,23 +106,24 @@ function startAdapter(options) {
                         .catch(e => adapter.log.error(`Cannot set state ${id}: ${e.message}`));
                 }
             } else {
+                let encoded;
                 try {
-                    const enc = encode(state.val, dp);
-                    const bufVal = enc[0];
-                    //const _buff_set = Buffer.concat([Buffer.from(`0620F08000${toHex(20 + bufVal.length)}04000000F0C100${toHex(dp)}000100${toHex(dp)}00${toHex(bufVal)}`, 'hex'), bufVal], bufVal.length + 20);
-                    const _buff_set = Buffer.concat([Buffer.from(`0620F08000${(20 + bufVal.length).toString(16)}04000000F0C100${dp.toString(16)}000100${dp.toString(16)}000${bufVal.length.toString(16)}`, 'hex'), bufVal], bufVal.length + 20);
-
-                    const sockets = getConnections();
-                    if (!sockets.length) {
-                        adapter.log.warn(`Cannot write ${id}: ISM8i is not connected`);
-                        return;
-                    }
-                    sockets.forEach(sock => sock.write(_buff_set));
-                    adapter.log.debug(`send ${_buff_set.toString('hex')}`);
-                    adapter.setState(id, enc[1], true);
+                    encoded = encode(state.val, dp);
                 } catch (e) {
                     adapter.log.error(`Can't encode DP (${e.message}) : ${dp} - data: ${state.val} - type: ${datapoints[dp].type}`);
+                    return;
                 }
+                const telegram = createWriteTelegram(dp, encoded[0]);
+
+                const sockets = getConnections();
+                if (!sockets.length) {
+                    adapter.log.warn(`Cannot write ${id}: ISM8i is not connected`);
+                    return;
+                }
+                sockets.forEach(sock => sock.write(telegram));
+                adapter.log.debug(`send ${telegram.toString('hex')}`);
+                adapter.setState(id, encoded[1], true)
+                    .catch(e => adapter.log.error(`Cannot set state ${id}: ${e.message}`));
             }
         }
     });
@@ -280,7 +275,8 @@ function decode(type, data, dp) {
             }
         }
     } else if (type === 'DPT_Scaling') {
-        return Math.round(parseInt(dec.decodeDPT5(data)) * 0.4);
+        // DPT 5.001: 0...255 = 0...100 % (ISM8i manual, 8.6.2)
+        return Math.round(dec.decodeDPT5(data) * 100 / 255);
     } else if (type === 'DPT_Value_Temp' || type === 'DPT_Tempd' || type === 'DPT_Value_Pres' || type === 'DPT_Power' || type === 'DPT_Value_Volume_Flow') {
         if (adapter.config.bool_bar && type === 'DPT_Value_Pres') {
             return Math.round((dec.decodeDPT9(data) / 100000) * 100) / 100;
@@ -558,130 +554,180 @@ function decode(type, data, dp) {
     }
 }
 
+/**
+ * Converts a value to a number. Returns NaN for values that are not numbers or numeric strings.
+ */
+function toNumber(value) {
+    if (typeof value === 'number') {
+        return value;
+    }
+    if (typeof value === 'string' && value.trim() !== '') {
+        return Number(value);
+    }
+    return NaN;
+}
+
+/**
+ * Limits a numeric value to min...max and rounds it to the step.
+ */
+function limit(data, min, max, step) {
+    const value = toNumber(data);
+    if (isNaN(value)) {
+        throw new Error(`Invalid number "${data}"`);
+    }
+    return Math.min(max, Math.max(min, Math.round(value / step) * step));
+}
+
+/**
+ * Parses a date. Accepted: "YYYY-MM-DD", "DD.MM.YYYY", everything that Date can parse and timestamps.
+ */
+function parseDate(data) {
+    let date;
+    const text = typeof data === 'string' ? data.trim() : '';
+    let m = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if (m) {
+        date = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+    } else if ((m = text.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/))) {
+        date = new Date(parseInt(m[3], 10), parseInt(m[2], 10) - 1, parseInt(m[1], 10));
+    } else {
+        date = new Date(data);
+        date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+    // DPT 11.001 can store the years 2000...2089 (the decoder treats 90...99 as 1990...1999)
+    if (isNaN(date.getTime()) || date.getFullYear() < 2000 || date.getFullYear() > 2089) {
+        throw new Error(`Invalid date "${data}"`);
+    }
+    return date;
+}
+
+/**
+ * Parses a time of day. Accepted: "HH:MM", "HH:MM:SS", everything that Date can parse and timestamps.
+ */
+function parseTime(data) {
+    const text = typeof data === 'string' ? data.trim() : '';
+    const m = text.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+    if (m) {
+        const hours = parseInt(m[1], 10);
+        const minutes = parseInt(m[2], 10);
+        const seconds = parseInt(m[3] || '0', 10);
+        if (hours > 23 || minutes > 59 || seconds > 59) {
+            throw new Error(`Invalid time "${data}"`);
+        }
+        const time = new Date();
+        time.setHours(hours, minutes, seconds, 0);
+        return time;
+    }
+    const time = new Date(data);
+    if (isNaN(time.getTime())) {
+        throw new Error(`Invalid time "${data}"`);
+    }
+    return time;
+}
+
+/**
+ * Finds the value of a program selection. A value can be given as number (Wolf numbering, as on the
+ * control unit) or as text (as the adapter shows it).
+ *
+ * @param {any} data value written by the user
+ * @param {{num: number, text: string, raw: number}[]} programs allowed programs
+ * @returns {number} the value to send (KNX encoding)
+ */
+function findProgram(data, programs) {
+    const num = toNumber(data);
+    const program = programs.find(p => p.text === data || p.num === num);
+    if (!program) {
+        throw new Error(`Invalid value "${data}", allowed: ${programs.map(p => `${p.num} or "${p.text}"`).join(', ')}`);
+    }
+    return program.raw;
+}
+
+// Programmwahl Warmwasser: number as on the control unit (ISM8i manual, 8.7.4) -> DPT_DHWMode
+const PROGRAMS_DHW = [
+    { num: 0, text: 'Standby', raw: 4 },
+    { num: 1, text: 'Automatikbetrieb', raw: 0 },
+    { num: 2, text: 'Dauerbetrieb', raw: 2 },
+];
+// Programmwahl Heizkreis/Mischer: number as on the control unit (ISM8i manual, 8.7.3) -> DPT_HVACMode
+const PROGRAMS_HEATING = [
+    { num: 0, text: 'Standby', raw: 2 },
+    { num: 1, text: 'Automatikbetrieb', raw: 0 },
+    { num: 2, text: 'Heizbetrieb', raw: 1 },
+    { num: 3, text: 'Sparbetrieb', raw: 3 },
+];
+// Programmwahl CWL: number as DPT_HVACMode value (ISM8i manual, 8.7.5)
+const PROGRAMS_CWL = [
+    { num: 0, text: 'Automatikbetrieb', raw: 0 },
+    { num: 1, text: 'Nennlüftung', raw: 1 },
+    { num: 3, text: 'Reduzierte Lüftung', raw: 3 },
+    { num: 4, text: 'Feuchteschutz', raw: 4 },
+];
+
+/**
+ * Encodes a value for the ISM8i.
+ *
+ * @returns {[Buffer, any]} the encoded value and the value for the state (limited and rounded)
+ */
 function encode(data, dp) {
-    let val;
-    // const _data;
     const type = datapoints[dp].type;
     const name = datapoints[dp].name;
-    //"DPT_Value_Temp",
-    //"DPT_HVACMode",
-    //"DPT_DHWMode",
-    //"DPT_Switch",
-    //"DPT_Tempd",
-    //"DPT_TimeOfDay"
-    //"DPT_Scaling"
-    //"DPT_Value_1_Ucount"
-    //"DPT_Value_2_Ucount"
+    let buffer;
+    // Value for the state. For DPT 9 the limited value is used, because DPT 9 cannot store
+    // every value exactly (e.g. 85 is sent as 85.04). Other values are decoded from the buffer.
+    let value;
 
     if (type === 'DPT_Switch') {
-        if (['On', 'on', 'Enable', '1', 'true', 1, true].indexOf(data) > -1) {
-            if (adapter.config.bool_status) {
-                return [Buffer.from('01', 'hex'), true];
-            } else {
-                return [Buffer.from('01', 'hex'), 'On'];
-            }
-        } else {
-            if (adapter.config.bool_status) {
-                return [Buffer.from('00', 'hex'), false];
-            } else {
-                return [Buffer.from('00', 'hex'), 'Off'];
-            }
-        }
+        buffer = Buffer.from(['On', 'on', 'Enable', '1', 'true', 1, true].includes(data) ? [1] : [0]);
     } else if (type === 'DPT_Scaling') {
-        val = Math.round(data * 2) / 2;
-        if (val > 100) {
-            val = 100
-        }
-        if (val < 0) {
-            val = 0
-        }
-        return [enc.encodeDPT5(data), val];
+        // DPT 5.001: 0...255 = 0...100 % (ISM8i manual, 8.6.2)
+        const percent = limit(data, datapoints[dp].min || 0, datapoints[dp].max === undefined ? 100 : datapoints[dp].max, 1);
+        buffer = enc.encodeDPT5(Math.round(percent * 255 / 100));
     } else if (type === 'DPT_Value_1_Ucount') {
-        return [enc.encodeDPT5(data), val];
+        buffer = enc.encodeDPT5(limit(data, 0, 255, 1));
     } else if (type === 'DPT_Value_2_Ucount') {
-        return [enc.encodeDPT7(data), val];
+        buffer = enc.encodeDPT7(limit(data, 0, 65535, 1));
     } else if (type === 'DPT_Tempd' && name === 'Sollwertkorrektur') {
-        val = Math.round(data * 2) / 2;
-        if (val > 4) {
-            val = 4
-        }
-        if (val < -4) {
-            val = 4
-        }
-        return [enc.encodeDPT9(data), val];
+        value = limit(data, -4, 4, 0.5);
+        buffer = enc.encodeDPT9(value);
     } else if (type === 'DPT_Tempd' && name === 'Sparfaktor') {
-        val = Math.round(data * 2) / 2;
-        if (val > 10) {
-            val = 10
-        }
-        if (val < 0) {
-            val = 0
-        }
-        return [enc.encodeDPT9(data), val];
+        value = limit(data, 0, 10, 0.5);
+        buffer = enc.encodeDPT9(value);
     } else if (name === 'Programmwahl Warmwasser') {
-        if (data == 0 || data === 'Standby') {
-            return [Buffer.from('04', 'hex'), 'Standby'];
-        }
-        else if (data == 2 || data === 'Dauerbetrieb') {
-            return [Buffer.from('02', 'hex'), 'Dauerbetrieb'];
-        } else {
-            return [Buffer.from('00', 'hex'), 'Automatikbetrieb'];
-        }
+        buffer = Buffer.from([findProgram(data, PROGRAMS_DHW)]);
     } else if (name === 'Programmwahl Mischer' || name === 'Programmwahl Heizkreis') {
-        if (data == 0 || data === 'Standby') {
-            return [Buffer.from('02', 'hex'), 'Standby'];
-        }
-        else if (data == 1 || data === 'Automatikbetrieb') {
-            return [Buffer.from('00', 'hex'), 'Automatikbetrieb'];
-        } else if (data == 2 || data === 'Heizbetrieb') {
-            return [Buffer.from('01', 'hex'), 'Heizbetrieb'];
-        } else {
-            return [Buffer.from('03', 'hex'), 'Sparbetrieb'];
-        }
+        buffer = Buffer.from([findProgram(data, PROGRAMS_HEATING)]);
     } else if (type === 'DPT_HVACMode' && name === 'Programmwahl CWL') {
-        if (data == 0 || data === 'Automatikbetrieb') {
-            return [Buffer.from('00', 'hex'), 'Automatikbetrieb'];
-        } else if (data == 1 || data === 'Nennlüftung') {
-            return [Buffer.from('01', 'hex'), 'Nennlüftung'];
-        } else if(data == 3 || data === 'Reduzierte Lüftung') {
-            return [Buffer.from('03', 'hex'), 'Reduzierte Lüftung'];
-        } else if(data == 4 || data === 'Feuchteschutz') {
-            return [Buffer.from('04', 'hex'), 'Feuchteschutz'];
-        }
+        buffer = Buffer.from([findProgram(data, PROGRAMS_CWL)]);
     } else if (type === 'DPT_Date') {
-        const dataDate = new Date(data);
-        if (!isNaN(dataDate.getFullYear())) {
-            const onlyDate = new Date(dataDate.getFullYear(), dataDate.getMonth(), dataDate.getDate());
-
-            return [enc.encodeDPT11(onlyDate), onlyDate];
-        }
-        throw new Error('Invalid date');
+        buffer = enc.encodeDPT11(parseDate(data));
     } else if (type === 'DPT_TimeOfDay') {
-        const dataDate = new Date(data);
-        // We ignore the weekday for now!
-        return [enc.encodeDPT10(dataDate), dataDate];
-    }
-    if (name === 'Warmwassersolltemperatur') {
-        val = parseInt(data);
-        if (val > 65) {
-            val = 65;
-        }
-        if (val < 0) {
-            val = 0;
-        }
-        return [enc.encodeDPT9(data), val];
-    } else if (name === 'Kesselsolltemperaturvorgabe') {
-        val = parseInt(data);
-        if (val > 90) {
-            val = 90;
-        }
-        if (val < 0) {
-            val = 0;
-        }
-        return [enc.encodeDPT9(data), val];
+        // The weekday is not used by the ISM8i
+        buffer = enc.encodeDPT10(parseTime(data));
+    } else if (type === 'DPT_Value_Temp' && (name === 'Warmwassersolltemperatur' || name === 'Kesselsolltemperaturvorgabe' || name === 'Sammlersolltemperaturvorgabe')) {
+        // the limits are in datapoints.json (ISM8i manual, 8.8)
+        value = limit(data, datapoints[dp].min, datapoints[dp].max, 1);
+        buffer = enc.encodeDPT9(value);
     } else {
         throw new Error('Encoding not supported');
     }
+
+    return [buffer, value === undefined ? decode(type, buffer, dp) : value];
+}
+
+/**
+ * Creates a DatapointValue.Ind telegram to write one datapoint (ISM8i manual, chapter 8.2)
+ */
+function createWriteTelegram(dp, value) {
+    const telegram = Buffer.alloc(20 + value.length);
+    splitter.copy(telegram, 0); // 06 20 F0 80
+    telegram.writeUInt16BE(telegram.length, 4); // frame size
+    Buffer.from('04000000F0C1', 'hex').copy(telegram, 6); // connection header, ObjectServer, DatapointValue.Ind
+    telegram.writeUInt16BE(dp, 12); // start datapoint
+    telegram.writeUInt16BE(1, 14); // number of datapoints
+    telegram.writeUInt16BE(dp, 16); // datapoint ID
+    telegram[18] = 0; // state, always 0
+    telegram[19] = value.length;
+    value.copy(telegram, 20);
+    return telegram;
 }
 
 function addGroup(dev) {
