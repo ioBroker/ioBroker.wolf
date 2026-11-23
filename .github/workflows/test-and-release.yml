@@ -11,9 +11,9 @@ on:
       - '*'
     tags:
       # normal versions
-      - "v?[0-9]+.[0-9]+.[0-9]+"
+      - 'v?[0-9]+.[0-9]+.[0-9]+'
       # pre-releases
-      - "v?[0-9]+.[0-9]+.[0-9]+-**"
+      - 'v?[0-9]+.[0-9]+.[0-9]+-**'
   pull_request: {}
 
 concurrency:
@@ -21,69 +21,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Performs quick checks before the expensive test runs
+  # Performs quick checks before the expensive test runs: type check, lint and package files
   check-and-lint:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [22.x]
-
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: ioBroker/testing-action-check@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '24.x'
+          type-checking: true
+          lint: true
 
-      - name: Install Dependencies
-        run: npm install
-
-#      - name: Perform a type check
-#        run: npm run check:ts
-#        env:
-#          CI: true
-      # - name: Lint TypeScript code
-      #   run: npm run lint
-#      - name: Test package files
-#        run: npm run test:package
-
-  # Runs adapter tests on all supported node versions and OSes
+  # Runs unit and integration tests on all supported node versions and OSes
   adapter-tests:
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
-
     needs: [check-and-lint]
-
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         node-version: [22.x, 24.x, 26.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
-
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: ioBroker/testing-action-adapter@v1
         with:
           node-version: ${{ matrix.node-version }}
+          os: ${{ matrix.os }}
+          build: true
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Run local tests
-        run: npm test
-#      - name: Run unit tests
-#        run: npm run test:unit
-#      - name: Run integration tests # (linux/osx)
-#        if: startsWith(runner.OS, 'windows') == false
-#        run: DEBUG=testing:* npm run test:integration
-#      - name: Run integration tests # (windows)
-#        if: startsWith(runner.OS, 'windows')
-#        run: set DEBUG=testing:* & npm run test:integration
-
-  # Deploys the final package to NPM
+  # Deploys the final package to NPM (trusted publishing) and creates the GitHub release
   deploy:
     needs: [check-and-lint, adapter-tests]
 
@@ -95,8 +60,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    # Write permissions are required to create Github releases,
-    # id-token is required for npm Trusted Publishing
+    # Write permissions are required to create GitHub releases,
+    # id-token is required for npm trusted publishing
     permissions:
       contents: write
       id-token: write
@@ -104,29 +69,12 @@ jobs:
     steps:
       - uses: ioBroker/testing-action-deploy@v1
         with:
-          node-version: '22.x'
-          install-command: 'npm install'
-          build: false
+          node-version: '24.x'
+          build: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Notify Sentry.io about the release
-        run: |
-          VERSION="${{ github.ref_name }}"
-          VERSION=${VERSION#v}
-          npm i -g @sentry/cli
-          export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-          export SENTRY_URL=https://sentry.iobroker.net
-          export SENTRY_ORG=iobroker
-          export SENTRY_PROJECT=iobroker-wolf
-          export SENTRY_VERSION=iobroker.wolf@$VERSION
-          sentry-cli releases new $SENTRY_VERSION
-          sentry-cli releases set-commits $SENTRY_VERSION --auto
-          sentry-cli releases finalize $SENTRY_VERSION
-
-        # Add the following line BEFORE finalize if sourcemap uploads are needed
-        # sentry-cli releases files $SENTRY_VERSION upload-sourcemaps build/
+          sentry: true
+          sentry-token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          sentry-project: 'iobroker-wolf'
+          sentry-version-prefix: 'iobroker.wolf'
+          sentry-github-integration: true
+          sentry-sourcemap-paths: 'build/'
