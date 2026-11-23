@@ -104,8 +104,13 @@ function startAdapter(options) {
             if (!datapoints[dp]) return;
 
             if (datapoints[dp].rw === 'r') {
-                adapter.setState(id, ack_data[dp].value, true);
                 adapter.log.error(`${id} is only readable`);
+                // restore the last value received from the ISM8i
+                const value = ack_data[dp] && ack_data[dp].id === id ? ack_data[dp].value : undefined;
+                if (value !== undefined) {
+                    adapter.setState(id, value, true)
+                        .catch(e => adapter.log.error(`Cannot set state ${id}: ${e.message}`));
+                }
             } else {
                 try {
                     const enc = encode(state.val, dp);
@@ -141,7 +146,7 @@ function getDevice(dp) {
         return 'hg3_t';
     } else if ((dp >= 40 && dp <= 52) || (dp >= 206 && dp <= 208) || (dp === 367)) {
         return 'hg4_t';
-    } else if ((dp >= 53 && dp <= 66) || (dp === 194) || (dp === 368) || (dp >= 355 && dp <= 361) || (dp === 251)) {
+    } else if ((dp >= 53 && dp <= 66) || (dp === 194) || (dp === 368) || (dp >= 355 && dp <= 361) || (dp === 251) || (dp === 372)) {
         return 'bm1_t';
     } else if ((dp >= 67 && dp <= 79) || (dp === 369)) {
         return 'bm2_t';
@@ -149,7 +154,7 @@ function getDevice(dp) {
         return 'bm3_t';
     } else if ((dp >= 93 && dp <= 105)|| (dp === 371)) {
         return 'bm4_t';
-    } else if ((dp >= 106 && dp <= 113) || (dp >= 209 && dp <= 210)) {
+    } else if ((dp >= 106 && dp <= 113) || (dp >= 209 && dp <= 211)) {
         return 'km1_t';
     } else if (dp >= 114 && dp <= 120) {
         return 'mm1_t';
@@ -174,7 +179,7 @@ function getDeviceRages(id) {
     if (id === 'hg1_t') {
         return [{ 'lsb': 1, 'msb': 13 }, { 'lsb': 197, 'msb': 199 }, { 'lsb': 364, 'msb': 364 }];
     } else if (id === 'hg2_t') {
-        return [{ 'lsb': 14, 'msb': 26 }, { 'lsb': 200, 'msb': 202 }, { 'lsb3': 365, 'msb3': 365 }];
+        return [{ 'lsb': 14, 'msb': 26 }, { 'lsb': 200, 'msb': 202 }, { 'lsb': 365, 'msb': 365 }];
     } else if (id === 'hg3_t') {
         return [{ 'lsb': 27, 'msb': 39}, { 'lsb': 203, 'msb': 205 }, { 'lsb': 366, 'msb': 366 }];
     } else if (id === 'hg4_t') {
@@ -188,7 +193,7 @@ function getDeviceRages(id) {
     } else if (id === 'bm4_t') {
         return [{ 'lsb': 93, 'msb': 105 }, { 'lsb': 371, 'msb': 371 }];
     } else if (id === 'km1_t') {
-        return [{ 'lsb': 106, 'msb': 113 }, { 'lsb': 209, 'msb': 210 }];
+        return [{ 'lsb': 106, 'msb': 113 }, { 'lsb': 209, 'msb': 211 }];
     } else if (id === 'mm1_t') {
         return [{ 'lsb': 114, 'msb': 120 }];
     } else if (id === 'mm2_t') {
@@ -680,26 +685,25 @@ function encode(data, dp) {
 }
 
 function addGroup(dev) {
-    let groupName = '';
-    dev = dev.replace('_t','_n');
-    if (adapter.config.names[`${dev}`] === '') {
+    const nameKey = dev.replace('_t', '_n');
+    let groupName = adapter.config.names[nameKey];
+    if (!groupName) {
         if (dev.match(/^hg/)) {
-            groupName = `Heizgerät ${dev.slice(-3,-2)}`;
+            groupName = `Heizgerät ${dev.slice(-3, -2)}`;
         } else if (dev.match(/^bm/)) {
-            groupName = `Bediengerät ${dev.slice(-3,-2)}`;
+            groupName = `Bediengerät ${dev.slice(-3, -2)}`;
         } else if (dev.match(/^mm/)) {
-            groupName = `Mischermodul ${dev.slice(-3,-2)}`;
+            groupName = `Mischermodul ${dev.slice(-3, -2)}`;
         } else if (dev.match(/^km/)) {
             groupName = 'Kaskadenmodul';
         } else if (dev.match(/^sm/)) {
             groupName = 'Solarmodul';
         } else if (dev.match(/^cwl/)) {
             groupName = 'Comfort-Wohnungs-Lüftung';
+        } else {
+            groupName = 'Unbekannte Datenpunkte';
         }
-    } else {
-        groupName = adapter.config.names[`${dev}`];
     }
-    if (dev !== "unknown") dev = dev.replace('n','t');
     adapter.log.debug(`Add Channel ${dev} : ${groupName}`);
     adapter.extendObject(dev, {
         type: 'channel',
@@ -814,14 +818,27 @@ function main() {
     adapter.getForeignObjects(`${adapter.namespace}.*`, (err, list) => {
         for (const idd in list) {
             if (list.hasOwnProperty(idd)) {
-                ack_data[idd.split('.').pop()] = {id: idd};
                 ack_data.old_devices[idd.split('.')[2]] = idd.split('.')[2];
 
-                // Fix existing objects created by older versions or with other settings
                 const obj = list[idd];
                 const dp = idd.split('.').pop();
                 const data = datapoints[dp];
-                if (obj && obj.type === 'state' && obj.common && data) {
+                if (!data || !obj || obj.type !== 'state') {
+                    continue;
+                }
+
+                // Only an object at the expected path counts as existing. Older versions created some
+                // datapoints in other channels. Such an object must not block creating the object at the
+                // expected path, otherwise values are written to a state without object (#96).
+                const expectedId = `${adapter.namespace}.${getDevice(dp)}.${dp}`;
+                if (idd !== expectedId) {
+                    adapter.log.info(`Object ${idd} is obsolete and not updated any more, the value of datapoint ${dp} is now in ${expectedId}. You can delete ${idd}.`);
+                    continue;
+                }
+                ack_data[dp] = {id: idd};
+
+                // Fix existing objects created by older versions or with other settings
+                if (obj.common) {
                     let changed = false;
 
                     // Fix type if "status as boolean" was changed
@@ -855,13 +872,13 @@ function main() {
         }
 
         // Remap devices from earlier names (without _t/_n postfix)
-        for (const devName in Object.keys(adapter.config.devices)) {
+        for (const devName of Object.keys(adapter.config.devices)) {
             if (!devName.endsWith('_t') && adapter.config.devices[devName + '_t'] === undefined) {
                 adapter.config.devices[devName + '_t'] = adapter.config.devices[devName];
                 delete adapter.config.devices[devName];
             }
         }
-        for (const devName in Object.keys(adapter.config.names)) {
+        for (const devName of Object.keys(adapter.config.names)) {
             if (!devName.endsWith('_n') && adapter.config.names[devName + '_n'] === undefined) {
                 adapter.config.names[devName + '_n'] = adapter.config.names[devName];
                 delete adapter.config.names[devName];
