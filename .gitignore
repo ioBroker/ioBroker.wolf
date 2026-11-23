@@ -1,7 +1,10 @@
 /.idea
+/.vs
 /node_modules
 /iob_npm.done
-/package-lock.json
+/tmp
+build
+*.tsbuildinfo
 
 #ignore .commitinfo created by ioBroker release script
 .commitinfo

@@ -2251,6 +2251,7 @@
     "type": "DPT_Unknown2",
     "rw": "r",
     "read": true,
+    "write": false,
     "commonType": "string"
   },
   "353": {
