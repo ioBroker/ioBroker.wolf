@@ -845,6 +845,12 @@ function main() {
                             delete obj.common.max;
                             changed = true;
                         }
+                    } else if (getCommonType(dp) === 'number' && (obj.common.min !== data.min || obj.common.max !== data.max)) {
+                        // Update min/max of writable states to the current limits
+                        adapter.log.debug(`Update min/max of ${idd} to ${data.min}..${data.max}`);
+                        obj.common.min = data.min;
+                        obj.common.max = data.max;
+                        changed = true;
                     }
 
                     changed && adapter.setForeignObject(idd, obj);

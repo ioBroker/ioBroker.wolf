@@ -1953,7 +1953,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 100
   },
   "199": {
     "name": "Kesselsolltemperaturvorgabe",
@@ -1986,7 +1986,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 100
   },
   "202": {
     "name": "Kesselsolltemperaturvorgabe",
@@ -2019,7 +2019,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 100
   },
   "205": {
     "name": "Kesselsolltemperaturvorgabe",
@@ -2052,7 +2052,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 100
   },
   "208": {
     "name": "Kesselsolltemperaturvorgabe",
@@ -2074,7 +2074,7 @@
     "einheit": "%",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 100
   },
   "210": {
     "name": "Sammlersolltemperaturvorgabe",
