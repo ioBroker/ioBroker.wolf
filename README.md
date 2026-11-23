@@ -22,8 +22,7 @@ Lese auf [deutsch](docs/de/README.md).
 -->
 
 ## Changelog
-
-### **WORK IN PROGRESS**
+### 2.0.0 (2026-11-23)
 * (GermanBluefox) Breaking change: Node.js >= 22 and admin >= 7.0.0 are required now
 * (GermanBluefox) The adapter was refactored to TypeScript, the configuration dialog to JsonConfig
 * (GermanBluefox) Configurations of older versions are converted when the adapter starts (before: when the configuration dialog was opened)
