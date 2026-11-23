@@ -654,35 +654,6 @@ function encode(data, dp) {
     }
 }
 
-function bufferIndexOf(buf, search, offset) {
-    offset = offset || 0;
-
-    let m = 0;
-    let s = -1;
-    for (let i = offset; i < buf.length; ++i) {
-
-        if (buf[i] != search[m]) {
-            s = -1;
-            m = 0;
-        }
-
-        if (buf[i] == search[m]) {
-            if (s === -1) {
-                s = i;
-            }
-            ++m;
-            if (m === search.length) {
-                break;
-            }
-        }
-    }
-
-    if (s > -1 && buf.length - s < search.length) {
-        return -1;
-    }
-    return s;
-}
-
 function addGroup(dev) {
     let groupName = '';
     dev = dev.replace('_t','_n');
@@ -896,108 +867,176 @@ function main() {
     });
 }
 
-function setState(adapter, dp, val, data, device) {
-    if (data.length <= 20) {
-        adapter.log.debug(`Skip DP ${dp} without value - data: ${data.toString('hex')} - length: ${data.length}`);
+function setState(adapter, dp, value, device, telegram) {
+    let val;
+    try {
+        val = decode(datapoints[dp].type, value, dp);
+    } catch (err) {
+        adapter.log.error(`Can't parse DP : ${dp}, type ${datapoints[dp].type} - data: ${telegram.toString('hex')} - length: ${telegram.length}`);
+        adapter.log.debug(`Incoming Device: ${device}, Datapoint: ${dp}, Datapoint_name: ${datapoints[dp].name}, Datapoint_type: ${datapoints[dp].type}, Data: ${telegram.toString('hex')}, Length: ${telegram.length}`);
         return;
     }
-    try {
-        val = decode(datapoints[dp].type, data.slice(20), dp);
-        adapter.log.debug(`Set Value for ${device}.${dp}.${datapoints[dp].name}: ${val}`);
-        adapter.setState(`${device}.${dp}`, val, true);
-        ack_data[dp]['value'] = val;
-    } catch (err) {
-        val = '';
-        adapter.log.error(`Can't parse DP : ${dp}, type ${datapoints[dp].type} - data: ${data.toString('hex')} - length: ${data.length}`);
-        datapoints[dp] && adapter.log.debug(`Incoming Device: ${device}, Datapoint: ${dp}, Datapoint_name: ${datapoints[dp].name}, Datapoint_type: ${datapoints[dp].type}, Data: ${data.toString('hex')}, Length: ${data.length}, Value: ${val}`
-        );
+    adapter.log.debug(`Set Value for ${device}.${dp}.${datapoints[dp].name}: ${val}`);
+    adapter.setState(`${device}.${dp}`, val, true)
+        .catch(e => adapter.log.error(`Cannot set state ${device}.${dp}: ${e.message}`));
+    ack_data[dp]['value'] = val;
+}
+
+/**
+ * Splits received data into complete telegrams (ISM8i manual, chapter 8.2).
+ * The frame size (bytes 4-5) tells how long a telegram is. An incomplete telegram at the end
+ * stays in the buffer until the rest arrives with the next chunk.
+ *
+ * @returns {{telegrams: Buffer[], rest: Buffer}}
+ */
+function splitTelegrams(buffer) {
+    const telegrams = [];
+    while (buffer.length) {
+        const start = buffer.indexOf(splitter);
+        if (start === -1) {
+            // keep the last bytes, they could be the beginning of the next header
+            const keep = Math.min(buffer.length, splitter.length - 1);
+            if (buffer.length > keep) {
+                adapter.log.debug(`Ignore data without header: ${buffer.subarray(0, buffer.length - keep).toString('hex')}`);
+            }
+            buffer = buffer.subarray(buffer.length - keep);
+            break;
+        }
+        if (start > 0) {
+            adapter.log.debug(`Ignore data before header: ${buffer.subarray(0, start).toString('hex')}`);
+            buffer = buffer.subarray(start);
+        }
+        if (buffer.length < 6) {
+            // frame size not received yet
+            break;
+        }
+        const frameSize = buffer.readUInt16BE(4);
+        if (frameSize < 12) {
+            adapter.log.debug(`Ignore telegram with invalid frame size ${frameSize}: ${buffer.toString('hex')}`);
+            buffer = buffer.subarray(splitter.length);
+            continue;
+        }
+        if (buffer.length < frameSize) {
+            // wait for the rest of the telegram
+            break;
+        }
+        telegrams.push(buffer.subarray(0, frameSize));
+        buffer = buffer.subarray(frameSize);
+    }
+    return { telegrams, rest: buffer };
+}
+
+/**
+ * Parses a SetDatapointValue.Req telegram (MainService 0xF0, SubService 0x06, ISM8i manual chapter 8.2).
+ * One telegram can contain several datapoints.
+ *
+ * @returns {{startDp: number, datapoints: {dp: number, value: Buffer}[]} | null} null if the telegram is not a SetDatapointValue.Req
+ */
+function parseTelegram(telegram) {
+    if (telegram.length < 16 || telegram[10] !== 0xF0 || telegram[11] !== 0x06) {
+        return null;
+    }
+    const startDp = telegram.readUInt16BE(12);
+    const count = telegram.readUInt16BE(14);
+    const result = [];
+    let offset = 16;
+    for (let i = 0; i < count; i++) {
+        if (offset + 4 > telegram.length) {
+            adapter.log.debug(`Telegram contains less datapoints than announced (${i} of ${count}): ${telegram.toString('hex')}`);
+            break;
+        }
+        const dp = telegram.readUInt16BE(offset);
+        const length = telegram[offset + 3];
+        const value = telegram.subarray(offset + 4, offset + 4 + length);
+        if (value.length < length) {
+            adapter.log.debug(`Value of DP ${dp} is incomplete: ${telegram.toString('hex')}`);
+            break;
+        }
+        result.push({ dp, value });
+        offset += 4 + length;
+    }
+    return { startDp, datapoints: result };
+}
+
+async function processDatapoint(dp, value, telegram) {
+    const datapoint = datapoints[dp];
+    if (!datapoint) {
+        adapter.log.debug(`Unknown datapoint ${dp} - data: ${telegram.toString('hex')}`);
+        return;
+    }
+    if (!value.length) {
+        adapter.log.debug(`Skip DP ${dp} without value - data: ${telegram.toString('hex')} - length: ${telegram.length}`);
+        return;
+    }
+
+    const device = getDevice(dp);
+    adapter.log.debug(`Data for ${device} : ${dp}`);
+    if (adapter.config.devices[device] === 'Auto' || (dp >= 212 && dp <= 250) || (dp >= 252 && dp <= 354)) {
+        if (ack_data[dp]) {
+            setState(adapter, dp, value, device, telegram);
+        } else {
+            if (datapoint.name === 'Störung') {
+                if (value.readInt8(0) === 1) {
+                    ignore[device] = true;
+                    adapter.log.info(`heating ${device} do not exist`);
+                } else {
+                    ignore[device] = undefined;
+                }
+            }
+
+            if (!ignore[device]) {
+                if (await addDevice(dp)) {
+                    adapter.log.debug(`create objects: ${dp}`);
+                    setState(adapter, dp, value, device, telegram);
+                }
+            }
+        }
+    } else if (device) {
+        adapter.log.debug(`Device ${device} is disabled, datapoint ${dp} ignored`);
+    } else {
+        adapter.log.debug(`For datapoint ${dp} no device defined.`);
     }
 }
+
+async function processTelegram(sock, telegram) {
+    adapter.log.debug(`Received telegram from ${sock.remoteAddress}:${sock.remotePort}: ${telegram.toString('hex')}`);
+    const parsed = parseTelegram(telegram);
+    if (!parsed) {
+        adapter.log.debug(`Ignore telegram with service ${telegram.subarray(10, 12).toString('hex')}`);
+        return;
+    }
+
+    // Every SetDatapointValue.Req must be acknowledged, otherwise the ISM8i repeats it 5 times.
+    // A new buffer is used for every acknowledgement, because socket.write() may still hold the previous one.
+    const ack = Buffer.from(buffReq);
+    ack.writeUInt16BE(parsed.startDp, 12);
+    adapter.log.debug(`Acknowledge ${ack.toString('hex')}`);
+    sock.write(ack);
+
+    for (const { dp, value } of parsed.datapoints) {
+        await processDatapoint(dp, value, telegram);
+    }
+}
+
+// Telegrams are processed one after another, so that objects are completely created before the next value arrives
+let processing = Promise.resolve();
 
 function createServer(adapter) {
     adapter._server = net.createServer(sock => {
         !adapter._connections.includes(sock) && adapter._connections.push(sock);
 
-        //const buff_set = Buffer.from('0620F080001404000000F0C10039000100390001', 'hex');
-        //0620F080001504000000F006006E0001006E030101
-        let val;
-        let dp;
-        let device;
-        let search;
-        let lines;
-        let data;
+        let received = Buffer.alloc(0);
 
         sock.on('error', err => adapter.log.error(`Socket error: ${err.toString()}`));
 
-        sock.on('data', async _data => {
-            adapter.log.debug(`Received Data from ${sock.remoteAddress}:${sock.remotePort}: ${_data.toString('hex')}`);
-            //console.log(_data)
-            search = -1;
-            lines = [];
-
-            while ((search = bufferIndexOf(_data, splitter)) > -1) {
-                lines.push(_data.slice(0, search + splitter.length));
-                _data = _data.slice(search + splitter.length, _data.length);
-            }
-
-            _data.length && lines.push(_data);
-
-            for (let i = 1; i < lines.length; i++) {
-                data = Buffer.concat([splitter, lines[i]]);
-
-                buffReq[12] = data[12];
-                buffReq[13] = data[13];
-                adapter.log.debug(`Acknowledge ${buffReq.toString('hex')}`);
-                sock.write(buffReq);
-
-                dp = data.readUInt16BE(12);
-                device = getDevice(dp);
-                adapter.log.debug(`Data for ${device} : ${dp}`);
-                if (adapter.config.devices[device] === 'Auto') {
-                    if (ack_data[dp]) {
-                        setState(adapter, dp, val, data, device);
-                    } else {
-                        if (datapoints[dp].name === 'Störung') {
-                            if (data.slice(20).readInt8(0) === 1) {
-                                ignore[device] = true;
-                                adapter.log.info(`heating ${device} do not exist`);
-                            } else {
-                                ignore[device] = undefined;
-                            }
-                        }
-
-                        if (!ignore[device]) {
-                            if (await addDevice(dp)) {
-                                adapter.log.debug(`create object: ${dp}`);
-                                setState(adapter, dp, val, data, device);
-                            }
-                        }
-                    }
-                } else {
-                    if ((dp >= 212 && dp <= 250) || (dp >= 252 && dp <= 354)){
-                        if (ack_data[dp]) {
-                            setState(adapter, dp, val, data, device);
-                        } else {
-                            if (datapoints[dp].name === 'Störung') {
-                                if (data.slice(20).readInt8(0) === 1) {
-                                    ignore[device] = true;
-                                    adapter.log.info(`heating ${device} do not exist`);
-                                } else {
-                                    ignore[device] = undefined;
-                                }
-                            }
-
-                            if (!ignore[device]) {
-                                if (await addDevice(dp)) {
-                                    adapter.log.debug(`create objects: ${dp}`);
-                                    setState(adapter, dp, val, data, device);
-                                }
-                            }
-                        }
-                    }else{
-                        adapter.log.info(`For datapoint ${dp} no device defined.`);
-                    }
-                }
+        sock.on('data', chunk => {
+            adapter.log.debug(`Received Data from ${sock.remoteAddress}:${sock.remotePort}: ${chunk.toString('hex')}`);
+            const { telegrams, rest } = splitTelegrams(Buffer.concat([received, chunk]));
+            received = rest;
+            for (const telegram of telegrams) {
+                processing = processing
+                    .then(() => processTelegram(sock, telegram))
+                    .catch(e => adapter.log.error(`Cannot process telegram ${telegram.toString('hex')}: ${e.message}`));
             }
         });
 
