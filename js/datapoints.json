@@ -562,8 +562,8 @@
     "write": true,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
-    "max": 65
+    "min": 20,
+    "max": 80
   },
   "57": {
     "name": "Programmwahl Heizkreis",
@@ -687,8 +687,8 @@
     "write": true,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
-    "max": 65
+    "min": 20,
+    "max": 80
   },
   "70": {
     "name": "Programmwahl Mischer",
@@ -812,8 +812,8 @@
     "write": true,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
-    "max": 65
+    "min": 20,
+    "max": 80
   },
   "83": {
     "name": "Programmwahl Mischer",
@@ -937,8 +937,8 @@
     "write": true,
     "einheit": "°C",
     "commonType": "number",
-    "min": 0,
-    "max": 65
+    "min": 20,
+    "max": 80
   },
   "96": {
     "name": "Programmwahl Mischer",
@@ -2085,7 +2085,7 @@
     "einheit": "°C",
     "commonType": "number",
     "min": 0,
-    "max": 1000
+    "max": 90
   },
   "211": {
     "name": "Betriebsart Heizen/Kühlen",

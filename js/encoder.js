@@ -46,39 +46,36 @@ Encoder.prototype.encodeDPT5 = function (value) {
  * encode dpt 7 values
  */
 Encoder.prototype.encodeDPT7 = function (value) {
-    const buffer = Buffer.alloc(1);
-    buffer.writeUInt16BE(value & 0xFF, 0);
+    const buffer = Buffer.alloc(2);
+    buffer.writeUInt16BE(value & 0xFFFF, 0);
     return buffer;
 };
 
 /**
- * encode dpt 9 values
+ * encode dpt 9 values: float value = 0.01 * mantissa * 2^exponent
+ * The smallest exponent is used, with which the mantissa fits into -2048...2047.
  */
-Encoder.prototype.encodeDPT9 = function (value, exp) {
-    const data = [0, 0];
-
-    if (exp === undefined) {
-        exp = 2;
+Encoder.prototype.encodeDPT9 = function (value) {
+    let exp = 0;
+    let mant = Math.round(value * 100);
+    while ((mant < -2048 || mant > 2047) && exp < 15) {
+        exp++;
+        mant = Math.round((value * 100) / (1 << exp));
+    }
+    if (mant < -2048 || mant > 2047) {
+        throw new Error(`Value ${value} is out of range for DPT 9`);
     }
 
-    let mant = value * 100 / (1 << exp);
-
-    //Fill in sign bit
-    if (value < 0) {
-        data[0] |= 0x80;
-        mant = (~(mant * -1) + 1) & 0x07ff;
+    let data = (exp & 0x0f) << 11;
+    if (mant < 0) {
+        // sign bit and mantissa in two's complement notation
+        data |= 0x8000 | (mant & 0x07ff);
+    } else {
+        data |= mant;
     }
-
-    // Fill in exp (4bit)
-    data[0] |= (exp & 0x0F) << 3;
-
-    // Fill in mantissa
-    data[0] |= (mant >> 8) & 0x7;
-    data[1] |= mant & 0xFF;
 
     const buffer = Buffer.alloc(2);
-    buffer.writeUInt8(data[0], 0);
-    buffer.writeUInt8(data[1], 1);
+    buffer.writeUInt16BE(data, 0);
     return buffer;
 };
 
@@ -111,7 +108,8 @@ Encoder.prototype.encodeDPT11 = function (value) {
     const date = new Date(value)
     const buffer = Buffer.alloc(3);
 
-    const day = date.getDay()
+    // day of the month (getDay() would return the weekday)
+    const day = date.getDate();
     const mon = date.getMonth()
     let year = date.getFullYear()
 
