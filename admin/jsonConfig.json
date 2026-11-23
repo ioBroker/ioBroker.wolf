@@ -1,0 +1,559 @@
+{
+    "i18n": true,
+    "type": "tabs",
+    "items": {
+        "_connection": {
+            "type": "panel",
+            "label": "Connection",
+            "items": {
+                "_logo": {
+                    "type": "staticImage",
+                    "src": "wolf.png",
+                    "style": {
+                        "width": "64px"
+                    },
+                    "sm": 12,
+                    "md": 2,
+                    "lg": 1
+                },
+                "bind": {
+                    "type": "ip",
+                    "label": "Adapter bind interface",
+                    "listenOnAllPorts": true,
+                    "newLine": true,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4
+                },
+                "port": {
+                    "type": "number",
+                    "label": "Port",
+                    "min": 1,
+                    "max": 65535,
+                    "default": 12004,
+                    "sm": 12,
+                    "md": 3,
+                    "lg": 2
+                },
+                "_hint": {
+                    "type": "staticText",
+                    "text": "Select an interface that allows external connections. The ISM8i must be configured to connect to this IP address and port.",
+                    "newLine": true,
+                    "sm": 12
+                },
+                "bool_status": {
+                    "type": "checkbox",
+                    "label": "Status as Boolean",
+                    "help": "Switch states are written as true/false instead of text",
+                    "newLine": true,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4
+                },
+                "bool_bar": {
+                    "type": "checkbox",
+                    "label": "Pressure in bar",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4
+                },
+                "polling_interval": {
+                    "type": "number",
+                    "label": "Polling interval",
+                    "help": "Seconds, 0 = off. Requests all values from the ISM8i.",
+                    "min": 0,
+                    "max": 2147482,
+                    "default": 0,
+                    "newLine": true,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4
+                }
+            }
+        },
+        "_devices": {
+            "type": "panel",
+            "label": "Devices",
+            "items": {
+                "_devicesHint": {
+                    "type": "staticText",
+                    "text": "Auto: the objects are created when the device sends values. off: the values of the device are ignored and its objects are deleted when the adapter starts.",
+                    "sm": 12
+                },
+                "_heatersImage": {
+                    "type": "staticImage",
+                    "src": "image/heating.png",
+                    "style": {
+                        "width": "48px"
+                    },
+                    "newLine": true,
+                    "sm": 2,
+                    "md": 1
+                },
+                "_heaters": {
+                    "type": "header",
+                    "text": "Heaters",
+                    "size": 4,
+                    "sm": 10,
+                    "md": 11
+                },
+                "devices.hg1_t": {
+                    "type": "select",
+                    "label": "Heater 1",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.hg1_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.hg2_t": {
+                    "type": "select",
+                    "label": "Heater 2",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.hg2_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.hg3_t": {
+                    "type": "select",
+                    "label": "Heater 3",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.hg3_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.hg4_t": {
+                    "type": "select",
+                    "label": "Heater 4",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.hg4_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "_operatingImage": {
+                    "type": "staticImage",
+                    "src": "image/bm2.png",
+                    "style": {
+                        "width": "48px"
+                    },
+                    "newLine": true,
+                    "sm": 2,
+                    "md": 1
+                },
+                "_operating": {
+                    "type": "header",
+                    "text": "Operating modules",
+                    "size": 4,
+                    "sm": 10,
+                    "md": 11
+                },
+                "devices.bm1_t": {
+                    "type": "select",
+                    "label": "Operating module 1",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.bm1_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.bm2_t": {
+                    "type": "select",
+                    "label": "Operating module 2",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.bm2_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.bm3_t": {
+                    "type": "select",
+                    "label": "Operating module 3",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.bm3_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.bm4_t": {
+                    "type": "select",
+                    "label": "Operating module 4",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.bm4_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "_mixingImage": {
+                    "type": "staticImage",
+                    "src": "image/uni.png",
+                    "style": {
+                        "width": "48px"
+                    },
+                    "newLine": true,
+                    "sm": 2,
+                    "md": 1
+                },
+                "_mixing": {
+                    "type": "header",
+                    "text": "Mixing modules",
+                    "size": 4,
+                    "sm": 10,
+                    "md": 11
+                },
+                "devices.mm1_t": {
+                    "type": "select",
+                    "label": "Mixing module 1",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.mm1_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.mm2_t": {
+                    "type": "select",
+                    "label": "Mixing module 2",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.mm2_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.mm3_t": {
+                    "type": "select",
+                    "label": "Mixing module 3",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.mm3_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "_otherImage": {
+                    "type": "staticImage",
+                    "src": "image/cwl.png",
+                    "style": {
+                        "width": "48px"
+                    },
+                    "newLine": true,
+                    "sm": 2,
+                    "md": 1
+                },
+                "_other": {
+                    "type": "header",
+                    "text": "Other devices",
+                    "size": 4,
+                    "sm": 10,
+                    "md": 11
+                },
+                "devices.km1_t": {
+                    "type": "select",
+                    "label": "Cascade module",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.km1_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.sm1_t": {
+                    "type": "select",
+                    "label": "Solar module",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.sm1_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.cwl_t": {
+                    "type": "select",
+                    "label": "Comfort domestic ventilation (CWL)",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.cwl_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                },
+                "devices.hg0_t": {
+                    "type": "select",
+                    "label": "Split air/water heat pump",
+                    "options": [
+                        {
+                            "value": "Auto",
+                            "label": "Auto"
+                        },
+                        {
+                            "value": "off",
+                            "label": "off"
+                        }
+                    ],
+                    "default": "Auto",
+                    "newLine": true,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                },
+                "names.hg0_n": {
+                    "type": "text",
+                    "label": "Name",
+                    "default": "",
+                    "sm": 6,
+                    "md": 5,
+                    "lg": 4
+                }
+            }
+        }
+    }
+}
