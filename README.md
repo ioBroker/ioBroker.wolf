@@ -30,6 +30,9 @@ Lese auf [deutsch](docs/de/README.md).
 * (GermanBluefox) Unknown mode values of ISM8i are written as raw values instead of logging parse errors, telegrams without a value are skipped (#92, #124)
 * (GermanBluefox) Removed min/max from read-only states to avoid range warnings, min/max of writable states are updated to the real limits (#102, #109)
 * (GermanBluefox) Migrated deploy workflow to npm Trusted Publishing (#139)
+* (GermanBluefox) Fixed crash when a telegram was split over several TCP packets. All datapoints of a telegram are processed now (#107)
+* (GermanBluefox) Fixed connection handling: closed connections are removed, an old connection is closed when the ISM8i reconnects, polling and writing only use open connections (#154, #123)
+* (GermanBluefox) Added state `info.connection`
 
 ### 1.7.0 (2023-01-26)
 * (fred0815) added missing ISM8i states
