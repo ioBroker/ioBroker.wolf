@@ -449,7 +449,7 @@ function decode(type, data, dp) {
             }
         }
         adapter.log.debug(`Unknown DHWMode value ${_data} for DP ${dp}`);
-        return _data;
+        return String(_data);
 
     }
     else if (type === 'DPT_HVACMode') {
@@ -466,7 +466,7 @@ function decode(type, data, dp) {
                 return 'Sparbetrieb';
             } else {
                 adapter.log.debug(`Unknown HVACMode value ${_data} for DP ${dp}`);
-                return _data;
+                return String(_data);
             }
         } else if (datapoints[dp].name === 'Programmwahl CWL') {
             if (_data === 0) {
@@ -479,7 +479,7 @@ function decode(type, data, dp) {
                 return 'Feuchteschutz';
             } else {
                 adapter.log.debug(`Unknown HVACMode value ${_data} for DP ${dp}`);
-                return _data;
+                return String(_data);
             }
         } else {
             return 'not defined';
