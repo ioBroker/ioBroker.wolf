@@ -33,6 +33,8 @@ Lese auf [deutsch](docs/de/README.md).
 * (GermanBluefox) Fixed crash when a telegram was split over several TCP packets. All datapoints of a telegram are processed now (#107)
 * (GermanBluefox) Fixed connection handling: closed connections are removed, an old connection is closed when the ISM8i reconnects, polling and writing only use open connections (#154, #123)
 * (GermanBluefox) Added state `info.connection`
+* (GermanBluefox) An object of a datapoint at a path of an older version does not block creating the object at the current path anymore (#96)
+* (GermanBluefox) Added missing datapoints: 211 (Betriebsart Heizen/Kühlen, Kaskadenmodul), 365 (Kesselsolltemperatur HG2) and 372 (Zuletzt aktiver Störcode)
 
 ### 1.7.0 (2023-01-26)
 * (fred0815) added missing ISM8i states
