@@ -26,6 +26,7 @@ Lese auf [deutsch](docs/de/README.md).
 ### **WORK IN PROGRESS**
 - (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
 * (GermanBluefox) Updated @iobroker/adapter-core to 3.x (#132)
+* (GermanBluefox) Fixed boolean handling for DPT_Bool and type update of existing objects when the boolean option changes (#98)
 
 ### 1.7.0 (2023-01-26)
 * (fred0815) added missing ISM8i states
