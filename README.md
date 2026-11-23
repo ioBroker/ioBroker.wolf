@@ -40,6 +40,8 @@ Lese auf [deutsch](docs/de/README.md).
 * (GermanBluefox) Invalid values for Programmwahl are not sent anymore (before: Automatikbetrieb or Sparbetrieb was sent). The numbers are unchanged (numbering of the Wolf control unit), see documentation
 * (GermanBluefox) Warmwassersolltemperatur can be set from 20 to 80 °C as described in the ISM8i manual (before: 0 to 65 °C)
 * (GermanBluefox) Percent values (DPT_Scaling) are calculated with 100/255 as described in the ISM8i manual, so 100 % is shown as 100 % (before: 102 %)
+* (GermanBluefox) Fixed decoding of the device detection: "Erkennung verfügbarer Geräte 2" (DP 356) was always empty, DP 355 showed wrong devices, DP 251 and 358 were empty if more than one circuit is available, "Zuletzt aktiver Störcode" (DP 372) had no value
+* (GermanBluefox) Unknown values of "Betriebsart" are shown with their KNX name or number instead of logging parse errors. "Programmwahl" shows "Permanent Kühlen"
 
 ### 1.7.0 (2023-01-26)
 * (fred0815) added missing ISM8i states

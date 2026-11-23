@@ -209,6 +209,88 @@ function getDeviceRages(id) {
 
 }
 
+// Heizgerätetyp, DP 357, 359, 360, 361 (ISM8i manual, 8.7.9)
+const BOILER_TYPES = {
+    0: 'kein Heizgerät',
+    1: 'CGB-2',
+    2: 'MGK-2',
+    3: 'TOB',
+    4: 'BWL-1S',
+    5: 'FGB',
+    6: 'CHA',
+    7: 'COB-2',
+    8: 'CGB-2 38/55',
+    9: 'CGB-2 38/55',
+    10: 'TGB-2',
+    11: 'TGB-2',
+    12: 'CGB-2 75/100',
+    13: 'CGB-2 75/100',
+    14: 'FHA',
+};
+// bit -> name. DP 251: available heating/mixer circuits, DP 358: available hot water circuits (ISM8i manual, 8.7.6, 8.7.7)
+const HEATING_CIRCUITS = ['Dir. Heizkreis', 'Mischerkreis 1', 'Mischerkreis 2', 'Mischerkreis 3', 'Mischerkreis 4', 'Mischerkreis 5', 'Mischerkreis 6', 'Mischerkreis 7'];
+const HOT_WATER_CIRCUITS = ['Dir. Warmwasser', 'Warmwasser 1', 'Warmwasser 2', 'Warmwasser 3', 'Warmwasser 4', 'Warmwasser 5', 'Warmwasser 6', 'Warmwasser 7'];
+// bit -> name. DP 355 and 356: available devices (ISM8i manual, 8.7.8)
+const DEVICES_355 = {
+    1: 'Mischermodul 1',
+    2: 'Mischermodul 2',
+    3: 'Mischermodul 3',
+    4: 'Mischermodul 4',
+    5: 'Mischermodul 5',
+    6: 'Mischermodul 6',
+    7: 'Mischermodul 7',
+    8: 'Heizgerät 1',
+    9: 'Heizgerät 2',
+    10: 'Heizgerät 3',
+    11: 'Heizgerät 4',
+    12: 'Heizgerät 5',
+    13: 'Solarmodul',
+};
+const DEVICES_356 = {
+    6: 'CWL Excellent',
+    9: 'Solarmodul 1',
+    10: 'Solarmodul 2',
+    11: 'BM-2 (0) / System',
+};
+// DPT_HVACContrMode (ISM8i manual, 8.6.10)
+const HVAC_CONTR_MODES = {
+    0: 'Auto',
+    1: 'Heat',
+    2: 'Morning Warmup',
+    3: 'Cool',
+    4: 'Night Purge',
+    5: 'Precool',
+    6: 'Off',
+    7: 'Test',
+    8: 'Emergency Heat',
+    9: 'Fan Only',
+    10: 'Free Cool',
+    11: 'Ice',
+    12: 'Maximum Heating Mode',
+    13: 'Economic Heat/Cool Mode',
+    14: 'Dehumidification',
+    15: 'Calibration Mode',
+    16: 'Emergency Cool Mode',
+    17: 'Emergency Steam Mode',
+    20: 'NoDem',
+};
+
+/**
+ * Returns the names of the set bits, separated by comma
+ *
+ * @param {number} value
+ * @param {Record<number, string> | string[]} names bit -> name, bits without name are ignored
+ */
+function decodeBitMask(value, names) {
+    const result = [];
+    for (let bit = 0; bit < 16; bit++) {
+        if (value & (1 << bit) && names[bit]) {
+            result.push(names[bit]);
+        }
+    }
+    return result.join(', ');
+}
+
 function decode(type, data, dp) {
     let val;
     let _data;
@@ -291,170 +373,31 @@ function decode(type, data, dp) {
     } else if (type === 'DPT_TimeOfDay') {
         return dec.decodeDPT10(data);
     } else if (type === 'DPT_Value_1_Ucount') {
-        if (dp === 357 || dp === 359 || dp === 360 || dp === 361){
-            _data = dec.decodeDPT5(data);
-            switch (_data){
-                case 0:
-                    return 'kein Heizgerät';
-                case 1:
-                    return 'CGB-2';
-                case 2:
-                    return 'MGK-2';
-                case 3:
-                    return 'TOB';
-                case 4:
-                    return 'BWL-1S';
-                case 5:
-                    return 'FGB';
-                case 6:
-                    return 'CHA';
-                case 7:
-                    return 'COB-2';
-                case 8:
-                    return 'CGB-2 38/55';
-                case 9:
-                    return 'CGB-2 38/55';
-                case 10:
-                    return 'TGB-2';
-                case 11:
-                    return 'TGB-2';
-                case 12:
-                    return 'CGB-2 75/100';
-                case 13:
-                    return 'CGB-2 75/100';
-                case 14:
-                    return 'FHA';
-                default:
-                    return '';
+        _data = dec.decodeDPT5(data);
+        if (dp === 357 || dp === 359 || dp === 360 || dp === 361) {
+            // Heizgerätetyp (ISM8i manual, 8.7.9)
+            if (BOILER_TYPES[_data] !== undefined) {
+                return BOILER_TYPES[_data];
             }
-        } else if (dp === 358){
-            _data = dec.decodeDPT5(data);
-            switch (_data){
-                case 1:
-                    return 'Dir. Warmwasser';
-                case 2:
-                    return 'Warmwasser 1';
-                case 4:
-                    return 'Warmwasser 2';
-                case 8:
-                    return 'Warmwasser 3';
-                case 16:
-                    return 'Warmwasser 4';
-                case 32:
-                    return 'Warmwasser 5';
-                case 64:
-                    return 'Warmwasser 6';
-                case 128:
-                    return 'Warmwasser 7';
-                default:
-                    return '';
-            }
-        } else if (dp === 251){
-            _data = dec.decodeDPT5(data);
-            switch (_data){
-                case 1:
-                    return 'Dir. Heizkreis';
-                case 2:
-                    return 'Mischerkreis 1';
-                case 4:
-                    return 'Mischerkreis 2';
-                case 8:
-                    return 'Mischerkreis 3';
-                case 16:
-                    return 'Mischerkreis 4';
-                case 32:
-                    return 'Mischerkreis 5';
-                case 64:
-                    return 'Mischerkreis 6';
-                case 128:
-                    return 'Mischerkreis 7';
-                default:
-                    return '';
-            }
+            adapter.log.debug(`Unknown boiler type ${_data} for DP ${dp}`);
+            return String(_data);
+        } else if (dp === 358) {
+            // bit mask of the available hot water circuits
+            return decodeBitMask(_data, HOT_WATER_CIRCUITS);
+        } else if (dp === 251) {
+            // bit mask of the available heating/mixer circuits
+            return decodeBitMask(_data, HEATING_CIRCUITS);
         }
+        return _data;
     } else if (type === 'DPT_Value_2_Ucount') {
-        _data = dec.decodeDPT7(data);
-        let wert = "";
-        if (dp === 355){
-            // 16 max length in bit - only 14 are currentyl needed
-            let y = 16 -_data.length;
-            for (let i = 0; i < 14; i++){
-                if (_data.slice(i, i + 1) == 1) {
-                    switch (i+y){
-                        case 2:
-                            wert += ' Solarmodul, ';
-                            break;
-                        case 3:
-                            wert += ' Heizgerät 4, ';
-                            break;
-                        case 4:
-                            wert += ' Heizgerät 4, ';
-                            break;
-                        case 5:
-                            wert += ' Heizgerät 3, ';
-                            break;
-                        case 6:
-                            wert += ' Heizgerät 2, ';
-                            break;
-                        case 7:
-                            wert += ' Heizgerät 1, ';
-                            break;
-                        case 8:
-                            wert += ' Mischermodul, ';
-                            break;
-                        case 9:
-                            wert += ' Mischermodul, ';
-                            break;
-                        case 10:
-                            wert += ' Mischermodul, ';
-                            break;
-                        case 11:
-                            wert += ' Mischermodul, ';
-                            break;
-                        case 12:
-                            wert += ' Mischermodul 3, ';
-                            break;
-                        case 13:
-                            wert += ' Mischermodul 2, ';
-                            break;
-                        case 14:
-                            wert += ' Mischermodul 1, ';
-                            break;
-                    }
-                }
-            }
+        // bit masks of the available devices (ISM8i manual, 8.7.8)
+        _data = data.readUInt16BE(0);
+        if (dp === 355) {
+            return decodeBitMask(_data, DEVICES_355);
+        } else if (dp === 356) {
+            return decodeBitMask(_data, DEVICES_356);
         }
-        if (dp === 356){
-            _data = dec.decodeDPT7(data);
-            let wert = "";
-            // 16 max length in bit - only 11 are currently needed
-            let y = 16 -_data.length;
-            for (let i = 0; i < 12; i++){
-                if (_data.slice(i, i + 1) == 1) {
-                    switch (i+y){
-                        case 9:
-                            wert += ' CWL Excellent, ';
-                            break;
-                        case 8:
-                            wert += '';
-                            break;
-                        case 7:
-                            wert += '' ;
-                            break;
-                        case 6:
-                            wert += ' Solarmodul 1, ';
-                            break;
-                        case 5:
-                            wert += ' Solarmodul 2, ';
-                            break;
-                        case 4:
-                            wert += ' BM-2(0)/System, ';
-                            break;
-                    }
-                }
-            }
-        }
-        return wert;
+        return _data;
     } else if (type === 'DPT_Date') {
         return dec.decodeDPT11(data);
     } else if (type === 'DPT_FlowRate_m3/h') {
@@ -490,6 +433,9 @@ function decode(type, data, dp) {
                 return 'Heizbetrieb';
             } else if (_data === 3) {
                 return 'Sparbetrieb';
+            } else if (_data === 4) {
+                // Building Protection (ISM8i manual, 8.7.3)
+                return 'Permanent Kühlen';
             } else {
                 adapter.log.debug(`Unknown HVACMode value ${_data} for DP ${dp}`);
                 return String(_data);
@@ -511,46 +457,23 @@ function decode(type, data, dp) {
             return 'not defined';
         }
     } else if (type === 'DPT_HVACContrMode') {
-        _data = data.readInt8(0);
-        if (dp < 177) {
-            if (_data === 0) {
-                return 'Auto';
-            } else if (_data === 1) {
-                return 'Heat';
-            } else if (_data === 6) {
-                return 'Off';
-            } else if (_data === 7) {
-                return 'GLT / Test';
-            } else if (_data === 11) {
-                return 'Ice';
-            } else if (_data === 15) {
-                return 'Calibration Mode';
-            } else {
-                throw '';
-            }
-        } else {
-            if (_data === 0) {
-                return 'Auto';
-            } else if (_data === 1) {
-                return 'Heat';
-            } else if (_data === 3) {
-                return 'Cool';
-            } else if (_data === 6) {
-                return 'Off';
-            } else if (_data === 7) {
-                return 'Test';
-            } else if (_data === 11) {
-                return 'Ice';
-            } else {
-                throw '';
-            }
+        // Betriebsart (ISM8i manual, 8.7.1, 8.7.2)
+        _data = data.readUInt8(0);
+        if (_data === 7 && dp < 177) {
+            // Test or GLT mode of gas and oil boilers
+            return 'GLT / Test';
         }
+        if (HVAC_CONTR_MODES[_data] !== undefined) {
+            return HVAC_CONTR_MODES[_data];
+        }
+        adapter.log.debug(`Unknown HVACContrMode value ${_data} for DP ${dp}`);
+        return String(_data);
     } else if (type === 'DPT_Unknown1') {
         return data.readUInt8(0).toString();
     } else if (type === 'DPT_Unknown2') {
         return data.readUInt16BE(0).toString();
     } else {
-        throw '';
+        throw new Error(`Unknown type ${type}`);
     }
 }
 
