@@ -24,7 +24,11 @@ Lese auf [deutsch](docs/de/README.md).
 ## Changelog
 
 ### **WORK IN PROGRESS**
-- (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+* (GermanBluefox) Breaking change: Node.js >= 22 and admin >= 7.0.0 are required now
+* (GermanBluefox) The adapter was refactored to TypeScript, the configuration dialog to JsonConfig
+* (GermanBluefox) Configurations of older versions are converted when the adapter starts (before: when the configuration dialog was opened)
+* (GermanBluefox) Added unit tests for the protocol and the value conversion, and an integration test with a simulated ISM8i
+* (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
 * (GermanBluefox) Updated @iobroker/adapter-core to 3.x (#132)
 * (GermanBluefox) Fixed boolean handling for DPT_Bool and type update of existing objects when the boolean option changes (#98)
 * (GermanBluefox) Unknown mode values of ISM8i are written as raw values instead of logging parse errors, telegrams without a value are skipped (#92, #124)
@@ -149,7 +153,8 @@ Lese auf [deutsch](docs/de/README.md).
 
 The MIT License (MIT)
 
-Copyright (c) 2015-2023 smiling_Jack, ioBroker-Community
+Copyright (c) 2019-2023 ioBroker-Community
+              2015-2019 Smiling Jack
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
